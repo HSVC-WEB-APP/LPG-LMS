@@ -73,7 +73,7 @@ button{cursor:pointer}
 .cavsw button[data-c="C3"] i{color:var(--C3)}.cavsw button[data-c="C4"] i{color:var(--C4)}
 
 /* ---------- layout ---------- */
-main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
+main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto;min-height:calc(100dvh + 240px)}
 .scr{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;animation:fade .22s ease}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .eyebrow{font:600 11px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
@@ -94,7 +94,7 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
 .htiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto;padding-top:10px}
 .ht{background:var(--heroTile);border:1px solid #262D36;border-radius:8px;padding:7px 8px;min-width:0}
 .ht .hk{font-size:9.5px;letter-spacing:.05em;line-height:1.25;min-height:2.5em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ht b{display:block;font:600 14px/1.25 var(--mono);color:var(--heroT);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.ht b{display:block;font:600 13px/1.25 var(--mono);color:var(--heroT);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .ht b small{font:500 10.5px var(--sans);color:var(--heroT2);margin-left:2px}
 .ht i{display:block;font:400 10.5px/1.3 var(--sans);font-style:normal;color:var(--heroT2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hrow2{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
@@ -193,6 +193,59 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
 .langs button[aria-pressed="true"]{border-color:var(--ring);box-shadow:0 0 0 1px var(--ring);background:var(--selF);color:var(--selT)}
 .langs button small{font:500 12px var(--mono);color:var(--t3)}
 
+/* hero v2 — PMS layout */
+.hero2{position:relative;overflow:hidden;background:var(--hero);border:1px solid var(--heroBd);border-radius:16px;padding:10px 10px 10px 8px;color:var(--heroT);box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
+.hero2::before{content:"";position:absolute;inset:-35% -25% auto auto;width:280px;height:280px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 20%,transparent),transparent);pointer-events:none}
+.h2top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 8px 4px}
+.h2top .hk{font-family:var(--mono);letter-spacing:.06em;color:var(--heroT2)}
+.h2body{position:relative;display:grid;grid-template-columns:44% 1fr;gap:8px;align-items:stretch}
+.sec{display:block;width:100%;height:auto;overflow:visible}
+.h2r{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pms{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pc{background:#151B21;border:1px solid #29313A;border-radius:9px;padding:6px 7px 7px;min-width:0}
+.pl{display:flex;justify-content:space-between;align-items:baseline;gap:4px;font:500 9px/1.2 var(--mono);color:#8B96A3;letter-spacing:.02em;white-space:nowrap}
+.pl span:first-child{overflow:hidden;text-overflow:ellipsis}
+.pv{font:600 15.5px/1.25 var(--mono);color:#6EE28A;margin-top:3px;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pv .pu{font:500 9.5px var(--sans);color:#8B96A3;margin-left:4px}
+.pv.wv{color:#7DB3F5}.pv.tt{color:#F0F3F6}
+.pc.m{background:linear-gradient(135deg,color-mix(in srgb,var(--acc) 18%,#151B21),#151B21 70%);border-color:color-mix(in srgb,var(--acc) 50%,#29313A);padding:8px 9px 9px}
+.pc.m .pl{font-size:10px;color:#C7CED6}
+.pc.m .pv{font-size:30px;line-height:1.1;color:#7CF29A;margin-top:4px;letter-spacing:-.02em}
+.hbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto;padding-top:4px}
+.hb{height:42px;border-radius:10px;border:1px solid #39414B;background:#1E242B;color:#F0F3F6;font:600 12.5px var(--sans);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 6px;min-width:0}
+.hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb svg{width:16px;height:16px;flex:none}
+.hb.pri{background:#2F6FB8;border-color:#3B7CC6}
+.hb:active{filter:brightness(1.2)}
+.stat{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 9px 3px 7px;font:600 11px var(--sans);background:#1F3A2B;color:#8FE0B0;white-space:nowrap}
+.stat i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 25%,transparent)}
+.stat.al{background:#3A2F18;color:#F2C27A}.stat.tr{background:#3D1E1E;color:#FF8A8A;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.hero .sec{width:100%}
+.hero{grid-template-columns:42% 1fr!important;min-height:0}
+.hero .hbig{font-size:27px}
+.ehr{display:inline-flex;gap:6px;align-items:center}
+.chip.up{display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 8px;font:600 11.5px var(--sans);color:var(--t0);background:var(--tile)}
+.chip.up svg{width:13px;height:13px}
+.strip{position:fixed;left:0;right:0;z-index:29;top:var(--hh,108px);display:flex;justify-content:center;padding:6px 16px;pointer-events:none;animation:fadeI .15s}
+.strip button{pointer-events:auto;display:flex;align-items:center;gap:10px;max-width:608px;width:100%;justify-content:space-between;background:#101418;color:#F0F3F6;border:1px solid #2E353E;border-radius:12px;padding:8px 12px;font:500 13px var(--mono);box-shadow:0 8px 24px -8px rgba(0,0,0,.5)}
+#stripTxt{display:flex;gap:14px;flex-wrap:nowrap;overflow:hidden}
+.strip b{color:#7CF29A;font-weight:600}.strip i{font-style:normal;color:#8B96A3;font-family:var(--sans);font-size:11px;margin-right:4px}
+.strip svg{width:16px;height:16px;flex:none;color:#8CC4FF}
+.inp .nb{width:40px}
+.inp.sm .nb{width:34px;font-size:19px}
+.inp.sm input{padding:0 6px;font-size:16.5px}
+.inp .u:empty{padding:0}
+.inp .u.live{color:var(--link);font-family:var(--mono);font-weight:600}
+/* details sheet */
+.dtiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
+.dt{background:var(--tile);border:1px solid var(--bd2);border-radius:10px;padding:9px 10px}
+.dt .eyebrow{font-size:10px;letter-spacing:.06em}
+.dt b{display:block;font:600 17px/1.3 var(--mono);color:var(--t0);margin-top:3px}
+.dt b small{font:500 11px var(--sans);color:var(--t3);margin-left:3px}
+.dt i{display:block;font:400 11.5px var(--sans);font-style:normal;color:var(--t3)}
+@media (max-width:370px){.pv{font-size:13.5px}.pc.m .pv{font-size:25px}.pl{font-size:8.5px}.h2body{grid-template-columns:42% 1fr}}
+@media (min-width:480px){.pv{font-size:18px}.pc.m .pv{font-size:36px}.pl{font-size:10px}}
 /* gauge svg */
 .gauge .lvl{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 .gauge text{font-family:var(--mono)}
@@ -202,7 +255,7 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
 </style>
 </head>
 <body>
-<header class="top">
+<header class="top" id="hdr">
   <div class="hrow">
     <div class="mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--t1)"><path d="M8.5 1.5v5.2H6Q2.5 6.7 2.5 10v4.5h4v4h7v-4h4V10q0-3.3-3.5-3.3h-2.5V1.5"/><path d="M2.5 11.5h15" stroke="var(--acc)"/></svg></div>
     <div class="brand"><b>Cavern Gauge</b><span id="hsub">HSVC · TK-3301</span></div>
@@ -215,57 +268,59 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
   </div>
 </header>
 
+<div class="strip" id="strip" hidden><button id="stripBtn" data-top><span id="stripTxt"></span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 16V4M5.5 8.5 10 4l4.5 4.5"/></svg></button></div>
 <main>
 <!-- ================= STOCK ================= -->
 <section class="scr" data-s="stock">
-  <div class="hero">
-    <svg class="gauge" id="g-stock" viewBox="0 0 100 240" preserveAspectRatio="xMidYMid meet"></svg>
-    <div class="hv">
-      <div class="hk" data-i="massM">Product mass · M</div>
-      <div class="hbig" id="o-m">–</div>
-      <div class="hmid" id="o-g">–</div>
-      <div class="hsub" data-i="volG">Product volume · G</div>
-      <div class="hrow2" id="o-chips"></div>
-      <div class="htiles">
-        <div class="ht"><div class="hk" data-i="fillLAH">Fill to LAH</div><b id="o-fill">–</b></div>
-        <div class="ht"><div class="hk" data-i="perCm">1 cm product</div><b id="o-cm">–</b></div>
-        <div class="ht"><div class="hk" data-i="room">Room to LAH</div><b id="o-room">–</b></div>
-        <div class="ht"><div class="hk" data-i="pumpable">Pumpable to LAL</div><b id="o-lal">–</b></div>
+  <div class="hero2" id="hero-stock">
+    <div class="h2top"><span class="hk" id="h2tag">TK-3301</span><span id="o-stat"></span></div>
+    <div class="h2body">
+      <svg class="sec" id="g-stock" preserveAspectRatio="xMidYMin meet"></svg>
+      <div class="h2r">
+        <div class="pc m"><div class="pl"><span class="tg" data-k="M">M</span><span>t</span></div><div class="pv" id="o-m">–</div></div>
+        <div class="pms">
+          <div class="pc"><div class="pl"><span class="tg" data-k="D">D</span></div><div class="pv"><span id="o-d">–</span><small class="pu">g/cm³</small></div></div>
+          <div class="pc"><div class="pl"><span class="tg" data-k="G">G</span><span>m³</span></div><div class="pv" id="o-g">–</div></div>
+          <div class="pc"><div class="pl"><span class="tg" data-k="TV">TV</span><span>m³</span></div><div class="pv" id="o-tv">–</div></div>
+          <div class="pc"><div class="pl"><span class="tg" data-k="N">N</span><span>m³</span></div><div class="pv" id="o-n">–</div></div>
+          <div class="pc"><div class="pl"><span class="tg" data-k="WV">WV</span><span>m³</span></div><div class="pv wv" id="o-wv">–</div></div>
+          <div class="pc"><div class="pl"><span class="tg">T liq.</span><span>°C</span></div><div class="pv tt" id="o-t">–</div></div>
+        </div>
+        <div class="hbtns"><button class="hb" id="bDet"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5h12M4 10h12M4 14.5h8"/></svg><span data-i="details">Details</span></button>
+          <button class="hb pri" data-jump="in-stock"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 3v12M5.5 10.5 10 15l4.5-4.5"/></svg><span data-i="enter">Enter</span></button></div>
       </div>
     </div>
   </div>
   <div class="msgs" id="o-msg"></div>
 
-  <div class="card stack">
-    <div class="eyebrow"><span data-i="readings">PMS readings</span><button class="chip t" id="snap" style="padding:4px 10px;font-size:11.5px">PMS</button></div>
+  <div class="card stack" id="in-stock">
+    <div class="eyebrow"><span data-i="readings">PMS readings</span><span class="ehr"><button class="chip t" id="snap" style="padding:4px 10px;font-size:11.5px">PMS</button><button class="chip up" data-top><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 16V4M5.5 8.5 10 4l4.5 4.5"/></svg><span data-i="result">Result</span></button></span></div>
     <label class="f"><div class="fl"><b id="t-lt1">LT33001</b><span data-i="prodLevel">product level</span></div>
       <div class="inp prod"><button class="nb" data-nudge="p" data-d="-0.01" aria-label="−1 cm">−</button><input id="p" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span><button class="nb" data-nudge="p" data-d="0.01" aria-label="+1 cm">+</button></div></label>
     <div class="g2">
-      <label class="f"><div class="fl"><b id="t-lt2">LT33002</b><span data-i="water">water</span></div><div class="inp wat sm"><input id="w2" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span></div></label>
-      <label class="f"><div class="fl"><b id="t-lt3">LT33003</b><span data-i="water">water</span></div><div class="inp wat sm"><input id="w3" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span></div></label>
+      <label class="f"><div class="fl"><b id="t-lt2">LT33002</b><span data-i="water">water</span></div><div class="inp wat sm"><button class="nb" data-nudge="w2" data-d="-0.01">−</button><input id="w2" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u"></span><button class="nb" data-nudge="w2" data-d="0.01">+</button></div></label>
+      <label class="f"><div class="fl"><b id="t-lt3">LT33003</b><span data-i="water">water</span></div><div class="inp wat sm"><button class="nb" data-nudge="w3" data-d="-0.01">−</button><input id="w3" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u"></span><button class="nb" data-nudge="w3" data-d="0.01">+</button></div></label>
     </div>
     <div><div class="fl"><span data-i="wUse">Water level used</span></div>
       <div class="seg sm" id="wsrc"><button data-v="2">LT-002</button><button data-v="3">LT-003</button><button data-v="avg" data-i="avg">Average</button></div></div>
     <div class="g2">
-      <label class="f"><div class="fl"><b id="t-pt">PT33210</b></div><div class="inp sm"><input id="pg" inputmode="decimal" autocomplete="off"><span class="u">kg/cm²g</span></div></label>
-      <label class="f"><div class="fl"><b>T</b><span data-i="liqT">liquid</span></div><div class="inp sm"><input id="tl" inputmode="decimal" autocomplete="off"><span class="u">°C</span><button class="ub" id="bTE" type="button">TE</button></div></label>
+      <label class="f"><div class="fl"><b id="t-pt">PT33210</b></div><div class="inp sm"><input id="pg" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">kg/cm²g</span></div></label>
+      <label class="f"><div class="fl"><b>T</b><span data-i="liqT">liquid</span></div><div class="inp sm"><input id="tl" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">°C</span><button class="ub" id="bTE" type="button">TE</button></div></label>
     </div>
     <label class="f"><div class="fl"><b>D15</b><span data-i="d15">density at 15 °C</span><button class="chip t r" type="button" data-go="dens" style="padding:2px 9px;font-size:11px" data-i="more">More</button></div>
-      <div class="inp sm"><input id="din" inputmode="decimal" autocomplete="off"><span class="u">kg/L</span></div></label>
+      <div class="inp sm"><input id="din" inputmode="decimal" autocomplete="off" enterkeyhint="done"><span class="u">kg/L</span></div></label>
     <p class="hint" data-i="negHint">Type 165.55 for −165.55 m MSL.</p>
   </div>
 
   <div class="acts"><button class="btn pri" id="share"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 12.5V2.5M6.5 6 10 2.5 13.5 6M4 10v6.5h12V10"/></svg><span data-i="share">Share result</span></button>
     <button class="btn" id="copy"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6.5" y="6.5" width="10" height="10" rx="1.5"/><path d="M13.5 6.5v-3h-10v10h3"/></svg><span data-i="copy">Copy</span></button></div>
 
-  <div class="card"><div class="eyebrow" data-i="details">Details</div><dl class="kv" id="o-kv"></dl></div>
-  <div class="foot" id="foot"></div>
 </section>
 
 <!-- ================= A → B ================= -->
 <section class="scr" data-s="ab" hidden>
   <div class="hero">
-    <svg class="gauge" id="g-ab" viewBox="0 0 100 240"></svg>
+    <svg class="sec" id="g-ab" preserveAspectRatio="xMidYMin meet"></svg>
     <div class="hv">
       <div class="hk" id="ab-k1">Volume A → B</div>
       <div class="hbig" id="ab-v">–</div>
@@ -277,10 +332,12 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
         <div class="ht"><div class="hk" data-i="dLevel">Level change</div><b id="ab-dl">–</b></div>
         <div class="ht"><div class="hk">t/m³</div><b id="ab-tpm">–</b></div>
       </div>
+      <div class="hbtns"><button class="hb pri" data-jump="in-ab" style="grid-column:1/-1"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 3v12M5.5 10.5 10 15l4.5-4.5"/></svg><span data-i="enter">Enter</span></button></div>
     </div>
   </div>
   <div class="msgs" id="ab-msg"></div>
-  <div class="card stack">
+  <div class="card stack" id="in-ab">
+    <div class="eyebrow"><span data-i="inputs">Input</span><button class="chip up" data-top><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 16V4M5.5 8.5 10 4l4.5 4.5"/></svg><span data-i="result">Result</span></button></div>
     <div class="seg" id="ab-liq"><button data-v="product" data-i="product">Product</button><button data-v="water" data-i="waterC">Water</button></div>
     <label class="f"><div class="fl"><b>A</b><span data-i="from">from</span><button class="chip t r" type="button" id="ab-cur" style="padding:2px 9px;font-size:11px" data-i="useCur">Current</button></div>
       <div class="inp prod" id="ab-ia"><button class="nb" data-nudge="ab-a" data-d="-0.01">−</button><input id="ab-a" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span><button class="nb" data-nudge="ab-a" data-d="0.01">+</button></div></label>
@@ -294,7 +351,7 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
 <!-- ================= PUMP PLAN ================= -->
 <section class="scr" data-s="plan" hidden>
   <div class="hero">
-    <svg class="gauge" id="g-plan" viewBox="0 0 100 240"></svg>
+    <svg class="sec" id="g-plan" preserveAspectRatio="xMidYMin meet"></svg>
     <div class="hv">
       <div class="hk" data-i="newLevel">New level</div>
       <div class="hbig" id="q-v">–</div>
@@ -305,18 +362,20 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
         <div class="ht"><div class="hk" data-i="duration">Time at rate</div><b id="q-dur">–</b></div>
         <div class="ht" style="grid-column:1/-1"><div class="hk" id="q-k3" data-i="massAfter">Product mass after</div><b id="q-after">–</b></div>
       </div>
+      <div class="hbtns"><button class="hb pri" data-jump="in-plan" style="grid-column:1/-1"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 3v12M5.5 10.5 10 15l4.5-4.5"/></svg><span data-i="enter">Enter</span></button></div>
     </div>
   </div>
   <div class="msgs" id="q-msg"></div>
-  <div class="card stack">
+  <div class="card stack" id="in-plan">
+    <div class="eyebrow"><span data-i="inputs">Input</span><button class="chip up" data-top><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 16V4M5.5 8.5 10 4l4.5 4.5"/></svg><span data-i="result">Result</span></button></div>
     <div class="g2">
       <div class="seg sm" id="q-liq"><button data-v="product" data-i="product">Product</button><button data-v="water" data-i="waterC">Water</button></div>
       <div class="seg sm" id="q-dir"><button data-v="out" data-i="out">Pump out</button><button data-v="in" data-i="in">Fill in</button></div>
     </div>
     <label class="f"><div class="fl"><b data-i="start">Start</b><span data-i="startLevel">level</span><button class="chip t r" type="button" id="q-cur" style="padding:2px 9px;font-size:11px" data-i="useCur">Current</button></div>
-      <div class="inp prod" id="q-il"><button class="nb" data-nudge="q-l" data-d="-0.01">−</button><input id="q-l" inputmode="decimal" autocomplete="off"><span class="u">m</span><button class="nb" data-nudge="q-l" data-d="0.01">+</button></div></label>
+      <div class="inp prod" id="q-il"><button class="nb" data-nudge="q-l" data-d="-0.01">−</button><input id="q-l" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span><button class="nb" data-nudge="q-l" data-d="0.01">+</button></div></label>
     <label class="f"><div class="fl"><b data-i="qty">Quantity</b></div>
-      <div class="inp"><input id="q-q" inputmode="decimal" autocomplete="off"><div class="seg sm" id="q-u" style="margin:5px;border:0;width:118px"><button data-v="m3">m³</button><button data-v="t">t</button></div></div></label>
+      <div class="inp"><input id="q-q" inputmode="decimal" autocomplete="off" enterkeyhint="done"><div class="seg sm" id="q-u" style="margin:5px;border:0;width:118px"><button data-v="m3">m³</button><button data-v="t">t</button></div></div></label>
     <div class="chips" id="q-qq"><button class="chip" data-q="1000">1,000</button><button class="chip" data-q="2000">2,000</button><button class="chip" data-q="5000">5,000</button><button class="chip" data-q="10000">10,000</button><button class="chip" data-q="20000">20,000</button></div>
     <label class="f"><div class="fl"><b data-i="rate">Rate</b><span data-i="optional">optional</span></div>
       <div class="inp sm"><input id="q-r" inputmode="decimal" autocomplete="off" placeholder="—"><span class="u" id="q-ru">m³/h</span></div></label>
@@ -402,23 +461,85 @@ const RAW = {"C3_A": {"el0": -192.1, "n": 4711, "d": "0,196,196,195,196,196,196,
 const EOS = {"T0":-20,"dT":1,"off":[0,2,5,10,20,40],"C3":[[2.44518,0.554451,0.554753,0.555204,0.555947,0.557406,0.560218],[2.53441,0.553208,0.553514,0.553971,0.554724,0.556201,0.559048],[2.62609,0.55196,0.552271,0.552734,0.553497,0.554993,0.557874],[2.72026,0.550707,0.551022,0.551491,0.552265,0.55378,0.556698],[2.81696,0.54945,0.549769,0.550245,0.551028,0.552564,0.555517],[2.91624,0.548188,0.548511,0.548993,0.549787,0.551343,0.554334],[3.01813,0.54692,0.547248,0.547737,0.548542,0.550118,0.553147],[3.1227,0.545648,0.54598,0.546476,0.547292,0.548889,0.551956],[3.22996,0.54437,0.544707,0.54521,0.546037,0.547656,0.550762],[3.33998,0.543087,0.543429,0.543939,0.544777,0.546418,0.549564],[3.4528,0.541798,0.542145,0.542662,0.543513,0.545176,0.548362],[3.56845,0.540504,0.540857,0.541381,0.542243,0.543929,0.547157],[3.68699,0.539205,0.539562,0.540094,0.540969,0.542678,0.545948],[3.80846,0.537899,0.538262,0.538801,0.539689,0.541422,0.544735],[3.93291,0.536588,0.536956,0.537504,0.538404,0.540161,0.543518],[4.06037,0.535271,0.535645,0.5362,0.537114,0.538896,0.542298],[4.1909,0.533948,0.534327,0.534891,0.535818,0.537625,0.541073],[4.32454,0.532619,0.533004,0.533576,0.534517,0.53635,0.539844],[4.46133,0.531284,0.531675,0.532255,0.53321,0.53507,0.538612],[4.60133,0.529942,0.530339,0.530929,0.531897,0.533784,0.537375],[4.74458,0.528594,0.528997,0.529596,0.530579,0.532494,0.536134],[4.89112,0.527239,0.527648,0.528257,0.529255,0.531198,0.534888],[5.041,0.525877,0.526293,0.526911,0.527925,0.529897,0.533639],[5.19427,0.524509,0.524932,0.525559,0.526589,0.52859,0.532385],[5.35098,0.523134,0.523563,0.524201,0.525247,0.527278,0.531126],[5.51117,0.521751,0.522188,0.522836,0.523898,0.525961,0.529864],[5.67489,0.520362,0.520805,0.521464,0.522543,0.524637,0.528596],[5.84218,0.518965,0.519416,0.520085,0.521181,0.523308,0.527324],[6.0131,0.51756,0.518019,0.518699,0.519813,0.521973,0.526048],[6.1877,0.516148,0.516614,0.517306,0.518438,0.520632,0.524767],[6.36602,0.514727,0.515202,0.515905,0.517057,0.519285,0.523481],[6.5481,0.513299,0.513782,0.514497,0.515668,0.517932,0.52219],[6.73401,0.511863,0.512354,0.513082,0.514272,0.516573,0.520895],[6.92378,0.510418,0.510918,0.511658,0.512869,0.515207,0.519594],[7.11747,0.508965,0.509474,0.510227,0.511458,0.513835,0.518289],[7.31512,0.507503,0.508021,0.508788,0.51004,0.512457,0.516978],[7.51679,0.506033,0.50656,0.50734,0.508615,0.511072,0.515663],[7.72252,0.504553,0.50509,0.505884,0.507181,0.50968,0.514342],[7.93237,0.503064,0.503611,0.50442,0.50574,0.508281,0.513016],[8.14638,0.501565,0.502122,0.502947,0.504291,0.506875,0.511685],[8.36461,0.500057,0.500625,0.501465,0.502833,0.505462,0.510349],[8.5871,0.498539,0.499118,0.499973,0.501367,0.504042,0.509007],[8.81391,0.497011,0.497601,0.498473,0.499892,0.502615,0.50766],[9.04509,0.495472,0.496074,0.496963,0.498409,0.50118,0.506307],[9.28068,0.493923,0.494537,0.495443,0.496917,0.499738,0.504949],[9.52075,0.492363,0.492989,0.493913,0.495415,0.498288,0.503585],[9.76533,0.490792,0.491431,0.492374,0.493905,0.49683,0.502215],[10.01449,0.489209,0.489862,0.490824,0.492385,0.495364,0.500839],[10.26828,0.487615,0.488281,0.489263,0.490855,0.49389,0.499458],[10.52675,0.486009,0.486689,0.487691,0.489316,0.492408,0.498071],[10.78995,0.484391,0.485086,0.486109,0.487766,0.490918,0.496678],[11.05794,0.48276,0.48347,0.484515,0.486206,0.489419,0.495279],[11.33077,0.481116,0.481842,0.48291,0.484636,0.487912,0.493874],[11.60849,0.47946,0.480202,0.481292,0.483055,0.486396,0.492462],[11.89116,0.477789,0.478548,0.479663,0.481464,0.48487,0.491045],[12.17883,0.476105,0.476881,0.478021,0.479861,0.483336,0.489621],[12.47157,0.474406,0.475201,0.476367,0.478247,0.481793,0.488191],[12.76941,0.472693,0.473506,0.4747,0.476621,0.48024,0.486755],[13.07243,0.470965,0.471798,0.473019,0.474983,0.478678,0.485312],[13.38068,0.469221,0.470074,0.471324,0.473333,0.477106,0.483862],[13.6942,0.467461,0.468336,0.469616,0.471671,0.475524,0.482407],[14.01307,0.465685,0.466581,0.467893,0.469996,0.473932,0.480944],[14.33734,0.463891,0.464811,0.466155,0.468308,0.47233,0.479475],[14.66707,0.462081,0.463024,0.464402,0.466607,0.470717,0.477999],[15.00232,0.460252,0.461221,0.462634,0.464892,0.469095,0.476517],[15.34314,0.458405,0.4594,0.46085,0.463164,0.467461,0.475028],[15.6896,0.456538,0.457561,0.459049,0.461421,0.465816,0.473532],[16.04176,0.454652,0.455703,0.457232,0.459664,0.464161,0.472029],[16.39968,0.452746,0.453826,0.455397,0.457892,0.462494,0.470519],[16.76342,0.450818,0.45193,0.453544,0.456104,0.460816,0.469002],[17.13304,0.448868,0.450013,0.451673,0.454301,0.459126,0.467478],[17.50862,0.446896,0.448075,0.449783,0.452483,0.457424,0.465948],[17.89021,0.4449,0.446116,0.447873,0.450647,0.45571,0.46441],[18.27788,0.44288,0.444134,0.445944,0.448795,0.453985,0.462865],[18.67169,0.440835,0.442129,0.443994,0.446926,0.452246,0.461314],[19.07172,0.438763,0.440099,0.442023,0.445039,0.450496,0.459755],[19.47804,0.436665,0.438045,0.440029,0.443134,0.448732,0.458189],[19.8907,0.434537,0.435965,0.438013,0.441211,0.446956,0.456616],[20.30979,0.432381,0.433858,0.435974,0.439268,0.445166,0.455036],[20.73537,0.430193,0.431723,0.43391,0.437307,0.443364,0.45345],[21.16753,0.427973,0.429559,0.431822,0.435325,0.441548,0.451856]],"NC4":[[0.45213,0.62173,0.621945,0.622266,0.622797,0.623847,0.625898],[0.47285,0.620702,0.620919,0.621243,0.62178,0.622839,0.62491],[0.49433,0.619672,0.619891,0.620219,0.62076,0.62183,0.623919],[0.51658,0.61864,0.618862,0.619192,0.619739,0.620819,0.622927],[0.53962,0.617606,0.61783,0.618163,0.618715,0.619805,0.621933],[0.56346,0.61657,0.616795,0.617132,0.61769,0.61879,0.620938],[0.58814,0.615531,0.615759,0.616099,0.616662,0.617773,0.61994],[0.61366,0.61449,0.61472,0.615064,0.615632,0.616754,0.618941],[0.64005,0.613447,0.613679,0.614026,0.6146,0.615733,0.617941],[0.66733,0.612401,0.612636,0.612986,0.613566,0.614709,0.616938],[0.69553,0.611353,0.61159,0.611944,0.612529,0.613684,0.615934],[0.72465,0.610303,0.610542,0.610899,0.61149,0.612657,0.614928],[0.75473,0.60925,0.609491,0.609852,0.610449,0.611627,0.61392],[0.78578,0.608194,0.608438,0.608803,0.609406,0.610595,0.61291],[0.81782,0.607136,0.607383,0.607751,0.60836,0.609561,0.611898],[0.85089,0.606075,0.606324,0.606696,0.607312,0.608525,0.610884],[0.88499,0.605012,0.605264,0.60564,0.606261,0.607486,0.609868],[0.92016,0.603946,0.6042,0.60458,0.605208,0.606445,0.608851],[0.95641,0.602877,0.603134,0.603518,0.604152,0.605402,0.607831],[0.99377,0.601806,0.602065,0.602453,0.603094,0.604357,0.606809],[1.03226,0.600731,0.600994,0.601386,0.602033,0.603309,0.605785],[1.0719,0.599654,0.599919,0.600315,0.60097,0.602258,0.60476],[1.11272,0.598574,0.598842,0.599242,0.599904,0.601205,0.603731],[1.15474,0.597491,0.597762,0.598167,0.598835,0.60015,0.602701],[1.19799,0.596405,0.596679,0.597088,0.597763,0.599092,0.601669],[1.24248,0.595316,0.595593,0.596007,0.596689,0.598032,0.600634],[1.28825,0.594225,0.594504,0.594922,0.595612,0.596969,0.599598],[1.33531,0.59313,0.593413,0.593835,0.594532,0.595903,0.598559],[1.38369,0.592031,0.592318,0.592744,0.593449,0.594835,0.597517],[1.43342,0.59093,0.591219,0.591651,0.592363,0.593764,0.596474],[1.48452,0.589825,0.590118,0.590554,0.591274,0.59269,0.595428],[1.53702,0.588718,0.589013,0.589454,0.590183,0.591613,0.594379],[1.59093,0.587606,0.587906,0.588352,0.589088,0.590534,0.593329],[1.6463,0.586492,0.586794,0.587245,0.58799,0.589452,0.592276],[1.70313,0.585374,0.58568,0.586136,0.586889,0.588366,0.59122],[1.76146,0.584252,0.584562,0.585023,0.585784,0.587278,0.590162],[1.82132,0.583127,0.583441,0.583907,0.584677,0.586187,0.589101],[1.88272,0.581999,0.582316,0.582787,0.583566,0.585093,0.588038],[1.9457,0.580867,0.581187,0.581664,0.582452,0.583996,0.586972],[2.01029,0.579731,0.580055,0.580538,0.581334,0.582896,0.585904],[2.0765,0.578591,0.578919,0.579408,0.580213,0.581792,0.584833],[2.14436,0.577448,0.57778,0.578274,0.579089,0.580686,0.58376],[2.21391,0.5763,0.576636,0.577136,0.577961,0.579576,0.582683],[2.28517,0.575149,0.575489,0.575995,0.576829,0.578463,0.581604],[2.35816,0.573994,0.574338,0.57485,0.575694,0.577347,0.580523],[2.43292,0.572835,0.573183,0.573701,0.574555,0.576227,0.579438],[2.50947,0.571671,0.572024,0.572549,0.573413,0.575104,0.578351],[2.58783,0.570504,0.570861,0.571392,0.572266,0.573978,0.57726],[2.66805,0.569332,0.569693,0.570231,0.571116,0.572848,0.576167],[2.75013,0.568156,0.568522,0.569066,0.569962,0.571714,0.575071],[2.83412,0.566976,0.567346,0.567897,0.568804,0.570577,0.573972],[2.92004,0.565791,0.566166,0.566724,0.567642,0.569437,0.57287],[3.00791,0.564602,0.564982,0.565547,0.566476,0.568292,0.571765],[3.09777,0.563408,0.563793,0.564365,0.565306,0.567144,0.570657],[3.18965,0.56221,0.562599,0.563179,0.564132,0.565992,0.569546],[3.28357,0.561006,0.561401,0.561988,0.562953,0.564837,0.568432],[3.37957,0.559798,0.560198,0.560793,0.56177,0.563677,0.567314],[3.47766,0.558586,0.558991,0.559593,0.560583,0.562514,0.566194],[3.57789,0.557368,0.557778,0.558389,0.559392,0.561346,0.56507],[3.68028,0.556145,0.556561,0.557179,0.558195,0.560175,0.563943],[3.78485,0.554917,0.555339,0.555965,0.556995,0.558999,0.562812],[3.89165,0.553684,0.554111,0.554747,0.555789,0.55782,0.561678],[4.00069,0.552446,0.552879,0.553523,0.554579,0.556636,0.560541],[4.11201,0.551202,0.551641,0.552294,0.553365,0.555448,0.559401],[4.22563,0.549953,0.550398,0.55106,0.552145,0.554255,0.558257],[4.3416,0.548698,0.54915,0.549821,0.550921,0.553058,0.557109],[4.45993,0.547438,0.547896,0.548576,0.549691,0.551857,0.555958],[4.58066,0.546172,0.546637,0.547326,0.548457,0.550651,0.554803],[4.70382,0.5449,0.545371,0.546071,0.547217,0.549441,0.553645],[4.82944,0.543623,0.544101,0.54481,0.545972,0.548226,0.552483],[4.95755,0.542339,0.542824,0.543543,0.544722,0.547007,0.551318],[5.08817,0.541049,0.541541,0.542271,0.543467,0.545783,0.550149],[5.22135,0.539753,0.540252,0.540993,0.542206,0.544554,0.548976],[5.35711,0.53845,0.538957,0.539709,0.540939,0.54332,0.547799],[5.49549,0.537142,0.537656,0.538419,0.539667,0.542081,0.546618],[5.6365,0.535826,0.536349,0.537123,0.538389,0.540837,0.545434],[5.7802,0.534504,0.535035,0.535821,0.537106,0.539588,0.544245],[5.9266,0.533175,0.533714,0.534512,0.535816,0.538334,0.543053],[6.07574,0.531839,0.532387,0.533197,0.534521,0.537075,0.541857],[6.22765,0.530497,0.531052,0.531875,0.533219,0.535811,0.540656],[6.38236,0.529147,0.529711,0.530547,0.531912,0.534541,0.539452]],"IC4":[[0.72477,0.602875,0.603124,0.603494,0.604107,0.605316,0.607667],[0.75581,0.601788,0.602039,0.602413,0.603033,0.604254,0.606628],[0.78788,0.600698,0.600951,0.60133,0.601956,0.603189,0.605587],[0.82101,0.599605,0.599861,0.600244,0.600877,0.602123,0.604545],[0.85522,0.59851,0.598769,0.599155,0.599795,0.601054,0.603501],[0.89053,0.597411,0.597673,0.598064,0.59871,0.599983,0.602454],[0.92697,0.59631,0.596575,0.59697,0.597623,0.598909,0.601406],[0.96456,0.595206,0.595474,0.595873,0.596534,0.597833,0.600355],[1.00333,0.594099,0.59437,0.594774,0.595441,0.596755,0.599303],[1.0433,0.59299,0.593263,0.593672,0.594346,0.595674,0.598248],[1.0845,0.591877,0.592154,0.592567,0.593249,0.59459,0.597191],[1.12695,0.590761,0.591041,0.591459,0.592148,0.593504,0.596132],[1.17067,0.589642,0.589926,0.590348,0.591045,0.592416,0.595071],[1.2157,0.588521,0.588807,0.589234,0.589939,0.591325,0.594007],[1.26206,0.587396,0.587685,0.588117,0.58883,0.590231,0.592942],[1.30977,0.586267,0.58656,0.586997,0.587717,0.589134,0.591874],[1.35886,0.585136,0.585432,0.585874,0.586602,0.588035,0.590804],[1.40936,0.584001,0.584301,0.584747,0.585484,0.586933,0.589731],[1.46129,0.582863,0.583166,0.583618,0.584363,0.585828,0.588656],[1.51468,0.581721,0.582028,0.582485,0.583239,0.58472,0.587579],[1.56956,0.580576,0.580886,0.581349,0.582112,0.58361,0.586499],[1.62595,0.579427,0.579741,0.580209,0.580981,0.582496,0.585417],[1.68388,0.578275,0.578593,0.579067,0.579848,0.581379,0.584332],[1.74339,0.57712,0.577441,0.57792,0.57871,0.58026,0.583245],[1.80448,0.57596,0.576286,0.576771,0.57757,0.579137,0.582156],[1.8672,0.574797,0.575126,0.575617,0.576426,0.578012,0.581064],[1.93158,0.57363,0.573964,0.57446,0.575279,0.576883,0.579969],[1.99763,0.572459,0.572797,0.5733,0.574128,0.575751,0.578871],[2.06539,0.571285,0.571626,0.572135,0.572974,0.574616,0.577771],[2.13488,0.570106,0.570452,0.570967,0.571816,0.573478,0.576669],[2.20614,0.568923,0.569274,0.569795,0.570654,0.572336,0.575563],[2.2792,0.567736,0.568091,0.568619,0.569489,0.571191,0.574455],[2.35408,0.566545,0.566905,0.56744,0.56832,0.570043,0.573344],[2.4308,0.56535,0.565714,0.566256,0.567147,0.568891,0.57223],[2.50941,0.564151,0.564519,0.565068,0.565971,0.567735,0.571114],[2.58993,0.562947,0.56332,0.563876,0.56479,0.566576,0.569994],[2.67239,0.561738,0.562117,0.56268,0.563606,0.565414,0.568872],[2.75681,0.560526,0.560909,0.561479,0.562417,0.564248,0.567746],[2.84324,0.559308,0.559697,0.560274,0.561224,0.563078,0.566618],[2.93169,0.558086,0.55848,0.559065,0.560027,0.561904,0.565487],[3.0222,0.556859,0.557258,0.557851,0.558826,0.560727,0.564352],[3.1148,0.555627,0.556032,0.556633,0.557621,0.559546,0.563215],[3.20952,0.554391,0.554801,0.55541,0.556411,0.558361,0.562074],[3.30639,0.553149,0.553565,0.554182,0.555196,0.557172,0.56093],[3.40544,0.551903,0.552324,0.55295,0.553978,0.555979,0.559783],[3.5067,0.550651,0.551078,0.551712,0.552754,0.554782,0.558633],[3.6102,0.549394,0.549827,0.55047,0.551526,0.55358,0.557479],[3.71597,0.548131,0.54857,0.549223,0.550294,0.552375,0.556323],[3.82404,0.546863,0.547309,0.547971,0.549056,0.551165,0.555162],[3.93445,0.54559,0.546042,0.546713,0.547814,0.549951,0.553999],[4.04723,0.544311,0.544769,0.54545,0.546566,0.548733,0.552832],[4.1624,0.543026,0.543491,0.544182,0.545314,0.54751,0.551661],[4.28,0.541735,0.542208,0.542908,0.544056,0.546283,0.550487],[4.40006,0.540439,0.540918,0.541629,0.542794,0.545051,0.54931],[4.52261,0.539136,0.539623,0.540344,0.541526,0.543815,0.548129],[4.64769,0.537828,0.538321,0.539054,0.540252,0.542574,0.546944],[4.77533,0.536512,0.537014,0.537757,0.538974,0.541328,0.545755],[4.90555,0.535191,0.5357,0.536455,0.537689,0.540077,0.544563],[5.03839,0.533863,0.53438,0.535146,0.536399,0.538821,0.543367],[5.17389,0.532528,0.533054,0.533832,0.535104,0.537561,0.542168],[5.31208,0.531187,0.531721,0.532511,0.533802,0.536295,0.540964],[5.45298,0.529839,0.530381,0.531184,0.532495,0.535024,0.539757],[5.59664,0.528484,0.529034,0.52985,0.531181,0.533748,0.538545],[5.74308,0.527121,0.527681,0.52851,0.529862,0.532467,0.53733],[5.89234,0.525751,0.52632,0.527162,0.528536,0.531181,0.536111],[6.04446,0.524374,0.524953,0.525808,0.527204,0.529889,0.534888],[6.19946,0.522989,0.523578,0.524448,0.525865,0.528591,0.53366],[6.35737,0.521597,0.522195,0.523079,0.52452,0.527288,0.532428],[6.51824,0.520196,0.520805,0.521704,0.523169,0.525979,0.531193],[6.6821,0.518788,0.519407,0.520321,0.52181,0.524665,0.529953],[6.84898,0.517371,0.518001,0.518931,0.520444,0.523344,0.528708],[7.01892,0.515946,0.516587,0.517533,0.519072,0.522018,0.52746],[7.19194,0.514512,0.515164,0.516127,0.517692,0.520686,0.526207],[7.3681,0.51307,0.513734,0.514714,0.516305,0.519347,0.52495],[7.54741,0.511618,0.512294,0.513292,0.514911,0.518003,0.523688],[7.72991,0.510157,0.510846,0.511861,0.513509,0.516652,0.522422],[7.91565,0.508687,0.509389,0.510423,0.512099,0.515294,0.521151],[8.10465,0.507208,0.507922,0.508975,0.510682,0.513931,0.519875],[8.29695,0.505718,0.506447,0.507519,0.509257,0.51256,0.518595],[8.4926,0.504219,0.504961,0.506054,0.507823,0.511183,0.517311],[8.69161,0.502709,0.503466,0.50458,0.506381,0.509799,0.516021]]};
 
 /* ================= PLANT DATA (from Cavern Volume Gauge 4.1) ================= */
-const CFG={
- C3:{name:"Propane",tk:"TK-3301",lt:["LT33001","LT33002","LT33003"],pt:"PT33210",bot:-192.1,top:-145,
-  zones:[[-192.1,-180],[-180,-172],[-172,-150],[-150,-145]],
-  pA:{LAHH:-151.64,LAH:-152.0,LAL:-172.0,LALL:-172.30},
-  wA:{"2":{LAHH:-182.50,LAH:-183.00,LAL:-188.00,LALL:-188.50},"3":{LAHH:-182.45,LAH:-182.95,LAL:-188.05,LALL:-188.50}},
-  te:[-146,-150,-155,-160,-165,-170,-172,-176,-180,-184],
-  snap:{date:"2026-10-02",p:-165.55,w2:-184.73,w3:-184.73,pg:"6.17",din:"0.507",ic4:"",te:[23.0,21.5,18.5,13.8,11.5,11.7,11.5,11.4,11.5,11.9]},
-  g:{crown:-150,floor:-172,resBot:-180,sumpBot:-192.1,potTop:-180,intake:-185.6,design:{MOP:11.13}},
-  file:"C3 Conversion Table & Curve Rev.1 (2021-05-26)"},
- C4:{name:"Butane",tk:"TK-3401",lt:["LT34001","LT34002","LT34003"],pt:"PT34210",bot:-152.1,top:-104.5,
-  zones:[[-152.1,-140],[-140,-132],[-132,-110],[-110,-104.5]],
-  pA:{LAHH:-111.64,LAH:-112.0,LAL:-132.0,LALL:-132.3},
-  wA:{"2":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5},"3":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5}},
-  te:[-106,-110,-115,-120,-125,-130,-132,-136,-140,-144],
-  snap:{date:"2026-10-02",p:-127.54,w2:-145.95,w3:-145.90,pg:"1.714",din:"0.578",ic4:"29",te:[26.5,26.0,25.8,24.2,23.7,23.6,23.7,23.8,23.5,23.7]},
-  g:{crown:-110,floor:-132,resBot:-140,sumpBot:-152.1,potTop:-140,intake:-145.6,design:{MOP:2.54}},
-  file:"C4 Conversion Table & Curve Rev.2 (2021-05-22)"}
+// Gallery half-width vs depth below crown (m), digitised from LPG-A1-CV-DWG-0239 Rev.10 (same section C3/C4)
+const HW=[[0,0],[0.02,0.5],[0.09,1.01],[0.215,1.51],[0.367,1.99],[0.584,2.45],[0.81,2.88],[1.10,3.29],[1.45,3.70],[2.04,4.29],[2.65,4.85],[3.30,5.36],[3.97,5.84],[4.66,6.30],[5.39,6.70],[6.10,7.05],[6.90,7.40],[7.65,7.67],[8.46,7.93],[9.26,8.125],[10.08,8.28],[10.90,8.40],[11.72,8.47],[12.55,8.48],[13.64,8.457],[14.70,8.38],[15.78,8.25],[16.83,8.087],[17.89,7.86],[18.94,7.58],[19.96,7.26],[20.96,6.89],[21.30,6.75],[21.75,6.56],[22.0,6.48]];
+const D35=1.279; // depth below crown where the gallery is as wide as the Ø7.0 shaft
+const POTW=0.85,FPOTW=0.95; // drawn pot widths (true OD 1.117 / 1.219) so the water bed between pots stays visible
+
+const CFG = {
+  C3:{ name:"Propane", tk:"TK-3301", lt:["LT33001","LT33002","LT33003"], pt:"PT33210", bot:-192.1, top:-145,
+    zones:[["Sump pit",-192.1,-180],["Water reserve",-180,-172],["Storage gallery",-172,-150],["Operation shaft",-150,-145]],
+    pA:{LAHH:-151.64,LAH:-152.0,LAL:-172.0,LALL:-172.30},
+    wA:{"2":{LAHH:-182.50,LAH:-183.00,LAL:-188.00,LALL:-188.50},"3":{LAHH:-182.45,LAH:-182.95,LAL:-188.05,LALL:-188.50}},
+    te:[-146,-150,-155,-160,-165,-170,-172,-176,-180,-184],
+    snap:{date:"2026-10-02",p:-165.55,w2:-184.73,w3:-184.73,pg:"6.17",din:"0.507",ic4:"",te:[23.0,21.5,18.5,13.8,11.5,11.7,11.5,11.4,11.5,11.9]},
+    pms:{p:-165.55,w:-184.73,TV:120383,WV:292,G:120091,N:121172,M:61296,D:0.507},
+    extra:"", file:"C3 Conversion Table & Curve Rev.1 (2021-05-26)", pumps:"P-3301A/B/C (VFD) product, P-3302A/B water",
+    g:{ground:2.6,tos:3.5,dwBot:-52.6,rockTop:-52.0,curtain:-130,
+      plug:{top:-139,wide:-141.5,base:-145,seat:-146.31,wWide:5.9,wBase:4.0},
+      crown:-150,floor:-172,resBot:-180,sumpBot:-192,steel:-191.7,res:[-5.5,3.5],
+      potTop:-180,potBot:-191.7,upperHole:-177,pumpDis:-182.83,pumpBot:-189.047,intake:-185.6,casBot:-190.7,
+      wpDis:-186.33,wpBot:-190.4,wpAlert:-190.5,wcasBot:-191,ltBot:-191,roofEnd:-150.8,teBot:-185,
+      len:1091,cap:370000,design:{TP:11.95,MAWP:11.54,MOP:11.13},shapeF:14,safeF:13},
+    pumpSpec:"KSB UPA 350-128 · 9 stages · 400 m³/h (min 150) · 517 m · 600 kW 6.6 kV · NPSHr 10 m",
+    wpSpec:"KSB UPA 250C-120 · 8 stages · 120 m³/h (min 40) · 255 m · 125 kW 380 V",
+    items:[
+     {k:"spw",tag:"P-3302B",line:'16"-SPW-33009 / 6"-SPW-33015',od:.406,x:-3.067},
+     {k:"spw",tag:"P-3302A",line:'16"-SPW-33008 / 6"-SPW-33014',od:.406,x:-2.431},
+     {k:"pt",tag:"PT casing",line:'4"-PPV-33108 pressure measurement casing',od:.114,x:-2.053},
+     {k:"spare",tag:"P-3301D",pot:"POT-3301D",line:'24"-PPL-33005 / 3"-PPL-33013 (spare)',od:.61,x:-1.573},
+     {k:"lt",tag:"LT casing",line:'10"-PPL-33006 level measurement casing',od:.273,x:-1.033},
+     {k:"pump",tag:"P-3301C",pot:"POT-3301C",line:'24"-PPL-33004 / 10"-PPL-33012',od:.61,x:-0.493},
+     {k:"lt",tag:"LT casing",line:'10"-PPL-33007 level measurement casing',od:.273,x:0.047},
+     {k:"pump",tag:"P-3301B",pot:"POT-3301B",line:'24"-PPL-33003 / 10"-PPL-33011',od:.61,x:0.587},
+     {k:"lt",tag:"LT casing",line:'10"-PPL-33075 level measurement casing',od:.273,x:1.127},
+     {k:"pump",tag:"P-3301A",pot:"POT-3301A",line:'24"-PPL-33002 / 10"-PPL-33010',od:.61,x:1.667},
+     {k:"vent",tag:"Vent casing",line:'12"-PPV-33109 vent casing',od:.324,x:2.168},
+     {k:"fill",tag:"FILL",pot:"POT-3302",line:'34"-PPL-33001 casing / 16"-PPL-33110 fill pipe',od:.864,x:2.797},
+     {k:"te",tag:"TE casing",line:'4"-PPL-33076 temperature casing',od:.114,x:3.36}],
+    plan:{el:-188,src:"LPG-A1-PI-PAD-0506 view A2-A2",items:[
+     {t:"POT-3301D",s:"D",x:-2.04,y:1.47,d:1.117,k:"spare"},{t:"POT-3301C",s:"C",x:-2.25,y:-0.235,d:1.117,k:"pump",p:"P-3301C"},
+     {t:"POT-3301B",s:"B",x:-1.175,y:-1.585,d:1.117,k:"pump",p:"P-3301B"},{t:"POT-3301A",s:"A",x:-0.1,y:-0.235,d:1.117,k:"pump",p:"P-3301A"},
+     {t:"POT-3302 (fill)",s:"F",x:0.9,y:-1.71,d:1.219,k:"fill",p:"FILL"},
+     {t:"P-3302A",s:"wA",x:1.5,y:2.37,d:.406,k:"spw",p:"P-3302A"},{t:"P-3302B",s:"wB",x:1.5,y:1.12,d:.406,k:"spw",p:"P-3302B"},
+     {t:"LT casing",x:-1.22,y:3.0,d:.273,k:"lt"},{t:"LT casing",x:-0.2,y:3.0,d:.273,k:"lt"},{t:"LT casing",x:0.76,y:3.0,d:.273,k:"lt"},{t:"TE casing",x:-1.93,y:2.62,d:.114,k:"te"}]}
+  },
+  C4:{ name:"Butane", tk:"TK-3401", lt:["LT34001","LT34002","LT34003"], pt:"PT34210", bot:-152.1, top:-104.5,
+    zones:[["Sump pit",-152.1,-140],["Water reserve",-140,-132],["Storage gallery",-132,-110],["Operation shaft",-110,-104.5]],
+    pA:{LAHH:-111.64,LAH:-112.0,LAL:-132.0,LALL:-132.3},
+    wA:{"2":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5},"3":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5}},
+    te:[-106,-110,-115,-120,-125,-130,-132,-136,-140,-144],
+    snap:{date:"2026-10-02",p:-127.54,w2:-145.95,w3:-145.90,pg:"1.714",din:"0.578",ic4:"29",te:[26.5,26.0,25.8,24.2,23.7,23.6,23.7,23.8,23.5,23.7]},
+    pms:{p:-127.54,w:-145.95,TV:29666,WV:228,G:29437,N:28907,M:16671,D:0.578},
+    extra:"PMS also lists set points −134.0 / −135.0 / −135.3 and −137.5 / −138.5 / −139.0 m on LT34002/003 inside the water reserve; their service is not labelled on the screen.",
+    file:"C4 Conversion Table & Curve Rev.2 (2021-05-22)", pumps:"P-3401A/B (VFD) product, P-3402A/B water",
+    g:{ground:2.6,tos:3.5,dwBot:-56.68,rockTop:-56.68,curtain:-90,
+      plug:{top:-100,wide:-101.5,base:-104.5,seat:-105.81,wWide:5.45,wBase:3.95},
+      crown:-110,floor:-132,resBot:-140,sumpBot:-152,steel:-151.7,res:[-3.5,5.5],
+      potTop:-140,potBot:-151.7,upperHole:-147,pumpDis:-142.83,pumpBot:-149.047,intake:-145.6,casBot:-150.7,
+      wpDis:-146.33,wpBot:-150.4,wpAlert:-150.5,wcasBot:-151,ltBot:-151,roofEnd:-110.8,teBot:-145,
+      len:380,cap:135000,design:{TP:3.39,MAWP:2.98,MOP:2.54},shapeF:27,safeF:13},
+    pumpSpec:"KSB UPA 350-128 · 9 stages · 400 m³/h (min 150) · 521 m · 600 kW 6.6 kV · NPSHr 10 m",
+    wpSpec:"KSB UPV 200D-14 · 11 stages · 44 m³/h (min 20) · 211 m · 50 kW 380 V",
+    items:[
+     {k:"spw",tag:"P-3402B",line:'16"-SPW-34007 / 4"-SPW-34014',od:.406,x:-3.067},
+     {k:"spw",tag:"P-3402A",line:'16"-SPW-34008 / 4"-SPW-34015',od:.406,x:-2.431},
+     {k:"pt",tag:"PT casing",line:'4"-BTV-34108 pressure measurement casing',od:.114,x:-2.053},
+     {k:"spare",tag:"P-3401C",pot:"POT-3401C",line:'24"-BTL-34004 / 3"-BTL-34012 (spare)',od:.61,x:-1.573},
+     {k:"lt",tag:"LT casing",line:'10"-BTL-34005 level measurement casing',od:.273,x:-1.033},
+     {k:"pump",tag:"P-3401B",pot:"POT-3401B",line:'24"-BTL-34002 / 10"-BTL-34010',od:.61,x:-0.493},
+     {k:"lt",tag:"LT casing",line:'10"-BTL-34075 level measurement casing',od:.273,x:0.047},
+     {k:"pump",tag:"P-3401A",pot:"POT-3401A",line:'24"-BTL-34003 / 10"-BTL-34011',od:.61,x:0.587},
+     {k:"lt",tag:"LT casing",line:'10"-BTL-34006 level measurement casing',od:.273,x:1.127},
+     {k:"fill",tag:"FILL",pot:"POT-3402",line:'34"-BTL-34001 casing / 16"-BTL-34110 fill pipe',od:.864,x:1.90},
+     {k:"vent",tag:"Vent casing",line:'12"-BTV-34109 vent casing',od:.324,x:2.65},
+     {k:"te",tag:"TE casing",line:'4"-BTL-34076 temperature casing',od:.114,x:3.10}],
+    plan:{el:-148.3,src:"LPG-A1-PI-PAD-0604 view A2-A2",items:[
+     {t:"POT-3401C",s:"C",x:-0.6,y:2.25,d:1.117,k:"spare"},{t:"POT-3401A",s:"A",x:-1.94,y:1.175,d:1.117,k:"pump",p:"P-3401A"},
+     {t:"POT-3401B",s:"B",x:-0.6,y:0.1,d:1.117,k:"pump",p:"P-3401B"},{t:"POT-3402 (fill)",s:"F",x:-2.07,y:-1.0,d:1.219,k:"fill",p:"FILL"},
+     {t:"P-3402A",s:"wA",x:0.65,y:-1.55,d:.406,k:"spw",p:"P-3402A"},{t:"P-3402B",s:"wB",x:1.94,y:-1.55,d:.406,k:"spw",p:"P-3402B"},
+     {t:"LT casing",x:2.67,y:1.22,d:.273,k:"lt"},{t:"LT casing",x:2.67,y:0.18,d:.273,k:"lt"},{t:"LT casing",x:2.67,y:-0.78,d:.273,k:"lt"},{t:"TE casing",x:2.28,y:1.81,d:.114,k:"te"}]}
+  }
 };
 
 /* ================= ENGINE (identical to Gauge 4.1) ================= */
@@ -444,18 +565,18 @@ function rhoV(c,TC,pa,ic4){let f=PCR.C3;if(c==="C4"){const w=wIso(ic4),a=PCR.IC4
 
 /* ================= I18N ================= */
 const L={
-en:{c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane",Butane:"Butane",
+en:{enter:"Enter",result:"Result",inputs:"Input",c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane",Butane:"Butane",
  nStock:"Stock",nAB:"A → B",nPlan:"Pump plan",nLook:"Table",nDens:"Density",
  massM:"Product mass · M",volG:"Product volume · G",fillLAH:"Fill to LAH",perCm:"1 cm product",room:"Room to LAH",pumpable:"Pumpable to LAL",
  readings:"PMS readings",prodLevel:"product level",water:"water",wUse:"Water level used",avg:"Average",liqT:"liquid",d15:"density at 15 °C",more:"More",
- negHint:"Levels in m MSL. Type 165.55 for −165.55 — the minus is added for you.",share:"Share result",copy:"Copy",copied:"Copied",details:"Details",
+ negHint:"Levels in m MSL: type 16555 or 165.55 — both read as −165.55.",share:"Share result",copy:"Copy",copied:"Copied",details:"Details",
  normal:"Normal",prodAl:"Product",watAl:"Water",
  kTV:"Total liquid · TV",kWV:"Water · WV",kG:"Product volume · G",kN:"Volume at 15 °C · N",kM:"Product mass · M",kT:"Liquid temperature",teAvg:"TE average below level",entered:"entered",
  kPs_C3:"Vapour pressure at T",kPs_C4:"Bubble pressure at T",kMargin:"PT − saturation",kFloor:"Level above gallery floor",kVap:"Vapour above liquid",kNpsh:"NPSHa estimate, no friction",
  basisFoot:"M = G × VCF × (D15 − 0.0011), weight in air, as the PMS. Tables: {f}. Same engine as Cavern Volume Gauge 4.1.",
  snapReset:"Load PMS snapshot {d}?",snapDone:"PMS snapshot {d} loaded",
  teTitle:"TE temperature profile",teNote:"Points below the product level (coloured) are averaged as the liquid temperature; points above as the vapour temperature.",teLiq:"Liquid avg",teVap:"Vapour avg",done:"Done",clearT:"Use TE average",
- product:"Product",waterC:"Water",from:"from",to:"to",useCur:"Current",quickB:"Quick: B = A",volA:"Volume at A",volB:"Volume at B",dLevel:"Level change",
+ product:"Product",waterC:"Water",from:"from",to:"to",useCur:"Current",quickB:"Quick: B = A",volA:"Volume at A, m³",volB:"Volume at B, m³",dLevel:"Level change",
  volAB_p:"Product volume A → B",volAB_w:"Water volume A → B",falls:"Level falls · pumped out",rises:"Level rises · filled in",noChg:"No change",
  assumeW:"Assumes the water level does not change between A and B.",waterTblEnd:"Water table B ends at {v} m; above it table A increments are used.",
  newLevel:"New level",out:"Pump out",in:"Fill in",start:"Start",startLevel:"level",qty:"Quantity",rate:"Rate",optional:"optional",duration:"Time at rate",
@@ -475,18 +596,18 @@ en:{c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane
  mSat:"Pressure is below saturation at {t} °C ({p} kg/cm²g); saturated liquid density is used.",mQty:"Enter a quantity.",mNeedD:"Set a density to work in tonnes.",mOutT:"That quantity takes the level outside the table.",
  mEnter:"Enter {l}.",lvlA:"Level A",lvlB:"Level B",lvlStart:"Starting level",lvlX:"Level",theme:"Theme",lang:"Language",chooseLang:"Language · Ngôn ngữ · 언어",
  shareHead:"{tk} {n} · stock",shTime:"Time",hrs:"h",days:"days",min:"min"},
-vi:{c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propan",Butane:"Butan",
+vi:{enter:"Nhập số",result:"Kết quả",inputs:"Nhập liệu",c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propan",Butane:"Butan",
  nStock:"Tồn kho",nAB:"Mức A → B",nPlan:"KH bơm",nLook:"Tra bảng",nDens:"KL riêng",
  massM:"Khối lượng SP · M",volG:"Thể tích sản phẩm · G",fillLAH:"Đầy so với LAH",perCm:"1 cm sản phẩm",room:"Còn trống tới LAH",pumpable:"Bơm được tới LAL",
  readings:"Số đọc PMS",prodLevel:"mức sản phẩm",water:"nước",wUse:"Mức nước dùng để tính",avg:"Trung bình",liqT:"lỏng",d15:"KLR ở 15 °C",more:"Thêm",
- negHint:"Mức tính theo m MSL. Gõ 165.55 sẽ hiểu là −165.55 — dấu trừ tự thêm.",share:"Chia sẻ kết quả",copy:"Sao chép",copied:"Đã sao chép",details:"Chi tiết",
+ negHint:"Mức theo m MSL: gõ 16555 hoặc 165.55 đều hiểu là −165.55.",share:"Chia sẻ kết quả",copy:"Sao chép",copied:"Đã sao chép",details:"Chi tiết",
  normal:"Bình thường",prodAl:"Sản phẩm",watAl:"Nước",
  kTV:"Tổng chất lỏng · TV",kWV:"Nước · WV",kG:"Thể tích sản phẩm · G",kN:"Thể tích ở 15 °C · N",kM:"Khối lượng sản phẩm · M",kT:"Nhiệt độ lỏng",teAvg:"TB các TE dưới mức",entered:"nhập tay",
  kPs_C3:"Áp suất hơi bão hòa ở T",kPs_C4:"Áp suất điểm sôi ở T",kMargin:"PT − áp bão hòa",kFloor:"Mức trên đáy gallery",kVap:"Hơi phía trên chất lỏng",kNpsh:"NPSHa ước tính, bỏ qua ma sát",
  basisFoot:"M = G × VCF × (D15 − 0.0011), trọng lượng trong không khí, như PMS. Bảng: {f}. Cùng bộ tính với Cavern Volume Gauge 4.1.",
  snapReset:"Nạp số liệu PMS {d}?",snapDone:"Đã nạp số liệu PMS {d}",
  teTitle:"Biên dạng nhiệt độ TE",teNote:"Các điểm dưới mức sản phẩm (có màu) được lấy trung bình làm nhiệt độ lỏng; các điểm phía trên là nhiệt độ hơi.",teLiq:"TB lỏng",teVap:"TB hơi",done:"Xong",clearT:"Dùng TB TE",
- product:"Sản phẩm",waterC:"Nước",from:"từ",to:"đến",useCur:"Hiện tại",quickB:"Nhanh: B = A",volA:"Thể tích tại A",volB:"Thể tích tại B",dLevel:"Thay đổi mức",
+ product:"Sản phẩm",waterC:"Nước",from:"từ",to:"đến",useCur:"Hiện tại",quickB:"Nhanh: B = A",volA:"Thể tích tại A, m³",volB:"Thể tích tại B, m³",dLevel:"Thay đổi mức",
  volAB_p:"Thể tích SP A → B",volAB_w:"Thể tích nước A → B",falls:"Mức giảm · đã bơm ra",rises:"Mức tăng · đã nạp vào",noChg:"Không đổi",
  assumeW:"Giả định mức nước không đổi giữa A và B.",waterTblEnd:"Bảng nước B kết thúc ở {v} m; phía trên dùng gia số của bảng A.",
  newLevel:"Mức mới",out:"Bơm ra",in:"Nạp vào",start:"Mức",startLevel:"ban đầu",qty:"Lượng",rate:"Lưu lượng",optional:"tùy chọn",duration:"Thời gian",
@@ -506,18 +627,18 @@ vi:{c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propa
  mSat:"Áp suất thấp hơn áp bão hòa ở {t} °C ({p} kg/cm²g); dùng KLR lỏng bão hòa.",mQty:"Nhập lượng.",mNeedD:"Cần KLR để tính theo tấn.",mOutT:"Lượng này đưa mức ra ngoài bảng.",
  mEnter:"Nhập {l}.",lvlA:"Mức A",lvlB:"Mức B",lvlStart:"Mức ban đầu",lvlX:"Mức",theme:"Giao diện",lang:"Ngôn ngữ",chooseLang:"Language · Ngôn ngữ · 언어",
  shareHead:"{tk} {n} · tồn kho",shTime:"Thời điểm",hrs:"giờ",days:"ngày",min:"phút"},
-ko:{c3:"C3 · 프로판",c4:"C4 · 부탄",sub:"HSVC LPG 캐번",Propane:"프로판",Butane:"부탄",
+ko:{enter:"값 입력",result:"결과",inputs:"입력",c3:"C3 · 프로판",c4:"C4 · 부탄",sub:"HSVC LPG 캐번",Propane:"프로판",Butane:"부탄",
  nStock:"재고",nAB:"레벨 A→B",nPlan:"펌핑 계획",nLook:"환산표",nDens:"밀도",
  massM:"제품 질량 · M",volG:"제품 부피 · G",fillLAH:"LAH 대비 충전율",perCm:"제품 1 cm",room:"LAH까지 여유",pumpable:"LAL까지 출하 가능",
  readings:"PMS 지시값",prodLevel:"제품 레벨",water:"물",wUse:"계산에 쓰는 물 레벨",avg:"평균",liqT:"액체",d15:"15 °C 밀도",more:"더보기",
- negHint:"레벨은 m MSL. 165.55 입력 시 −165.55로 처리됩니다 (마이너스 자동).",share:"결과 공유",copy:"복사",copied:"복사됨",details:"상세",
+ negHint:"레벨 m MSL: 16555 또는 165.55 입력 = −165.55.",share:"결과 공유",copy:"복사",copied:"복사됨",details:"상세",
  normal:"정상",prodAl:"제품",watAl:"물",
  kTV:"총 액체 · TV",kWV:"물 · WV",kG:"제품 부피 · G",kN:"15 °C 부피 · N",kM:"제품 질량 · M",kT:"액체 온도",teAvg:"레벨 아래 TE 평균",entered:"입력값",
  kPs_C3:"T에서 증기압",kPs_C4:"T에서 기포점 압력",kMargin:"PT − 포화압",kFloor:"갤러리 바닥 위 레벨",kVap:"액면 위 증기",kNpsh:"NPSHa 추정 (마찰 제외)",
  basisFoot:"M = G × VCF × (D15 − 0.0011), 공기 중 중량, PMS와 동일. 환산표: {f}. Cavern Volume Gauge 4.1과 같은 계산.",
  snapReset:"PMS {d} 값을 불러올까요?",snapDone:"PMS {d} 값 불러옴",
  teTitle:"TE 온도 분포",teNote:"제품 레벨 아래 지점(색 표시)의 평균을 액체 온도로, 위 지점은 증기 온도로 사용합니다.",teLiq:"액체 평균",teVap:"증기 평균",done:"완료",clearT:"TE 평균 사용",
- product:"제품",waterC:"물",from:"시작",to:"끝",useCur:"현재값",quickB:"빠른 입력: B = A",volA:"A 부피",volB:"B 부피",dLevel:"레벨 변화",
+ product:"제품",waterC:"물",from:"시작",to:"끝",useCur:"현재값",quickB:"빠른 입력: B = A",volA:"A 부피, m³",volB:"B 부피, m³",dLevel:"레벨 변화",
  volAB_p:"제품 부피 A → B",volAB_w:"물 부피 A → B",falls:"레벨 하강 · 출하",rises:"레벨 상승 · 입고",noChg:"변화 없음",
  assumeW:"A와 B 사이에서 물 레벨은 변하지 않는다고 가정합니다.",waterTblEnd:"물 환산표 B는 {v} m까지; 그 위는 표 A 증분을 사용합니다.",
  newLevel:"새 레벨",out:"출하",in:"입고",start:"시작",startLevel:"레벨",qty:"수량",rate:"유량",optional:"선택",duration:"소요 시간",
@@ -547,7 +668,9 @@ const el2=x=>isFinite(x)?(x<0?"−":"")+Math.abs(x).toFixed(2):"–";
 const sg=(x,d=1)=>isFinite(x)?(x>0?"+":x<0?"−":"±")+nf(Math.abs(x),d):"–";
 function num(s){if(s==null)return NaN;s=String(s).trim().replace(/\s/g,"").replace(/−/g,"-").replace(/,/g,".");if((s.match(/\./g)||[]).length>1)return NaN;return s===""?NaN:+s;}
 function qnum(s){if(s==null)return NaN;s=String(s).trim().replace(/\s/g,"");if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s))s=s.replace(/,/g,"");return num(s);}
-function lvl(s){let v=num(s);if(isFinite(v)&&v>0)v=-v;return v;}
+function lvl(s){if(s==null)return NaN;const r=String(s).trim().replace(/\s/g,"").replace(/−/g,"-");const m=r.match(/^-?(\d{4,5})$/);if(m)return -(+m[1]/(m[1].length===5?100:10));let v=num(r);if(isFinite(v)&&v>0)v=-v;return v;}
+const esc=x=>String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+function dNum(x){let v=num(x);if(v>=100&&v<1000)v/=1000;return v;}
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
 const U=(u)=>`<small>${u}</small>`;
 const ICON_W='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.8 15 14H1Z"/><path d="M8 6.3v3.6M8 11.6v.4"/></svg>';
@@ -575,7 +698,7 @@ function density(c=cav){const s=st(c),P=lvl(s.p),te=teAvg(c,P);
  const tIn=num(s.tl),tt=isFinite(tIn)?tIn:te.tl,pg=num(s.pg),ic4=num(s.ic4),air=s.air==="1";
  const pa=isFinite(pg)?g2a(pg):NaN,pb=bubble(c,tt,ic4);
  const rEOS=rhoMix(c,tt,isFinite(pa)?pa:pb,ic4),r15=rhoMix(c,15,NaN,ic4),vcf=rEOS/r15;
- const din=num(s.din),b15=s.dbasis==="15";let rho,tpm,d15=NaN;
+ const din=dNum(s.din),b15=s.dbasis==="15";let rho,tpm,d15=NaN;
  if(s.dm==="in"){if(b15){d15=din;rho=isFinite(din)?din*vcf:NaN;tpm=air?(din-0.0011)*vcf:rho;}else{rho=din;tpm=air?din-0.0011:din;}}
  else{rho=rEOS;d15=r15;tpm=air?rho-0.0011:rho;}
  const notes=[];
@@ -590,57 +713,120 @@ function fmtDur(h){if(!isFinite(h)||h<0)return "–";const m=h*60;if(m<90)return
 function band(v,A){if(!isFinite(v))return null;if(v>=A.LAHH)return ["tr","LAHH"];if(v>=A.LAH)return ["al","LAH"];if(v<=A.LALL)return ["tr","LALL"];if(v<=A.LAL)return ["al","LAL"];return ["ok",t("normal")];}
 const chip=(k,txt)=>`<span class="hchip ${k==="ok"?"":k}"><i></i>${txt}</span>`;
 
-/* ================= GAUGE (schematic, true elevation scale) ================= */
-function gauge(id,o){
- const svg=$(id),k=CFG[cav],z=k.zones,H=240,top=6,bot=234,E0=k.top,E1=k.bot;
- const Y=e=>top+(E0-e)/(E0-E1)*(bot-top);
- const yS=Y(z[3][1]),yC=Y(z[2][1]),yF=Y(z[2][0]),yR=Y(z[1][0]),yB=Y(z[0][0]);
- const path=`M43 ${yS} V${yC} H28 Q6 ${yC} 6 ${yC+16} V${yF} H24 V${yR} H39 V${yB-2} Q39 ${yB} 41 ${yB} H59 Q61 ${yB} 61 ${yB-2} V${yR} H76 V${yF} H94 V${yC+16} Q94 ${yC} 72 ${yC} H57 V${yS} Z`;
- const acc=cav==="C3"?"var(--C3)":"var(--C4)";
- const P=o.P,W=o.W;const yP=isFinite(P)?Math.max(top,Math.min(bot,Y(P))):bot,yW=isFinite(W)?Math.max(top,Math.min(bot,Y(W))):bot;
- let s=`<defs><clipPath id="${id}c"><path d="${path}"/></clipPath>
-  <linearGradient id="${id}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${acc}" stop-opacity=".95"/><stop offset="1" stop-color="${acc}" stop-opacity=".55"/></linearGradient>
-  <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--waterL)"/><stop offset="1" stop-color="var(--water)"/></linearGradient>
-  <pattern id="${id}h" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#2A323C" stroke-width="1.2"/></pattern></defs>`;
- s+=`<path d="${path}" fill="#141A20"/><g clip-path="url(#${id}c)">`;
- s+=`<rect x="0" y="0" width="100" height="${H}" fill="url(#${id}h)" opacity=".7"/>`;
- s+=`<g class="lvl" style="transform:translateY(${yP}px)"><rect x="0" y="0" width="100" height="${H}" fill="url(#${id}p)"/><rect x="0" y="0" width="100" height="1.6" fill="#fff" opacity=".85"/></g>`;
- s+=`<g class="lvl" style="transform:translateY(${yW}px)"><rect x="0" y="0" width="100" height="${H}" fill="url(#${id}w)"/><rect x="0" y="0" width="100" height="1.2" fill="#CFE4FF" opacity=".9"/></g>`;
- if(o.band&&o.band.every(isFinite)){const a=Y(Math.max(...o.band)),b=Y(Math.min(...o.band));s+=`<rect x="0" y="${a}" width="100" height="${Math.max(1,b-a)}" fill="#fff" opacity=".22"/>`;}
- s+=`</g><path d="${path}" fill="none" stroke="#8B96A3" stroke-width="1.2" stroke-linejoin="round"/>`;
- // alarm ticks (product, right side; water, left side)
- const tick=(e,side,col,lab)=>{const y=Y(e);const x0=side>0?94:6;return `<line x1="${x0}" y1="${y}" x2="${x0+side*5}" y2="${y}" stroke="${col}" stroke-width="1.3"/><text x="${x0+side*6}" y="${y+2.6}" font-size="7.5" fill="${col}" text-anchor="${side>0?"start":"end"}" font-weight="600">${lab}</text>`;};
- if(o.alarms!==false){const A=k.pA;s+=tick(A.LAH,1,"#F2C27A","H")+tick(A.LAL,1,"#F2C27A","L");}
- for(const m of (o.marks||[])){if(!isFinite(m.e))continue;const y=Y(m.e);s+=`<line x1="2" y1="${y}" x2="98" y2="${y}" stroke="#fff" stroke-width="1.1" stroke-dasharray="3 2"/><rect x="${m.side==="l"?1:82}" y="${y-6}" width="17" height="11" rx="2.5" fill="#0B0E11" stroke="#fff" stroke-width=".8"/><text x="${m.side==="l"?9.5:90.5}" y="${y+2.6}" font-size="7.5" fill="#fff" text-anchor="middle" font-weight="600">${m.t}</text>`;}
- svg.setAttribute("viewBox",`-6 0 112 ${H}`);
- svg.style.setProperty("--acc",acc);
- svg.innerHTML=s;
+/* ================= CAVERN SECTION (true scale, from Gauge 4.1 drawing) ================= */
+const PCOL={C3:["#F2B233","#C9861A"],C4:["#EC8A4C","#C45E26"]};
+function hwAt(d){if(d<=0)return 0;for(let i=1;i<HW.length;i++)if(d<=HW[i][0]){const a=HW[i-1],b=HW[i];return a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0]);}return HW[HW.length-1][1];}
+function spanAt(g,el){if(el>g.crown-D35)return[-3.5,3.5];if(el>=g.floor){const h=hwAt(g.crown-el);return[-h,h];}if(el>=g.resBot)return[g.res[0],g.res[1]];return[-3.5,3.5];}
+const sX=x=>(+x).toFixed(3),sY=e=>(-e).toFixed(3);
+function voidPath(g){const top=g.plug.base,c=g.crown,f=g.floor,P=[[-3.5,top],[-3.5,c-D35]];
+ for(const [d,h] of HW)if(d>D35)P.push([-h,c-d]);
+ P.push([g.res[0],f],[g.res[0],g.resBot],[-3.5,g.resBot],[-3.5,g.sumpBot],[3.5,g.sumpBot],[3.5,g.resBot],[g.res[1],g.resBot],[g.res[1],f]);
+ for(const [d,h] of HW.slice().reverse())if(d>D35)P.push([h,c-d]);
+ P.push([3.5,c-D35],[3.5,top]);return "M"+P.map(p=>sX(p[0])+","+sY(p[1])).join(" L")+" Z";}
+const TRAMP=[[255,245,230],[253,211,154],[245,158,76],[217,83,30],[143,36,16]];
+function tColor(t){let a=Math.max(0,Math.min(1,(t-5)/25));const x=a*(TRAMP.length-1),i=Math.min(TRAMP.length-2,Math.floor(x)),f=x-i,A=TRAMP[i],B=TRAMP[i+1];return `rgb(${A.map((v,j)=>Math.round(v+(B[j]-v)*f)).join(",")})`;}
+const sR=(x0,e0,x1,e1,a)=>`<rect x="${sX(Math.min(x0,x1))}" y="${sY(Math.max(e0,e1))}" width="${sX(Math.abs(x1-x0))}" height="${sX(Math.abs(e0-e1))}" ${a||""}/>`;
+const sL=(x0,e0,x1,e1,a)=>`<line x1="${sX(x0)}" y1="${sY(e0)}" x2="${sX(x1)}" y2="${sY(e1)}" ${a||""}/>`;
+const NS='vector-effect="non-scaling-stroke"';
+function section(id,o){
+ const svg=$(id),k=CFG[cav],g=k.g,pl=g.plug,[PC,PCd]=PCOL[cav],P=o.P,W=o.W,s=st();
+ const eTop=pl.top+0.6,eBot=g.sumpBot-0.7,x0=-9.3,x1=16.6,I=id+"_";
+ const o_=[];
+ o_.push(`<defs>
+  <pattern id="${I}rk" patternUnits="userSpaceOnUse" width="1.6" height="1.6" patternTransform="rotate(38)"><rect width="1.6" height="1.6" fill="#1B2128"/><rect width=".22" height="1.6" fill="#222932"/></pattern>
+  <pattern id="${I}cc" patternUnits="userSpaceOnUse" width="1" height="1"><rect width="1" height="1" fill="#4A535D"/><circle cx=".25" cy=".3" r=".09" fill="#5E6873"/><circle cx=".7" cy=".72" r=".07" fill="#3B434C"/></pattern>
+  <linearGradient id="${I}v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3946"/><stop offset="1" stop-color="#26303B"/></linearGradient>
+  <linearGradient id="${I}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${PC}"/><stop offset="1" stop-color="${PCd}"/></linearGradient>
+  <linearGradient id="${I}pt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${PCd}"/><stop offset=".45" stop-color="${PC}"/><stop offset="1" stop-color="${PCd}"/></linearGradient>
+  <linearGradient id="${I}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A93EE"/><stop offset="1" stop-color="#2161BD"/></linearGradient>
+  <pattern id="${I}bd" patternUnits="userSpaceOnUse" width=".8" height=".8" patternTransform="rotate(45)"><rect width=".26" height=".8" fill="#fff" fill-opacity=".35"/></pattern>
+  <clipPath id="${I}c"><path d="${voidPath(g)}"/></clipPath></defs>`);
+ // rock + dry shaft + plug
+ o_.push(sR(x0,eTop,9.3,eBot,`fill="url(#${I}rk)"`));
+ o_.push(sR(-3.5,eTop,3.5,pl.top,`fill="#0F1418"`),sL(-3.5,eTop,-3.5,pl.top,`stroke="#5C6672" stroke-width="1" ${NS}`),sL(3.5,eTop,3.5,pl.top,`stroke="#5C6672" stroke-width="1" ${NS}`));
+ o_.push(`<path d="M${sX(-3.5)},${sY(pl.top)} L${sX(-pl.wWide)},${sY(pl.wide)} L${sX(-pl.wBase)},${sY(pl.base)} L${sX(pl.wBase)},${sY(pl.base)} L${sX(pl.wWide)},${sY(pl.wide)} L${sX(3.5)},${sY(pl.top)} Z" fill="url(#${I}cc)" stroke="#6B7682" stroke-width="1" ${NS}/>`);
+ // void: vapour, product, water
+ const VP=voidPath(g);
+ o_.push(`<path d="${VP}" fill="url(#${I}v)"/><g clip-path="url(#${I}c)">`);
+ if(isFinite(P)&&isFinite(W)&&P>W)o_.push(sR(-20,Math.min(P,pl.base),20,W,`fill="url(#${I}p)"`));
+ else if(isFinite(P)&&!isFinite(W))o_.push(sR(-20,Math.min(P,pl.base),20,g.sumpBot-1,`fill="url(#${I}p)"`));
+ if(isFinite(W))o_.push(sR(-20,Math.min(W,pl.base),20,g.sumpBot-1,`fill="url(#${I}w)"`));
+ if(o.band&&o.band.every(isFinite))o_.push(sR(-20,o.band[0],20,o.band[1],`fill="url(#${I}bd)"`));
+ if(isFinite(P))o_.push(sL(-20,P,20,P,`stroke="#fff" stroke-width="1.5" ${NS}`));
+ if(isFinite(W))o_.push(sL(-20,W,20,W,`stroke="#CFE4FF" stroke-width="1.3" ${NS}`));
+ for(const m of (o.marks||[]))if(isFinite(m.e))o_.push(sL(-20,m.e,20,m.e,`stroke="#fff" stroke-width="1.3" stroke-dasharray="4 3" ${NS}`));
+ o_.push(`</g><path d="${VP}" fill="none" stroke="#8B96A3" stroke-width="1.2" stroke-linejoin="round" ${NS}/>`);
+ o_.push(sR(-3.45,g.steel,3.45,g.sumpBot,`fill="#5C6672"`));
+ // casings
+ const cas=`fill="#fff" fill-opacity=".04" stroke="#AEB8C2" stroke-opacity=".22" stroke-width=".6" ${NS}`;
+ for(const it of k.items){const r=it.od/2;
+  const bot=it.k==="lt"?g.ltBot:it.k==="te"?g.teBot:it.k==="spw"?g.wcasBot:it.k==="fill"?g.potBot+0.6:(it.k==="pt"||it.k==="vent")?g.roofEnd:g.casBot;
+  o_.push(sR(it.x-r,eTop,it.x+r,bot,cas));}
+ // pots (product inside, open top)
+ for(const it of k.items.filter(i=>i.pot)){const w=(it.k==="fill"?FPOTW:POTW)/2,wIn=isFinite(W)&&W>g.potTop,pTop=Math.min(isFinite(P)?P:g.potBot,g.potTop);
+  o_.push(sR(it.x-w,g.potTop,it.x+w,g.potBot,`fill="#26303B"`));
+  if(pTop>g.potBot)o_.push(sR(it.x-w,pTop,it.x+w,g.potBot,`fill="url(#${I}pt)"`));
+  if(wIn)o_.push(sR(it.x-w,Math.min(g.potBot+(W-g.potTop)*2,g.potTop),it.x+w,g.potBot,`fill="#3B86E8"`));
+  o_.push(sR(it.x-w,g.potTop,it.x+w,g.potBot,`fill="none" stroke="${wIn?"#FF6B6B":"#0B0E11"}" stroke-width="${wIn?1.6:1.1}" ${NS}`));
+  if(it.k==="pump")o_.push(sR(it.x-.2,g.pumpDis,it.x+.2,g.pumpBot,`rx=".06" fill="#6B7682" stroke="#0B0E11" stroke-width=".6" ${NS}`));}
+ for(const it of k.items.filter(i=>i.k==="spw"))o_.push(sR(it.x-.14,g.wpDis,it.x+.14,g.wpBot,`fill="#6B7682" stroke="#0B0E11" stroke-width=".6" ${NS}`));
+ // TE points
+ const te=k.items.find(i=>i.k==="te");if(te)k.te.forEach((e,i)=>{const v=num(s.te[i]);o_.push(`<circle cx="${sX(te.x)}" cy="${sY(e)}" r=".34" fill="${isFinite(v)?tColor(v):"#555"}" stroke="#0B0E11" stroke-width=".7" ${NS}/>`);});
+ // alarm marks on the wall (product amber, water blue); crossed = red
+ const wk=k.wA[s.wsrc==="3"?"3":"2"],al=[];
+ for(const [n,v] of Object.entries(k.pA))if(n==="LAH"||n==="LAL")al.push([v,n.startsWith("LAH")?P>=v:P<=v,"#E9C27A"]);
+ for(const [n,v] of Object.entries(wk))if(n==="LAH"||n==="LAL")al.push([v,n.startsWith("LAH")?W>=v:W<=v,"#7DB3F5"]);
+ for(const [v,on,c] of al){const x=spanAt(g,v)[1];o_.push(`<path d="M${sX(x+.15)},${sY(v)} l.95,-.55 v1.1 z" fill="${on?"#FF6B6B":c}"/>`);}
+ // labels on the right
+ const L=[],wt=s.wsrc==="3"?k.lt[2]:s.wsrc==="avg"?"LT avg":k.lt[1];
+ if(o.lbl!==false){if(isFinite(P))L.push({e:P,tag:k.lt[0],v:el2(P),c:PC});if(isFinite(W))L.push({e:W,tag:wt,v:el2(W),c:"#7DB3F5"});}
+ for(const m of (o.marks||[]))if(isFinite(m.e))L.push({e:m.e,tag:m.t,v:el2(m.e),c:"#FFFFFF",mk:true});
+ L.sort((a,b)=>b.e-a.e);let last=eTop+1;
+ for(const l of L){let y=Math.min(l.e,eTop-1.2);if(y>last-3.7)y=last-3.7;l.y=y;last=y;}
+ const lo=eBot+2.2,n=L.length;if(n){L[n-1].y=Math.max(L[n-1].y,lo);for(let i=n-2;i>=0;i--)L[i].y=Math.max(L[i].y,L[i+1].y+3.7);}
+ const lx=10.1;
+ for(const l of L){const wx=spanAt(g,l.e)[1]+.1;
+  o_.push(`<polyline points="${sX(wx)},${sY(l.e)} ${sX(lx-.9)},${sY(l.e)} ${sX(lx-.2)},${sY(l.y)}" fill="none" stroke="${l.c}" stroke-width="1" ${l.mk?'stroke-dasharray="3 2"':""} ${NS}/>`);
+  o_.push(`<text x="${sX(lx)}" y="${sY(l.y+.45)}" font-size="1.12" fill="${l.c}" fill-opacity=".8" font-family="var(--mono)" font-weight="500">${esc(l.tag)}</text>`);
+  o_.push(`<text x="${sX(lx)}" y="${sY(l.y-1.45)}" font-size="1.62" fill="${l.c}" font-family="var(--mono)" font-weight="600">${l.v}</text>`);}
+ svg.setAttribute("viewBox",`${sX(x0)} ${sY(eTop)} ${sX(x1-x0)} ${sX(eTop-eBot)}`);
+ svg.style.aspectRatio=`${(x1-x0).toFixed(2)}/${(eTop-eBot).toFixed(2)}`;
+ svg.innerHTML=o_.join("");
 }
 
 /* ================= RENDER ================= */
+let DET="",STRIP="";
 function rStock(){
- const s=current(),d=density(),k=CFG[cav],g=k.g,ss=st();
- const M=s.G*d.tpm;
- $("o-m").innerHTML=isFinite(M)?nf(M,0)+U("t"):"–";
- $("o-g").innerHTML=isFinite(s.G)?nf(s.G,0)+U("m³"):"–";
- const VLAH=vTot(cav,k.pA.LAH),VLAL=vTot(cav,k.pA.LAL),cm=perCm(cav,s.P,vTot);
- $("o-fill").innerHTML=isFinite(s.TV)?nf(s.TV/VLAH*100,1)+U("%"):"–";
- $("o-cm").innerHTML=isFinite(cm)?nf(cm,1)+U("m³")+(isFinite(d.tpm)?`<i>≈ ${nf(cm*d.tpm,1)} t</i>`:""):"–";
- $("o-room").innerHTML=isFinite(s.TV)&&isFinite(d.tpm)?nf((VLAH-s.TV)*d.tpm,0)+U("t"):"–";
- $("o-lal").innerHTML=isFinite(s.TV)&&isFinite(d.tpm)?nf((s.TV-VLAL)*d.tpm,0)+U("t"):"–";
- const bp=band(s.P,k.pA),bw=band(s.W,k.wA[s.src==="3"?"3":"2"]);
- $("o-chips").innerHTML=(bp?chip(bp[0],`${t("prodAl")} ${bp[1]}`):"")+(bw?chip(bw[0],`${t("watAl")} ${bw[1]}`):"");
- gauge("g-stock",{P:s.P,W:s.W});
- // TE hint in temperature field
+ const s=current(),d=density(),k=CFG[cav],g=k.g,M=s.G*d.tpm,N=s.G*d.vcf;
+ document.querySelectorAll("#hero-stock .tg[data-k]").forEach(e=>e.textContent=`${k.tk}-${e.dataset.k}`);
+ $("h2tag").textContent=`${k.tk} · ${t(k.name).toUpperCase()}`;
+ const D=isFinite(d.d15)?d.d15:d.rho;
+ $("o-m").textContent=isFinite(M)?nf(M,0):"–";
+ $("o-d").textContent=isFinite(D)?D.toFixed(3):"–";
+ $("o-g").textContent=isFinite(s.G)?nf(s.G,0):"–";
+ $("o-tv").textContent=isFinite(s.TV)?nf(s.TV,0):"–";
+ $("o-n").textContent=isFinite(N)?nf(N,0):"–";
+ $("o-wv").textContent=isFinite(s.WV)?nf(s.WV,0):"–";
+ $("o-t").textContent=isFinite(d.t)?d.t.toFixed(2):"–";
+ const bp=band(s.P,k.pA),bw=band(s.W,k.wA[s.src==="3"?"3":"2"]),bad=[bp&&bp[0]!=="ok"?[bp[0],`${t("prodAl")} ${bp[1]}`]:null,bw&&bw[0]!=="ok"?[bw[0],`${t("watAl")} ${bw[1]}`]:null].filter(Boolean);
+ $("o-stat").innerHTML=bad.length?bad.map(([c,x])=>`<span class="stat ${c}"><i></i>${x}</span>`).join(" "):(bp?`<span class="stat"><i></i>${t("normal")}</span>`:"");
+ section("g-stock",{P:s.P,W:s.W});
  $("tl").placeholder=isFinite(d.te.tl)?d.te.tl.toFixed(2):"";
- // details
+ STRIP=`<span><i>M</i><b>${isFinite(M)?nf(M,0):"–"}</b> t</span><span><i>G</i><b>${isFinite(s.G)?nf(s.G,0):"–"}</b> m³</span><span><i>P</i>${el2(s.P)}</span>`;
+ // details (sheet)
+ const VLAH=vTot(cav,k.pA.LAH),VLAL=vTot(cav,k.pA.LAL),cm=perCm(cav,s.P,vTot);
  const top=T[cav].A.elTop,Vv=vTot(cav,top)-s.TV,rv=rhoV(cav,d.te.tv,d.pa,d.ic4),Mv=Vv*rv/1000;
  const npsh=(s.P-g.intake)+(d.pa-d.pb)*1e5/(d.rEOS*1000*9.81);
+ const tile=(a,b,u,c)=>`<div class="dt"><div class="eyebrow">${a}</div><b>${b}${u?`<small>${u}</small>`:""}</b>${c?`<i>${c}</i>`:""}</div>`;
+ const tiles=[tile(t("fillLAH"),isFinite(s.TV)?nf(s.TV/VLAH*100,1):"–","%"),
+  tile(t("perCm"),isFinite(cm)?nf(cm,1):"–","m³",isFinite(cm*d.tpm)?`≈ ${nf(cm*d.tpm,1)} t`:""),
+  tile(t("room"),isFinite(s.TV)&&isFinite(d.tpm)?nf((VLAH-s.TV)*d.tpm,0):"–","t",isFinite(s.TV)?nf(VLAH-s.TV,0)+" m³":""),
+  tile(t("pumpable"),isFinite(s.TV)&&isFinite(d.tpm)?nf((s.TV-VLAL)*d.tpm,0):"–","t",isFinite(s.TV)?nf(s.TV-VLAL,0)+" m³":"")].join("");
  const rows=[
   [t("kTV"),isFinite(s.TV)?nf(s.TV,0)+" m³":"–",`${k.lt[0]} ${el2(s.P)} m`],
   [t("kWV"),isFinite(s.WV)?nf(s.WV,0)+" m³":"–",`${s.src==="avg"?"LT-002/003 "+t("avg").toLowerCase():s.src==="3"?k.lt[2]:k.lt[1]} ${el2(s.W)} m`],
   [t("kG"),isFinite(s.G)?nf(s.G,0)+" m³":"–","TV − WV"],
-  [t("kN"),isFinite(s.G*d.vcf)?nf(s.G*d.vcf,0)+" m³":"–","VCF "+(isFinite(d.vcf)?d.vcf.toFixed(5):"–")],
+  [t("kN"),isFinite(N)?nf(N,0)+" m³":"–","VCF "+(isFinite(d.vcf)?d.vcf.toFixed(5):"–")],
   [t("kM"),isFinite(M)?nf(M,0)+" t":"–",d.dm==="in"&&d.b15&&d.air?`N × (${isFinite(d.d15)?d.d15.toFixed(4):"–"} − 0.0011)`:`G × ${isFinite(d.tpm)?d.tpm.toFixed(4):"–"}`],
   [t("kT"),isFinite(d.t)?d.t.toFixed(2)+" °C":"–",d.tAuto?t("teAvg"):t("entered")],
   [t("kPs_"+cav),isFinite(d.pb)?nf(a2g(d.pb),2)+" kg/cm²g":"–"],
@@ -648,7 +834,7 @@ function rStock(){
   [t("kFloor"),isFinite(s.P)?(s.P-g.floor).toFixed(2)+" m":"–"],
   [t("kVap"),isFinite(Mv)?nf(Mv,0)+" t":"–",isFinite(Vv)?`${nf(Vv,0)} m³ × ${nf(rv,2)} kg/m³`:""],
   [t("kNpsh"),isFinite(npsh)?nf(npsh,1)+" m":"–","NPSHr 10 m"]];
- $("o-kv").innerHTML=rows.map(([a,b,c])=>`<div><dt>${a}</dt><dd>${b}${c?`<small>${c}</small>`:""}</dd></div>`).join("");
+ DET=`<div class="dtiles">${tiles}</div><dl class="kv">${rows.map(([a,b,c])=>`<div><dt>${a}</dt><dd>${b}${c?`<small>${c}</small>`:""}</dd></div>`).join("")}</dl><p class="foot">${t("basisFoot",{f:`<b>${k.file}</b>`})}</p>`;
  const m=[...d.notes];
  if(!isFinite(s.TV))m.unshift(["crit",isFinite(s.P)?rangeMsg(s.P,k.lt[0]):t("mEnterP")]);
  if(isFinite(s.W)&&!isFinite(s.WV))m.push(["crit",rangeMsg(s.W,t("waterC"))]);
@@ -658,7 +844,6 @@ function rStock(){
  if(isFinite(s.W2)&&isFinite(s.W3)&&Math.abs(s.W2-s.W3)>=0.2)m.push(["warn",t("mLTdiff",{v:nf(Math.abs(s.W2-s.W3),2)})]);
  if(isFinite(d.pg)&&d.pg>g.design.MOP)m.push(["crit",t("mMOP",{v:g.design.MOP})]);
  msgs("o-msg",m);
- $("foot").innerHTML=t("basisFoot",{f:`<b>${k.file}</b>`});
  $("snap").textContent="PMS "+k.snap.date;
 }
 function rAB(){
@@ -668,7 +853,7 @@ function rAB(){
  $("ab-v").innerHTML=isFinite(dv)?nf(Math.abs(dv),1)+U("m³"):"–";
  $("ab-t").innerHTML=isP&&isFinite(dv*d.tpm)?nf(Math.abs(dv*d.tpm),1)+U("t"):"";
  $("ab-s").textContent=!isFinite(dv)?"–":dv<0?t("falls"):dv>0?t("rises"):t("noChg");
- $("ab-va").innerHTML=isFinite(va)?nf(va,0)+U("m³"):"–";$("ab-vb").innerHTML=isFinite(vb)?nf(vb,0)+U("m³"):"–";
+ $("ab-va").textContent=isFinite(va)?nf(va,0):"–";$("ab-vb").textContent=isFinite(vb)?nf(vb,0):"–";
  $("ab-dl").innerHTML=isFinite(b-a)?sg(b-a,2)+U("m"):"–";$("ab-tpm").textContent=isP&&isFinite(d.tpm)?d.tpm.toFixed(4):"–";
  ["ab-ia","ab-ib"].forEach(i=>$(i).className="inp "+(isP?"prod":"wat"));
  $("ab-note").textContent=isP?t("assumeW"):t("waterTblEnd",{v:el2(T[cav].B.elTop)});
@@ -677,7 +862,8 @@ function rAB(){
  if(!isFinite(vb))m.push(["crit",isFinite(b)?rangeMsg(b,t("lvlB")):t("mEnter",{l:t("lvlB")})]);
  msgs("ab-msg",m);
  const cur=current();
- gauge("g-ab",isP?{P:cur.P,W:cur.W,marks:[{e:a,t:"A"},{e:b,t:"B",side:"l"}],band:[a,b],alarms:true}:{P:cur.P,W:cur.W,marks:[{e:a,t:"A"},{e:b,t:"B",side:"l"}],band:[a,b]});
+ section("g-ab",{P:cur.P,W:cur.W,marks:[{e:a,t:"A"},{e:b,t:"B"}],band:[a,b],lbl:false});
+ STRIP=`<span><i>ΔV</i><b>${isFinite(dv)?nf(Math.abs(dv),1):"–"}</b> m³</span>`+(isP?`<span><i>M</i><b>${isFinite(dv*d.tpm)?nf(Math.abs(dv*d.tpm),1):"–"}</b> t</span>`:"");
 }
 function rPlan(){
  const s=st(),isP=s.qL==="product",out=s.qD==="out",d=density(),cur=current(),k=CFG[cav];
@@ -705,8 +891,9 @@ function rPlan(){
  else if(s.qu==="t"&&!isFinite(d.tpm))m.push(["crit",t("mNeedD")]);
  else if(!isFinite(L2))m.push(["crit",t("mOutT")]);
  msgs("q-msg",m);
- const marks=[{e:L0,t:"S"},{e:L2,t:"N",side:"l"}];
- gauge("g-plan",isP?{P:cur.P,W:cur.W,marks,band:[L0,L2]}:{P:isFinite(P2)?P2:cur.P,W:cur.W,marks,band:[L0,L2]});
+ const marks=[{e:L0,t:t("start")},{e:L2,t:t("newLevel")}];
+ section("g-plan",{P:isP?cur.P:(isFinite(P2)?P2:cur.P),W:cur.W,marks,band:[L0,L2],lbl:false});
+ STRIP=`<span><i>${t("newLevel")}</i><b>${isFinite(L2)?el2(L2):"–"}</b> m</span><span>${isFinite(L2)?sg(L2-L0,2)+" m":""}</span>`;
 }
 function rLook(){
  const s=st(),d=density(),cur=current(),k=CFG[cav],l2v=s.lkM==="l2v";
@@ -748,7 +935,7 @@ function rDens(){
  $("d-help").textContent=t("dHelp")+(cav==="C4"?t("dHelpC4"):"");
 }
 const R={stock:rStock,ab:rAB,plan:rPlan,look:rLook,dens:rDens};
-function render(){R[scr]();}
+function render(){STRIP="";R[scr]();$("stripTxt").innerHTML=STRIP;checkStrip();}
 
 /* ================= BINDINGS ================= */
 // text inputs → state key
@@ -765,10 +952,10 @@ for(const id in BIND)$(id).addEventListener("input",e=>{st()[BIND[id]]=e.target.
 for(const id in SELS)$(id).addEventListener("change",e=>{st()[SELS[id]]=e.target.value;save();render();});
 for(const id in SEGS)$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const s=st(),ch=s[SEGS[id]]!==b.dataset.v;s[SEGS[id]]=b.dataset.v;if(ch&&SEGHOOK[id])SEGHOOK[id](s);save();loadFields();render();});
 // enter key → next field / blur
-document.addEventListener("keydown",e=>{if(e.key!=="Enter"||e.target.tagName!=="INPUT")return;e.preventDefault();const ins=[...document.querySelectorAll(`[data-s="${scr}"] input`)].filter(x=>x.offsetParent);const i=ins.indexOf(e.target);if(i>=0&&i<ins.length-1&&e.target.enterKeyHint==="next")ins[i+1].focus();else e.target.blur();});
+document.addEventListener("keydown",e=>{if(e.key!=="Enter"||e.target.tagName!=="INPUT")return;e.preventDefault();const ins=[...document.querySelectorAll(`[data-s="${scr}"] input`)].filter(x=>x.offsetParent);const i=ins.indexOf(e.target);if(i>=0&&i<ins.length-1&&e.target.enterKeyHint==="next")ins[i+1].focus();else if(e.target.enterKeyHint==="done"&&e.target.closest(".scr"))toTop();else e.target.blur();});
 // nudge buttons with hold-to-repeat
 let rep=null;
-function nudge(b){const id=b.dataset.nudge,el=$(id),key=BIND[id],v=lvl(el.value),d=+b.dataset.d;if(!isFinite(v))return;const nv=(v+d).toFixed(2);el.value=nv;st()[key]=nv;save();render();}
+function nudge(b){const id=b.dataset.nudge,el=$(id),key=BIND[id],v=lvl(el.value),d=+b.dataset.d;if(!isFinite(v))return;const nv=(v+d).toFixed(2);el.value=nv;if(navigator.vibrate)try{navigator.vibrate(6)}catch(_){}st()[key]=nv;save();render();}
 document.addEventListener("pointerdown",e=>{const b=e.target.closest("[data-nudge]");if(!b)return;e.preventDefault();nudge(b);let n=0;rep=setTimeout(function go(){nudge(b);n++;rep=setTimeout(go,n>12?35:90);},420);});
 ["pointerup","pointercancel","pointerleave"].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(rep);rep=null;}));
 // quick B
@@ -792,6 +979,25 @@ $("cavsw").addEventListener("click",e=>{const b=e.target.closest("button");if(b)
 // swipe between caverns on hero
 (function(){let x0=null,y0=null;document.addEventListener("touchstart",e=>{if(!e.target.closest(".hero"))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
  document.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setCav(dx<0?"C4":"C3");},{passive:true});})();
+
+/* ================= INPUT UX ================= */
+const LEVELS=["p","w2","w3","ab-a","ab-b","q-l","lk-el"];
+function liveU(el){const u=el.parentElement.querySelector(".u");if(!u)return;if(u.dataset.d==null)u.dataset.d=u.textContent;
+ const r=el.value.trim();if(LEVELS.includes(el.id)&&/^-?\d{4,5}$/.test(r)&&document.activeElement===el){u.textContent="= "+el2(lvl(r));u.classList.add("live");}else{u.textContent=u.dataset.d;u.classList.remove("live");}}
+document.addEventListener("input",e=>{if(e.target.tagName==="INPUT")liveU(e.target);});
+let justF=null;
+document.addEventListener("focusin",e=>{const el=e.target;if(el.tagName!=="INPUT")return;justF=el;const sel=()=>{try{el.setSelectionRange(0,el.value.length);}catch(_){try{el.select();}catch(__){}}};sel();setTimeout(sel,0);setTimeout(sel,60);});
+document.addEventListener("mouseup",e=>{if(e.target===justF){e.preventDefault();justF=null;}});
+document.addEventListener("touchend",e=>{if(e.target===justF){setTimeout(()=>{try{e.target.setSelectionRange(0,e.target.value.length)}catch(_){}} ,0);justF=null;}});
+document.addEventListener("focusout",e=>{const el=e.target;if(!LEVELS.includes(el.id))return;const v=lvl(el.value);if(isFinite(v)){const n=v.toFixed(2);if(el.value!==n){el.value=n;st()[BIND[el.id]]=n;save();render();}}liveU(el);});
+function hh(){return $("hdr").getBoundingClientRect().height;}
+function toTop(){if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();window.scrollTo({top:0,behavior:"smooth"});}
+document.addEventListener("click",e=>{const tp=e.target.closest("[data-top]");if(tp){e.preventDefault();toTop();return;}
+ const j=e.target.closest("[data-jump]");if(j){e.preventDefault();const box=$(j.dataset.jump),inp=box.querySelector("input");if(inp)inp.focus({preventScroll:true});const y=box.getBoundingClientRect().top+scrollY-hh()-10;window.scrollTo({top:y,behavior:"smooth"});}});
+function checkStrip(){const h=document.querySelector(`[data-s="${scr}"] .pc.m,[data-s="${scr}"] .hbig`),on=!!STRIP&&h&&["stock","ab","plan"].includes(scr)&&h.getBoundingClientRect().bottom<hh()+4;$("strip").hidden=!on;}
+addEventListener("scroll",checkStrip,{passive:true});
+new ResizeObserver(()=>document.documentElement.style.setProperty("--hh",hh()+"px")).observe($("hdr"));
+$("bDet").addEventListener("click",()=>{const k=CFG[cav];sheet(`<div class="sh-h"><h3>${t("details")} · ${k.tk}</h3><button class="chip t" data-close>${t("done")}</button></div>${DET}`);});
 
 /* ================= SHEETS ================= */
 function sheet(html,onMount){const h=$("sheetHost");h.innerHTML=`<div class="scrim"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;const sc=h.firstChild;sc.addEventListener("click",e=>{if(e.target===sc||e.target.closest("[data-close]"))close();});function close(){h.innerHTML="";render();}onMount&&onMount(sc,close);return close;}

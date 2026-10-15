@@ -1,5 +1,5 @@
 // Cavern Gauge — offline cache. Bump VERSION after every change to index.html.
-const VERSION="cvgm-2026-10-15a";
+const VERSION="cvgm-2026-10-15b";
 const CORE=["./","index.html","manifest.webmanifest","icon.svg","icon-180.png","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==VERSION).map(x=>caches.delete(x)))).then(()=>self.clients.claim()));});
