@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15191E" id="metaTheme">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cavern Gauge">
+<meta name="description" content="HSVC LPG cavern stock gauge — TK-3301 propane and TK-3401 butane: levels to volume and mass, level A→B, pump plan, table lookup, density.">
+<title>Cavern Gauge</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#15191E;--head:#1A1F25;--card:#1E242B;--tile:#252B33;--ctl:#22272E;--input:#0F1317;--strip:#161A1F;
+  --bd:#2E353E;--bd2:#39414B;
+  --t0:#F0F3F6;--t1:#D6DCE3;--t2:#A9B3BD;--t3:#8B96A3;--t4:#77818D;--tag:#C7CED6;
+  --pri:#2F6FB8;--onpri:#FFFFFF;--ring:#4DA3FF;--selF:#18304A;--selT:#C2E0FF;--link:#8CC4FF;
+  --ok:#5FC48A;--okchip:#1F3A2B;--okt:#8FE0B0;
+  --warnI:#F2A541;--warnT:#E9C27A;--warnB:#5A4A2A;--alT:#F2C27A;--alBand:#6B5124;
+  --tripT:#FF8A8A;--tripBand:#6B2B2B;
+  --C3:#F2B233;--C4:#EC8A4C;--water:#3B86E8;--waterL:#7DB3F5;
+  --hero:#101418;--heroBd:#2E353E;--heroT:#F0F3F6;--heroT2:#A9B3BD;--heroT3:#77818D;--heroTile:#1A2027;
+  --sh:none;--r-card:10px;--r-ctl:8px;--r-chip:6px;
+  --sans:"IBM Plex Sans","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --page:#EBECE8;--head:#F7F7F5;--card:#FFFFFF;--tile:#F2F2EF;--ctl:#F2F2EF;--input:#FFFFFF;--strip:#F2F2EF;
+  --bd:#ECEDEA;--bd2:#D7D9D3;
+  --t0:#111315;--t1:#3F454C;--t2:#5A6068;--t3:#6A7078;--t4:#80868D;--tag:#3F454C;
+  --pri:#111315;--onpri:#FFFFFF;--ring:#E8590C;--selF:#FFF1E8;--selT:#B83E0A;--link:#B83E0A;
+  --ok:#1E8E4E;--okchip:#E3F4EA;--okt:#17663A;
+  --warnI:#C77700;--warnT:#8A5A00;--warnB:#F0D9A8;--alT:#8A5A00;--alBand:#FBEBC9;
+  --tripT:#B42323;--tripBand:#FBE0E0;
+  --C3:#E7A21A;--C4:#E2783A;--water:#2F7BE0;--waterL:#5E9DEB;
+  --sh:0 1px 2px rgba(17,19,21,.06);--r-card:12px;--r-ctl:9px;--r-chip:6px;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--page);color:var(--t1);font:400 15px/1.45 var(--sans);-webkit-text-size-adjust:100%}
+body{min-height:100dvh;overscroll-behavior-y:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.mono{font-family:var(--mono)}
+[hidden]{display:none!important}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--head) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--bd);padding:calc(var(--sat) + 10px) 16px 10px}
+.hrow{display:flex;align-items:center;gap:10px}
+.mark{width:32px;height:32px;border:1.5px solid var(--t2);border-radius:7px;display:grid;place-items:center;flex:none}
+.mark svg{width:20px;height:20px}
+.brand{min-width:0;flex:1}
+.brand b{display:block;font:600 15px/1.15 var(--sans);color:var(--t0);letter-spacing:.01em}
+.brand span{display:block;font:500 10.5px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{height:34px;min-width:34px;padding:0 9px;border-radius:var(--r-ctl);border:1px solid var(--bd2);background:var(--ctl);color:var(--t1);display:inline-grid;place-items:center;font:600 12px var(--mono);letter-spacing:.04em}
+.ibtn svg{width:17px;height:17px}
+.cavsw{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:calc(var(--r-ctl) + 4px);background:var(--input);border:1px solid var(--bd2)}
+.cavsw button{border:0;background:transparent;border-radius:var(--r-ctl);padding:8px 6px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--t2);font:600 13px var(--sans);letter-spacing:.04em}
+.cavsw button i{width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.5}
+.cavsw button small{font:500 11px var(--mono);color:var(--t4);letter-spacing:0}
+@media (max-width:419px){.cavsw button small{display:none}}
+.cavsw button[aria-pressed="true"]{background:var(--tile);color:var(--t0);box-shadow:inset 0 0 0 1px var(--bd2),var(--sh)}
+.cavsw button[aria-pressed="true"] i{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 25%,transparent)}
+.cavsw button[data-c="C3"] i{color:var(--C3)}.cavsw button[data-c="C4"] i{color:var(--C4)}
+
+/* ---------- layout ---------- */
+main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto}
+.scr{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.eyebrow{font:600 11px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-card);padding:14px;box-shadow:var(--sh)}
+.card>.eyebrow{margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--hero);border:1px solid var(--heroBd);border-radius:calc(var(--r-card) + 4px);padding:14px 14px 12px;color:var(--heroT);display:grid;grid-template-columns:98px 1fr;gap:12px;min-height:250px}
+.hero::before{content:"";position:absolute;inset:-40% -30% auto auto;width:260px;height:260px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 22%,transparent),transparent);pointer-events:none}
+.hero .gauge{width:98px;height:100%;min-height:226px;display:block}
+.hero .hv{position:relative;display:flex;flex-direction:column;min-width:0}
+.hk{font:600 10.5px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--heroT3)}
+.hbig{font:600 34px/1.05 var(--mono);color:var(--heroT);letter-spacing:-.02em;margin:4px 0 2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hbig small,.hmid small{font:500 .45em var(--sans);color:var(--heroT2);letter-spacing:0;margin-left:4px}
+.hmid{font:600 20px/1.15 var(--mono);color:var(--heroT);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hsub{font:400 12px/1.35 var(--sans);color:var(--heroT2);margin-top:2px}
+.hsub b{font:500 12px var(--mono);color:var(--heroT)}
+.htiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto;padding-top:10px}
+.ht{background:var(--heroTile);border:1px solid #262D36;border-radius:8px;padding:7px 8px;min-width:0}
+.ht .hk{font-size:9.5px;letter-spacing:.05em;line-height:1.25;min-height:2.5em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ht b{display:block;font:600 14px/1.25 var(--mono);color:var(--heroT);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.ht b small{font:500 10.5px var(--sans);color:var(--heroT2);margin-left:2px}
+.ht i{display:block;font:400 10.5px/1.3 var(--sans);font-style:normal;color:var(--heroT2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrow2{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.hchip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 9px 3px 7px;font:600 11px var(--sans);letter-spacing:.03em;background:#1F3A2B;color:#8FE0B0}
+.hchip i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.hchip.al{background:#3A2F18;color:#F2C27A}.hchip.tr{background:#3D1E1E;color:#FF8A8A}.hchip.nt{background:#232A33;color:#A9B3BD}
+
+/* ---------- fields ---------- */
+.f{display:block;min-width:0}
+.fl{display:flex;align-items:baseline;gap:6px;margin-bottom:5px;min-width:0}
+.fl b{font:600 12.5px var(--mono);color:var(--tag);letter-spacing:.01em}
+.fl span{font:400 12.5px var(--sans);color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl .r{margin-left:auto;flex:none}
+.inp{position:relative;display:flex;align-items:stretch;background:var(--input);border:1px solid var(--bd2);border-radius:var(--r-ctl);transition:border-color .15s,box-shadow .15s;height:50px}
+.inp:focus-within{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 25%,transparent)}
+.inp input,.inp select{flex:1;min-width:0;border:0;background:transparent;outline:0;padding:0 12px;font:500 20px var(--mono);color:var(--t0);font-variant-numeric:tabular-nums}
+.inp select{font:500 14px var(--sans);appearance:none;-webkit-appearance:none;padding-right:30px;background:linear-gradient(45deg,transparent 50%,var(--t3) 50%) right 16px center/5px 5px no-repeat,linear-gradient(-45deg,transparent 50%,var(--t3) 50%) right 11px center/5px 5px no-repeat}
+.inp input::placeholder{color:var(--t4);font-weight:400}
+.inp .u{align-self:center;padding-right:12px;font:500 12px var(--sans);color:var(--t3);white-space:nowrap}
+.inp .nb{flex:none;width:44px;border:0;background:transparent;color:var(--t2);font:500 22px/1 var(--mono);display:grid;place-items:center;touch-action:manipulation}
+.inp .nb:active{background:var(--tile);color:var(--t0)}
+.inp .nb:first-child{border-right:1px solid var(--bd);border-radius:var(--r-ctl) 0 0 var(--r-ctl)}
+.inp .nb:last-child{border-left:1px solid var(--bd);border-radius:0 var(--r-ctl) var(--r-ctl) 0}
+.inp.prod{box-shadow:inset 3px 0 0 var(--acc)}.inp.wat{box-shadow:inset 3px 0 0 var(--water)}
+.inp.prod:focus-within{box-shadow:inset 3px 0 0 var(--acc),0 0 0 3px color-mix(in srgb,var(--ring) 25%,transparent)}
+.inp.wat:focus-within{box-shadow:inset 3px 0 0 var(--water),0 0 0 3px color-mix(in srgb,var(--ring) 25%,transparent)}
+.inp.sm{height:46px}.inp.sm input{font-size:17px}
+.inp .ub{flex:none;border:0;border-left:1px solid var(--bd);background:transparent;color:var(--link);font:600 12px var(--sans);padding:0 12px;letter-spacing:.03em;border-radius:0 var(--r-ctl) var(--r-ctl) 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stack{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.hint{font:400 12px/1.4 var(--sans);color:var(--t3);margin:0}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;padding:3px;background:var(--input);border:1px solid var(--bd2);border-radius:var(--r-ctl)}
+.seg button{border:0;background:transparent;border-radius:calc(var(--r-ctl) - 3px);padding:8px 6px;font:600 12.5px var(--sans);color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg button[aria-pressed="true"]{background:var(--tile);color:var(--t0);box-shadow:inset 0 0 0 1px var(--bd2),var(--sh)}
+.seg.sm button{padding:6px 4px;font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--bd2);background:var(--ctl);border-radius:999px;padding:6px 11px;font:500 12.5px var(--mono);color:var(--t1)}
+.chip:active{background:var(--tile)}
+.chip.t{font-family:var(--sans);font-weight:600;color:var(--link)}
+
+/* ---------- lists ---------- */
+.kv{margin:0;display:grid}
+.kv>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid var(--bd)}
+.kv>div:first-child{border-top:0;padding-top:2px}
+.kv dt{font:400 13px/1.35 var(--sans);color:var(--t2);min-width:0}
+.kv dd{margin:0;font:500 13.5px/1.35 var(--mono);color:var(--t0);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kv dd small{font:400 11.5px var(--sans);color:var(--t3);display:block}
+.msg{display:flex;gap:9px;align-items:flex-start;border-radius:var(--r-ctl);padding:10px 12px;font:400 13px/1.4 var(--sans);background:color-mix(in srgb,var(--alBand) 45%,var(--card));border:1px solid var(--warnB);color:var(--t0)}
+.msg svg{flex:none;width:16px;height:16px;margin-top:1px;color:var(--warnI)}
+.msg.crit{background:color-mix(in srgb,var(--tripBand) 45%,var(--card));border-color:color-mix(in srgb,var(--tripT) 40%,transparent)}
+.msg.crit svg{color:var(--tripT)}
+.msgs{display:grid;gap:8px}.msgs:empty{display:none}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{height:46px;border-radius:var(--r-ctl);border:1px solid var(--bd2);background:var(--ctl);color:var(--t0);font:600 13.5px var(--sans);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
+.btn svg{width:17px;height:17px}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:var(--onpri)}
+.btn:active{filter:brightness(1.15)}
+.foot{font:400 11.5px/1.5 var(--sans);color:var(--t4);text-align:center;padding:6px 8px 0}
+.foot b{font-weight:500;color:var(--t3)}
+
+/* ---------- table ---------- */
+.tw{overflow-x:auto;margin:0 -4px}
+.tbl{width:100%;border-collapse:collapse;font:500 13px var(--mono);font-variant-numeric:tabular-nums}
+.tbl th{font:600 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);text-align:right;padding:0 6px 8px;white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left;padding-left:2px}
+.tbl td{text-align:right;padding:9px 5px;font-size:12.5px;border-top:1px solid var(--bd);color:var(--t1);white-space:nowrap}
+.tbl tr.cur td{color:var(--t0);background:var(--selF);box-shadow:inset 0 1px 0 var(--ring),inset 0 -1px 0 var(--ring)}
+.tbl tr.cur td:first-child{box-shadow:inset 2px 0 0 var(--ring),inset 0 1px 0 var(--ring),inset 0 -1px 0 var(--ring)}
+.tbl tbody tr{cursor:pointer}
+.tbl td.na{color:var(--t4)}
+
+/* ---------- bottom nav ---------- */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--head) 90%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-top:1px solid var(--bd);padding:6px 6px calc(var(--sab) + 6px);display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.nav button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px 5px;border-radius:10px;color:var(--t3);font:600 10.5px/1.15 var(--sans);letter-spacing:.01em;text-align:center;min-width:0}
+.nav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav svg{width:22px;height:22px}
+.nav button[aria-selected="true"]{color:var(--t0);background:var(--tile);box-shadow:inset 0 0 0 1px var(--bd2)}
+.nav button[aria-selected="true"] svg{color:var(--acc)}
+
+/* ---------- sheet ---------- */
+.scrim{position:fixed;inset:0;z-index:50;background:rgba(5,8,11,.55);display:flex;align-items:flex-end;justify-content:center;animation:fadeI .18s}
+@keyframes fadeI{from{opacity:0}}
+.sheet{width:100%;max-width:640px;max-height:88dvh;overflow:auto;background:var(--card);border-radius:18px 18px 0 0;border:1px solid var(--bd2);border-bottom:0;padding:8px 16px calc(var(--sab) + 16px);animation:up .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--bd2);margin:2px auto 12px}
+.sh-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.sh-h h3{margin:0;font:600 16px var(--sans);color:var(--t0)}
+.tegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:12px 0}
+.tegrid label{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--t3)}
+.tegrid label i{font-style:normal;display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--t4)}
+.tegrid label.liq i{background:var(--acc)}
+.tegrid .inp{height:42px}.tegrid .inp input{font-size:16px;padding:0 10px}
+.toast{position:fixed;left:50%;bottom:calc(var(--sab) + 88px);transform:translateX(-50%);z-index:60;background:var(--t0);color:var(--page);font:600 13px var(--sans);padding:9px 16px;border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.3);animation:up .2s}
+.langs{display:grid;gap:8px;margin-top:8px}
+.langs button{height:52px;border-radius:var(--r-ctl);border:1px solid var(--bd2);background:var(--ctl);color:var(--t0);font:600 15px var(--sans);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.langs button[aria-pressed="true"]{border-color:var(--ring);box-shadow:0 0 0 1px var(--ring);background:var(--selF);color:var(--selT)}
+.langs button small{font:500 12px var(--mono);color:var(--t3)}
+
+/* gauge svg */
+.gauge .lvl{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.gauge text{font-family:var(--mono)}
+@media (min-width:430px){.hero{grid-template-columns:112px 1fr}.hero .gauge{width:112px}.hbig{font-size:38px}}
+@media (max-width:360px){.hbig{font-size:29px}.hmid{font-size:17px}.hero{grid-template-columns:84px 1fr}.hero .gauge{width:84px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="hrow">
+    <div class="mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--t1)"><path d="M8.5 1.5v5.2H6Q2.5 6.7 2.5 10v4.5h4v4h7v-4h4V10q0-3.3-3.5-3.3h-2.5V1.5"/><path d="M2.5 11.5h15" stroke="var(--acc)"/></svg></div>
+    <div class="brand"><b>Cavern Gauge</b><span id="hsub">HSVC · TK-3301</span></div>
+    <button class="ibtn" id="bLang" aria-label="Language">EN</button>
+    <button class="ibtn" id="bTheme" aria-label="Theme"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.5 12.3A7 7 0 0 1 7.7 3.5a7 7 0 1 0 8.8 8.8Z"/></svg></button>
+  </div>
+  <div class="cavsw" role="group" id="cavsw">
+    <button data-c="C3" aria-pressed="true"><i></i><span data-i="c3">C3 · PROPANE</span><small>TK-3301</small></button>
+    <button data-c="C4" aria-pressed="false"><i></i><span data-i="c4">C4 · BUTANE</span><small>TK-3401</small></button>
+  </div>
+</header>
+
+<main>
+<!-- ================= STOCK ================= -->
+<section class="scr" data-s="stock">
+  <div class="hero">
+    <svg class="gauge" id="g-stock" viewBox="0 0 100 240" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="hv">
+      <div class="hk" data-i="massM">Product mass · M</div>
+      <div class="hbig" id="o-m">–</div>
+      <div class="hmid" id="o-g">–</div>
+      <div class="hsub" data-i="volG">Product volume · G</div>
+      <div class="hrow2" id="o-chips"></div>
+      <div class="htiles">
+        <div class="ht"><div class="hk" data-i="fillLAH">Fill to LAH</div><b id="o-fill">–</b></div>
+        <div class="ht"><div class="hk" data-i="perCm">1 cm product</div><b id="o-cm">–</b></div>
+        <div class="ht"><div class="hk" data-i="room">Room to LAH</div><b id="o-room">–</b></div>
+        <div class="ht"><div class="hk" data-i="pumpable">Pumpable to LAL</div><b id="o-lal">–</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="msgs" id="o-msg"></div>
+
+  <div class="card stack">
+    <div class="eyebrow"><span data-i="readings">PMS readings</span><button class="chip t" id="snap" style="padding:4px 10px;font-size:11.5px">PMS</button></div>
+    <label class="f"><div class="fl"><b id="t-lt1">LT33001</b><span data-i="prodLevel">product level</span></div>
+      <div class="inp prod"><button class="nb" data-nudge="p" data-d="-0.01" aria-label="−1 cm">−</button><input id="p" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span><button class="nb" data-nudge="p" data-d="0.01" aria-label="+1 cm">+</button></div></label>
+    <div class="g2">
+      <label class="f"><div class="fl"><b id="t-lt2">LT33002</b><span data-i="water">water</span></div><div class="inp wat sm"><input id="w2" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span></div></label>
+      <label class="f"><div class="fl"><b id="t-lt3">LT33003</b><span data-i="water">water</span></div><div class="inp wat sm"><input id="w3" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span></div></label>
+    </div>
+    <div><div class="fl"><span data-i="wUse">Water level used</span></div>
+      <div class="seg sm" id="wsrc"><button data-v="2">LT-002</button><button data-v="3">LT-003</button><button data-v="avg" data-i="avg">Average</button></div></div>
+    <div class="g2">
+      <label class="f"><div class="fl"><b id="t-pt">PT33210</b></div><div class="inp sm"><input id="pg" inputmode="decimal" autocomplete="off"><span class="u">kg/cm²g</span></div></label>
+      <label class="f"><div class="fl"><b>T</b><span data-i="liqT">liquid</span></div><div class="inp sm"><input id="tl" inputmode="decimal" autocomplete="off"><span class="u">°C</span><button class="ub" id="bTE" type="button">TE</button></div></label>
+    </div>
+    <label class="f"><div class="fl"><b>D15</b><span data-i="d15">density at 15 °C</span><button class="chip t r" type="button" data-go="dens" style="padding:2px 9px;font-size:11px" data-i="more">More</button></div>
+      <div class="inp sm"><input id="din" inputmode="decimal" autocomplete="off"><span class="u">kg/L</span></div></label>
+    <p class="hint" data-i="negHint">Type 165.55 for −165.55 m MSL.</p>
+  </div>
+
+  <div class="acts"><button class="btn pri" id="share"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 12.5V2.5M6.5 6 10 2.5 13.5 6M4 10v6.5h12V10"/></svg><span data-i="share">Share result</span></button>
+    <button class="btn" id="copy"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6.5" y="6.5" width="10" height="10" rx="1.5"/><path d="M13.5 6.5v-3h-10v10h3"/></svg><span data-i="copy">Copy</span></button></div>
+
+  <div class="card"><div class="eyebrow" data-i="details">Details</div><dl class="kv" id="o-kv"></dl></div>
+  <div class="foot" id="foot"></div>
+</section>
+
+<!-- ================= A → B ================= -->
+<section class="scr" data-s="ab" hidden>
+  <div class="hero">
+    <svg class="gauge" id="g-ab" viewBox="0 0 100 240"></svg>
+    <div class="hv">
+      <div class="hk" id="ab-k1">Volume A → B</div>
+      <div class="hbig" id="ab-v">–</div>
+      <div class="hmid" id="ab-t">–</div>
+      <div class="hsub" id="ab-s">–</div>
+      <div class="htiles">
+        <div class="ht"><div class="hk" data-i="volA">Volume at A</div><b id="ab-va">–</b></div>
+        <div class="ht"><div class="hk" data-i="volB">Volume at B</div><b id="ab-vb">–</b></div>
+        <div class="ht"><div class="hk" data-i="dLevel">Level change</div><b id="ab-dl">–</b></div>
+        <div class="ht"><div class="hk">t/m³</div><b id="ab-tpm">–</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="msgs" id="ab-msg"></div>
+  <div class="card stack">
+    <div class="seg" id="ab-liq"><button data-v="product" data-i="product">Product</button><button data-v="water" data-i="waterC">Water</button></div>
+    <label class="f"><div class="fl"><b>A</b><span data-i="from">from</span><button class="chip t r" type="button" id="ab-cur" style="padding:2px 9px;font-size:11px" data-i="useCur">Current</button></div>
+      <div class="inp prod" id="ab-ia"><button class="nb" data-nudge="ab-a" data-d="-0.01">−</button><input id="ab-a" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="u">m</span><button class="nb" data-nudge="ab-a" data-d="0.01">+</button></div></label>
+    <label class="f"><div class="fl"><b>B</b><span data-i="to">to</span></div>
+      <div class="inp prod" id="ab-ib"><button class="nb" data-nudge="ab-b" data-d="-0.01">−</button><input id="ab-b" inputmode="decimal" autocomplete="off" enterkeyhint="done"><span class="u">m</span><button class="nb" data-nudge="ab-b" data-d="0.01">+</button></div></label>
+    <div><div class="fl"><span data-i="quickB">B = A ±</span></div><div class="chips" id="ab-q"><button class="chip" data-dd="-0.1">−0.10</button><button class="chip" data-dd="-0.5">−0.50</button><button class="chip" data-dd="-1">−1.00</button><button class="chip" data-dd="-2">−2.00</button><button class="chip" data-dd="1">+1.00</button></div></div>
+    <p class="hint" id="ab-note"></p>
+  </div>
+</section>
+
+<!-- ================= PUMP PLAN ================= -->
+<section class="scr" data-s="plan" hidden>
+  <div class="hero">
+    <svg class="gauge" id="g-plan" viewBox="0 0 100 240"></svg>
+    <div class="hv">
+      <div class="hk" data-i="newLevel">New level</div>
+      <div class="hbig" id="q-v">–</div>
+      <div class="hsub" id="q-s">–</div>
+      <div class="hrow2" id="q-chips"></div>
+      <div class="htiles">
+        <div class="ht"><div class="hk" id="q-k2">Same quantity</div><b id="q-e">–</b></div>
+        <div class="ht"><div class="hk" data-i="duration">Time at rate</div><b id="q-dur">–</b></div>
+        <div class="ht" style="grid-column:1/-1"><div class="hk" id="q-k3" data-i="massAfter">Product mass after</div><b id="q-after">–</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="msgs" id="q-msg"></div>
+  <div class="card stack">
+    <div class="g2">
+      <div class="seg sm" id="q-liq"><button data-v="product" data-i="product">Product</button><button data-v="water" data-i="waterC">Water</button></div>
+      <div class="seg sm" id="q-dir"><button data-v="out" data-i="out">Pump out</button><button data-v="in" data-i="in">Fill in</button></div>
+    </div>
+    <label class="f"><div class="fl"><b data-i="start">Start</b><span data-i="startLevel">level</span><button class="chip t r" type="button" id="q-cur" style="padding:2px 9px;font-size:11px" data-i="useCur">Current</button></div>
+      <div class="inp prod" id="q-il"><button class="nb" data-nudge="q-l" data-d="-0.01">−</button><input id="q-l" inputmode="decimal" autocomplete="off"><span class="u">m</span><button class="nb" data-nudge="q-l" data-d="0.01">+</button></div></label>
+    <label class="f"><div class="fl"><b data-i="qty">Quantity</b></div>
+      <div class="inp"><input id="q-q" inputmode="decimal" autocomplete="off"><div class="seg sm" id="q-u" style="margin:5px;border:0;width:118px"><button data-v="m3">m³</button><button data-v="t">t</button></div></div></label>
+    <div class="chips" id="q-qq"><button class="chip" data-q="1000">1,000</button><button class="chip" data-q="2000">2,000</button><button class="chip" data-q="5000">5,000</button><button class="chip" data-q="10000">10,000</button><button class="chip" data-q="20000">20,000</button></div>
+    <label class="f"><div class="fl"><b data-i="rate">Rate</b><span data-i="optional">optional</span></div>
+      <div class="inp sm"><input id="q-r" inputmode="decimal" autocomplete="off" placeholder="—"><span class="u" id="q-ru">m³/h</span></div></label>
+  </div>
+</section>
+
+<!-- ================= LOOKUP ================= -->
+<section class="scr" data-s="look" hidden>
+  <div class="card stack">
+    <div class="seg" id="lk-mode"><button data-v="l2v" data-i="l2v">Level → volume</button><button data-v="v2l" data-i="v2l">Volume → level</button></div>
+    <div id="lk-l">
+      <label class="f"><div class="fl"><b data-i="level">Level</b><span>m MSL</span><button class="chip t r" type="button" id="lk-cur" style="padding:2px 9px;font-size:11px" data-i="useCur">Current</button></div>
+        <div class="inp prod"><button class="nb" data-nudge="lk-el" data-d="-0.01">−</button><input id="lk-el" inputmode="decimal" autocomplete="off"><span class="u">m</span><button class="nb" data-nudge="lk-el" data-d="0.01">+</button></div></label>
+    </div>
+    <div id="lk-v" hidden class="stack">
+      <div class="seg sm" id="lk-what"><button data-v="TV">TV (A)</button><button data-v="G">G</button><button data-v="M" data-i="tonnes">Tonnes</button><button data-v="W" data-i="waterB">Water (B)</button></div>
+      <label class="f"><div class="fl"><b id="lk-vl">Volume</b></div><div class="inp"><input id="lk-vol" inputmode="decimal" autocomplete="off"><span class="u" id="lk-vu">m³</span></div></label>
+    </div>
+  </div>
+  <div class="hero" style="min-height:0;grid-template-columns:1fr">
+    <div class="hv">
+      <div class="hk" id="lk-k">Total liquid · TV</div>
+      <div class="hbig" id="lk-o">–</div>
+      <div class="hsub" id="lk-s">–</div>
+      <div class="htiles" id="lk-tiles"></div>
+    </div>
+  </div>
+  <div class="msgs" id="lk-msg"></div>
+  <div class="card">
+    <div class="eyebrow"><span data-i="near">Around this level</span><div class="seg sm" id="lk-step" style="width:170px"><button data-v="0.01">1 cm</button><button data-v="0.1">10 cm</button><button data-v="1">1 m</button></div></div>
+    <div class="tw"><table class="tbl"><thead><tr><th data-i="elev">Elev. m</th><th>TV m³</th><th data-i="waterB">Water (B)</th><th>m³/cm</th></tr></thead><tbody id="lk-tb"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= DENSITY ================= -->
+<section class="scr" data-s="dens" hidden>
+  <div class="hero" style="min-height:0;grid-template-columns:1fr">
+    <div class="hv">
+      <div class="hk" data-i="rhoTP">Density at cavern T, P</div>
+      <div class="hbig" id="d-rho">–</div>
+      <div class="hsub" id="d-rhos">–</div>
+      <div class="htiles">
+        <div class="ht"><div class="hk" data-i="tpm">Tonnes per m³ (G)</div><b id="d-tpm">–</b></div>
+        <div class="ht"><div class="hk">VCF</div><b id="d-vcf">–</b></div>
+        <div class="ht"><div class="hk" data-i="tUsed">Temperature used</div><b id="d-t">–</b></div>
+        <div class="ht"><div class="hk" id="d-pbk">Vapour pressure</div><b id="d-pb">–</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="msgs" id="d-msg"></div>
+  <div class="card stack">
+    <div class="seg" id="d-mode"><button data-v="in" data-i="dmIn">Enter density</button><button data-v="calc" data-i="dmCalc">From T &amp; P</button></div>
+    <div class="g2" id="d-inrow">
+      <label class="f"><div class="fl"><b data-i="density">Density</b></div><div class="inp sm"><input id="din2" inputmode="decimal" autocomplete="off"><span class="u">kg/L</span></div></label>
+      <label class="f"><div class="fl"><span data-i="basis">This density is</span></div><div class="inp sm"><select id="dbasis"><option value="15" data-i="b15">15 °C (COQ)</option><option value="obs" data-i="bObs">at cavern conditions</option></select></div></label>
+    </div>
+    <div class="g2">
+      <label class="f"><div class="fl"><b>T</b><span data-i="blankTE">blank = TE avg</span></div><div class="inp sm"><input id="tl2" inputmode="decimal" autocomplete="off"><span class="u">°C</span></div></label>
+      <label class="f"><div class="fl"><b>P</b><span id="d-pt">PT33210</span></div><div class="inp sm"><input id="pg2" inputmode="decimal" autocomplete="off"><span class="u">kg/cm²g</span></div></label>
+    </div>
+    <div class="g2" id="d-row3">
+      <label class="f" id="d-ic4row"><div class="fl"><b>iC4</b><span data-i="ic4">isobutane, % wt</span></div><div class="inp sm"><input id="ic4" inputmode="decimal" autocomplete="off"><span class="u">%</span></div></label>
+      <label class="f"><div class="fl"><span data-i="massBasis">Mass basis</span></div><div class="inp sm"><select id="air"><option value="1" data-i="air">Weight in air (PMS)</option><option value="0" data-i="vac">Mass in vacuum</option></select></div></label>
+    </div>
+  </div>
+  <div class="card"><div class="eyebrow" data-i="details">Details</div><dl class="kv" id="d-kv"></dl></div>
+  <p class="hint" id="d-help" style="padding:0 4px"></p>
+</section>
+</main>
+
+<nav class="nav" id="nav" role="tablist">
+  <button data-go="stock" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 2.5v5H7.5Q3.5 7.5 3.5 11.5V16h4.5v5.5h8V16h4.5v-4.5q0-4-4-4H14v-5"/><path d="M3.5 12.5h17" /></svg><span data-i="nStock">Stock</span></button>
+  <button data-go="ab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h10M4 18h10M18 4v16M15.5 7 18 4l2.5 3M15.5 17l2.5 3 2.5-3"/></svg><span data-i="nAB">A → B</span></button>
+  <button data-go="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="14" r="5.5"/><path d="M9 14 12.5 10.5M14.5 14H21M17.5 4v6M15 7.5 17.5 10 20 7.5"/></svg><span data-i="nPlan">Pump plan</span></button>
+  <button data-go="look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M3.5 14.5h17M10 4v16"/></svg><span data-i="nLook">Table</span></button>
+  <button data-go="dens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9.5 3h5M10.5 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L13.5 9V3"/><path d="M7.5 15h9"/></svg><span data-i="nDens">Density</span></button>
+</nav>
+
+<div id="sheetHost"></div>
+
+<script>
+const RAW = {"C3_A": {"el0": -192.1, "n": 4711, "d": "0,196,196,195,196,196,196,195,196,196,196,195,196,1,12,38,69,102,135,162,188,209,229,245,259,272,285,295,304,313,319,325,330,335,338,342,346,348,351,353,356,357,360,361,363,366,366,369,371,372,374,375,378,379,381,382,384,386,387,389,391,392,394,395,397,398,399,401,402,404,405,405,407,408,408,410,410,411,412,412,413,411,412,412,415,414,414,416,416,417,418,418,419,420,420,423,422,422,424,424,425,425,427,426,428,429,430,429,431,431,431,431,430,431,431,433,432,434,433,435,434,436,435,437,436,438,437,439,438,440,439,440,440,442,441,442,442,444,443,444,444,441,443,442,443,444,444,444,444,446,446,446,446,448,447,448,449,449,449,449,451,450,451,451,452,452,452,453,453,453,453,455,454,454,455,455,455,456,456,456,457,456,458,457,457,459,458,458,459,459,459,460,460,460,460,461,461,461,461,462,462,462,462,464,462,463,463,465,463,464,464,465,464,464,466,464,465,465,465,465,465,466,465,466,465,466,465,466,465,467,466,465,467,466,466,466,466,466,466,468,466,466,466,467,467,466,466,468,466,466,468,466,467,466,468,467,466,467,468,466,467,468,467,466,467,468,466,467,467,467,466,467,467,466,467,466,467,466,466,467,466,466,465,467,466,465,466,466,465,466,466,465,465,465,466,465,465,465,465,464,465,465,465,464,464,465,464,464,465,464,464,463,465,464,464,464,464,463,464,464,464,463,464,464,463,464,464,463,464,463,464,463,464,463,464,463,463,464,463,463,463,464,463,462,464,463,463,462,464,463,462,463,463,463,462,463,463,462,462,463,462,463,463,462,462,462,463,462,462,462,463,462,462,463,462,462,462,463,462,462,462,462,462,462,463,461,462,462,463,461,462,462,462,461,462,462,462,461,461,463,461,461,462,462,461,461,462,461,461,461,461,461,461,461,461,460,460,459,459,459,459,459,459,458,459,458,459,458,458,458,458,457,458,457,457,457,457,457,456,457,456,459,457,457,457,458,456,456,457,457,456,455,457,455,455,455,456,454,455,454,455,453,453,454,453,453,452,453,451,451,452,451,450,451,450,450,449,449,449,448,448,449,447,447,447,447,446,445,447,445,444,445,445,443,444,443,443,443,442,442,442,441,440,442,440,439,440,440,438,439,439,438,437,438,438,438,437,438,437,437,437,438,437,437,437,438,436,437,437,437,436,437,437,437,436,437,436,437,436,437,436,436,436,437,436,435,437,436,436,435,437,436,435,436,436,436,435,437,435,436,435,437,435,436,437,435,436,436,437,436,436,436,437,436,437,437,436,437,436,438,436,437,438,437,436,437,438,437,437,437,438,438,437,438,437,437,438,438,438,437,437,439,438,437,439,437,438,438,438,438,438,439,438,438,439,439,438,439,438,440,438,439,440,439,439,439,440,439,439,440,439,439,440,440,439,440,439,441,439,440,440,440,440,439,441,440,440,440,440,440,440,441,440,440,440,441,440,440,441,440,440,441,441,441,440,441,441,441,441,442,442,441,441,443,441,442,443,441,442,442,443,442,443,442,443,443,442,444,442,443,443,444,443,443,443,444,444,443,444,444,443,444,445,443,444,445,444,444,444,445,444,445,444,446,445,445,446,445,445,446,446,446,446,446,447,446,447,447,447,447,446,449,447,447,449,447,448,448,449,448,448,448,449,449,449,449,449,449,449,450,450,449,451,449,450,450,450,450,450,450,452,450,450,451,451,450,450,452,450,451,450,451,451,450,452,450,450,451,451,451,450,451,451,450,450,451,451,450,450,451,450,451,451,450,450,450,451,450,450,451,450,450,449,451,450,450,449,451,450,449,451,449,449,450,450,449,449,449,450,449,449,450,449,448,449,450,448,448,450,448,448,448,449,448,448,448,448,448,447,449,447,447,448,448,447,446,448,447,447,446,447,447,446,446,447,446,445,447,445,446,445,446,445,445,445,446,444,445,445,444,444,444,445,443,444,444,443,443,443,444,442,443,442,443,442,442,443,441,442,441,442,441,441,442,440,441,440,441,440,440,440,441,439,439,441,439,439,439,440,438,439,438,439,439,438,439,438,438,437,439,437,438,438,438,437,437,438,437,438,438,438,438,438,437,438,437,438,436,438,436,436,437,436,437,436,437,436,435,437,435,436,435,437,435,435,436,434,436,435,436,434,436,435,434,436,434,436,434,435,435,434,435,434,435,434,435,434,434,435,434,434,434,435,433,433,435,433,434,433,434,432,433,433,433,433,432,433,432,431,433,431,433,431,432,431,431,432,431,431,431,431,431,430,431,430,431,430,431,430,430,431,430,430,430,430,430,429,431,429,430,429,430,430,429,430,429,429,429,430,429,429,429,429,430,428,430,428,429,430,428,429,429,429,429,428,429,429,429,428,430,428,428,430,428,429,429,429,428,428,430,428,429,429,429,428,429,429,429,429,429,429,429,429,429,429,430,429,429,429,429,430,429,430,429,430,429,429,430,429,430,429,430,429,430,430,429,431,429,430,430,429,431,429,431,430,431,428,429,429,430,429,429,430,430,430,430,430,430,430,431,431,431,432,431,432,432,432,432,432,433,433,436,434,436,435,437,436,436,437,437,438,438,439,438,439,441,440,441,441,442,442,442,444,443,445,445,446,445,447,447,447,449,448,450,449,451,450,451,452,452,454,453,454,454,454,456,455,457,456,458,457,458,459,458,460,459,461,460,460,462,462,463,462,464,463,463,465,464,466,465,467,469,469,471,470,471,471,472,471,474,472,473,474,474,474,476,475,475,477,476,476,478,478,477,480,478,479,481,480,480,482,481,481,483,483,483,483,485,485,485,486,486,486,488,487,488,490,489,490,491,490,492,493,492,493,495,495,495,497,496,498,499,499,499,502,501,502,504,505,505,507,507,509,510,511,511,514,515,515,519,518,520,522,523,524,527,527,529,531,532,534,536,537,539,541,543,544,547,547,550,552,553,555,558,559,561,564,565,567,570,571,573,576,578,579,582,584,586,588,591,592,595,597,599,602,603,606,609,611,612,616,617,620,623,624,627,629,631,633,636,638,639,642,644,645,649,649,651,654,655,657,659,660,662,664,664,667,668,669,670,673,673,674,676,677,677,680,680,681,683,683,683,686,686,687,688,688,689,691,691,691,693,692,694,694,695,695,696,696,696,698,697,698,699,698,699,700,699,700,701,700,700,702,701,701,702,702,701,703,702,702,703,702,703,703,703,702,704,703,702,704,703,703,704,702,703,704,703,703,703,703,703,703,703,702,703,702,703,703,701,702,703,701,702,702,701,701,702,700,701,701,700,700,701,700,699,700,699,699,700,698,699,699,698,698,698,697,698,697,697,697,697,696,696,697,695,696,696,695,694,696,694,694,695,694,693,695,693,693,693,693,692,693,692,692,693,691,691,692,691,691,691,691,690,691,689,690,690,689,689,690,689,688,689,688,688,688,687,688,687,687,687,687,686,686,687,685,685,686,685,685,685,685,684,685,683,684,684,683,682,684,682,682,682,682,681,682,681,680,681,680,680,681,679,679,679,678,679,678,678,677,678,676,677,677,676,675,676,675,675,675,674,673,675,673,672,674,672,672,672,671,671,671,671,669,671,669,669,670,668,668,669,667,667,668,666,667,667,665,665,666,665,665,665,664,663,665,663,662,664,662,662,663,662,661,662,661,660,661,660,660,661,659,659,660,659,658,659,658,658,657,659,657,657,658,656,656,657,656,656,656,656,655,656,654,655,655,655,653,655,654,653,654,653,653,654,653,652,653,652,652,653,652,651,653,651,651,652,650,651,651,651,650,651,650,650,650,650,649,650,649,649,650,649,648,649,649,648,649,648,648,648,648,647,649,647,647,648,647,647,647,647,646,648,646,646,647,646,645,647,646,645,646,645,645,646,645,645,645,645,644,645,645,644,644,644,644,644,644,643,644,643,643,644,642,643,643,642,642,643,642,642,642,642,641,642,641,641,641,641,640,641,640,640,641,639,640,640,639,639,640,638,639,639,638,638,639,637,638,638,637,637,638,636,637,637,636,636,637,636,635,637,635,635,637,635,635,636,634,635,636,635,634,636,635,634,636,635,634,636,635,635,636,635,636,636,633,633,633,633,635,634,634,634,635,635,636,635,636,637,636,637,638,638,638,639,639,639,641,640,641,644,645,645,646,647,646,647,649,648,649,650,650,650,652,651,652,654,653,654,656,655,656,657,658,657,660,659,661,662,661,663,664,664,665,667,666,668,669,670,670,672,673,673,676,677,677,678,679,680,682,682,683,685,686,687,688,690,690,693,692,695,696,697,698,701,701,702,705,705,706,709,710,710,714,713,716,717,718,720,722,723,725,726,728,729,732,732,734,736,737,739,741,743,743,747,747,749,751,753,754,757,757,760,762,763,765,768,769,770,774,775,776,779,780,781,784,784,786,787,787,787,788,787,787,787,785,784,784,781,779,778,776,772,766,756,746,737,725,713,702,687,674,661,644,629,613,595,577,560,540,520,502,481,462,444,423,404,388,370,353,338,322,307,293,277,261,245,227,209,189,134860,140230,144727,149534,154130,156812,158376,159592,160360,160779,161597,162778,163669,164215,164436,164562,164679,164794,164907,165013,165119,165224,165327,165427,165529,165627,165723,165820,165913,166006,166101,166192,166283,166375,166465,166555,166646,166733,166822,166912,166998,167085,167173,167258,167343,167430,167514,167597,167683,167765,167848,167931,168013,168095,168177,168257,168339,168420,168500,168580,168662,168740,168820,168900,168978,169056,169136,169212,169290,169367,169443,169519,169596,169670,169745,169821,169894,169969,170044,170117,170191,170265,170339,170413,170488,170563,170639,170716,170792,170870,170951,171028,171111,171193,171276,171356,171434,171509,171583,171660,171733,171808,171882,171955,172029,172103,172176,172248,172323,172393,172467,172541,172613,172686,172762,172835,172908,172983,173056,173130,173204,173277,173351,173426,173499,173574,173650,173724,173798,173875,173948,174024,174100,174174,174249,174325,174399,174474,174551,174625,174700,174777,174851,174928,175004,175078,175155,175231,175305,175381,175457,175532,175606,175683,175756,175831,175907,175981,176055,176131,176203,176278,176353,176425,176500,176575,176647,176722,176796,176868,176943,177018,177091,177164,177240,177312,177386,177460,177531,177605,177679,177751,177824,177897,177969,178041,178114,178184,178257,178328,178399,178471,178543,178614,178685,178756,178826,178896,178967,179036,179105,179175,179244,179312,179382,179449,179518,179587,179654,179721,179790,179857,179923,179992,180057,180124,180191,180256,180323,180389,180453,180519,180586,180649,180715,180780,180845,180909,180974,181038,181103,181168,181231,181295,181361,181424,181488,181553,181617,181682,181747,181810,181875,181940,182004,182068,182134,182198,182262,182328,182392,182457,182522,182586,182651,182716,182780,182844,182910,182973,183038,183104,183167,183232,183297,183360,183425,183489,183552,183615,183680,183741,183805,183868,183931,183993,184056,184118,184181,184244,184305,184367,184430,184491,184552,184615,184675,184736,184798,184858,184919,184981,185040,185100,185162,185221,185282,185343,185403,185464,185524,185582,185642,185703,185760,185819,185880,185937,185996,186056,186114,186172,186231,186289,186348,186407,186465,186523,186582,186639,186698,186757,186814,186872,186931,186989,187047,187106,187164,187223,187282,187340,187399,187458,187517,187577,187636,187695,187754,187813,187871,187929,187987,188043,188099,188156,188211,188266,188324,188377,188434,188489,188544,188598,188655,188709,188764,188819,188874,188928,188983,189036,189091,189145,189198,189252,189307,189359,189412,189468,189520,189575,189632,189685,189739,189794,189846,189900,189953,190006,190059,190112,190165,190217,190271,190323,190375,190430,190482,190535,190587,190641,190692,190745,190798,190850,190902,190956,191007,191059,191113,191163,191216,191269,191320,191372,191424,191475,191527,191580,191629,191682,191734,191785,191836,191889,191940,191991,192043,192093,192145,192197,192246,192298,192350,192399,192449,192500,192549,192599,192649,192697,192747,192796,192845,192893,192943,192991,193039,193088,193136,193185,193233,193281,193329,193378,193425,193472,193521,193567,193614,193662,193708,193755,193803,193848,193895,193942,193987,194034,194079,194125,194169,194216,194259,194304,194349,194392,194437,194480,194524,194567,194612,194653,194697,194741,194783,194825,194870,194910,194954,194997,195038,195081,195124,195164,195206,195249,195290,195331,195373,195413,195454,195496,195536,195577,195618,195658,195698,195739,195778,195818,195859,195897,195936,195973,196011,196050,196088,196127,196165,196203,196241,196278,196317,196355,196393,196431,196468,196504,196542,196578,196615,196653,196688,196725,196760,196797,196834,196869,196907,196944,196981,197016,197051,197089,197123,197160,197196,197231,197267,197303,197337,197374,197409,197445,197480,197516,197551,197586,197623,197658,197694,197730,197766,197800,197837,197872,197906,197942,197976,198011,198046,198078,198113,198148,198179,198213,198246,198278,198310,198344,198374,198405,198438,198468,198500,198530,198561,198590,198621,198649,198679,198709,198737,198765,198796,198822,198850,198879,198905,198932,198959,198985,199011,199038,199062,199088,199114,199137,199163,199187,199211,199235,199259,199282,199304,199329,199351,199373,199397,199418,199439,199462,199481,199503,199524,199543,199563,199583,199602,199621,199641,199658,199676,199695,199712,199730,199748,199763,199781,199798,199814,199830,199848,199862,199879,199896,199910,199925,199941,199956,199971,199986,200000,200015,200030,200043,200058,200073,200086,200100,200115,200128,200141,200156,200169,200182,200196,200208,200221,200235,200247,200260,200274,200286,200298,200312,200324,200336,200349,200360,200373,200386,200397,200410,200422,200435,200447,200462,200474,200488,200503,200517,200533,200552,200572,200595,200624,200662,200714,200769,200822,200870,200908,200940,200973,201009,201042,201072,201103,201130,201160,201189,201217,201251,201291,201333,201381,201448,201562,201759,202139,202690,203318,204024,205123,206080,206429,206916,207650,208197,208908,209520,210104,210299,210359,210398,210428,210451,210468,210473,210471,210464,210451,210436,210418,210396,210373,210349,210321,210292,210262,210229,210196,210162,210127,210088,210051,210009,209966,209923,209870,209812,209755,209702,209644,209587,209528,209466,209402,209338,209267,209194,209117,209036,208951,208870,208790,208710,208631,208546,208459,208367,208269,208172,208078,207982,207886,207784,207682,207583,207487,207383,207277,207171,207056,206948,206840,206726,206613,206506,206401,206300,206204,206111,206027,205948,205875,205811,205755,205696,205638,205586,205534,205487,205440,205394,205354,205322,205297,205274,205254,205236,205222,205205,205186,205169,205153,205136,205123,205112,205102,205090,205082,205074,205069,205066,205062,205058,205055,205051,205050,205051,205049,205049,205051,205050,205049,205050,205049,205048,205048,205045,205044,205044,205041,205039,205038,205034,205031,205025,205021,205017,205015,205012,205013,205014,205012,205014,205014,205014,205015,205017,205017,205018,205019,205019,205020,205021,205021,205021,205022,205021,205021,205021,205019,205018,205017,205015,205014,205014,205011,205009,205008,205005,205002,205001,204997,204995,204993,204989,204986,204984,204979,204976,204972,204967,204962,204958,204950,204944,204941,204936,204933,204931,204927,204924,204922,204917,204914,204911,204906,204902,204899,204894,204889,204885,204880,204874,204870,204864,204858,204852,204846,204839,204832,204825,204817,204810,204801,204793,204786,204776,204768,204760,204750,204742,204732,204723,204712,204704,204692,204680,204669,204655,204643,204631,204617,204605,204595,204582,204570,204558,204543,204529,204517,204504,204495,204485,204474,204464,204454,204443,204432,204422,204411,204400,204389,204377,204365,204355,204341,204328,204318,204303,204291,204279,204265,204251,204238,204221,204204,204185,204167,204151,204136,204120,204103,204089,204071,204055,204040,204023,204006,203990,203973,203957,203942,203925,203909,203896,203879,203865,203851,203834,203818,203805,203789,203776,203762,203748,203734,203721,203706,203693,203681,203665,203651,203637,203622,203608,203596,203580,203566,203551,203535,203520,203506,203490,203475,203460,203446,203430,203416,203400,203385,203368,203351,203333,203315,203294,203275,203257,203238,203219,203202,203182,203166,203150,203133,203116,203099,203081,203065,203047,203030,203011,202994,202975,202956,202938,202918,202898,202879,202859,202839,202820,202800,202781,202763,202742,202723,202705,202684,202664,202645,202624,202603,202584,202561,202540,202519,202495,202473,202451,202426,202400,202377,202350,202325,202302,202276,202252,202228,202203,202179,202155,202129,202105,202080,202052,202025,202000,201975,201952,201929,201905,201882,201859,201835,201811,201789,201763,201739,201717,201691,201667,201645,201619,201596,201573,201548,201525,201501,201476,201451,201427,201401,201376,201350,201324,201297,201271,201243,201216,201188,201160,201132,201104,201076,201047,201019,200990,200962,200934,200904,200876,200846,200819,200788,200760,200733,200704,200677,200651,200623,200594,200565,200534,200506,200480,200451,200423,200395,200367,200338,200311,200280,200251,200223,200192,200161,200133,200101,200070,200042,200010,199980,199951,199918,199887,199857,199824,199791,199759,199726,199691,199658,199623,199587,199554,199517,199482,199445,199408,199370,199333,199294,199256,199218,199179,199140,199102,199062,199016,198978,198938,198898,198856,198816,198774,198733,198692,198651,198611,198570,198530,198489,198448,198407,198366,198324,198282,198241,198200,198157,198116,198077,198037,198004,197965,197926,197886,197846,197807,197767,197728,197688,197648,197607,197569,197526,197487,197446,197404,197363,197323,197279,197238,197196,197152,197109,197066,197022,196978,196935,196889,196845,196801,196755,196710,196666,196619,196574,196529,196483,196436,196392,196345,196298,196253,196205,196157,196110,196061,196011,195964,195912,195863,195813,195761,195709,195658,195604,195550,195497,195444,195390,195337,195282,195228,195173,195114,195055,194995,194933,194873,194813,194753,194694,194637,194577,194518,194461,194399,194340,194281,194220,194158,194099,194037,193976,193916,193854,193793,193733,193669,193607,193545,193479,193416,193352,193286,193221,193157,193090,193024,192959,192892,192825,192759,192691,192623,192556,192486,192416,192349,192278,192210,192142,192072,192004,191936,191866,191797,191730,191660,191591,191522,191452,191382,191312,191241,191170,191103,191034,190964,190895,190825,190756,190686,190616,190545,190475,190404,190332,190261,190189,190117,190047,189972,189899,189826,189751,189677,189603,189526,189452,189376,189299,189221,189143,189064,188986,188908,188826,188747,188667,188586,188505,188424,188342,188260,188177,188091,188006,187918,187827,187733,187635,187543,187459,187383,187305,187233,187164,187091,187020,186954,186884,186814,186748,186684,186664,186664,186669,186690,186813,187094,187367,187605,187895,188327,189053,190611,191916,192399,192718,192966,193228,193474,193653,193745,193758,193736,193702,193664,193632,193607,193591,193559,193515,193461,193402,193328,193253,193180,193105,193020,192929,192830,192724,192614,192504,192392,192279,192166,192049,191933,191816,191694,191574,191451,191325,191197,191066,190933,190799,190665,190528,190390,190251,190109,189966,189824,189679,189535,189389,189243,189097,188951,188804,188657,188510,188361,188212,188065,187914,187762,187608,187453,187297,187142,186979,186811,186642,186470,186301,186137,185968,185801,185636,185468,185307,185153,184998,184844,184694,184541,184391,184240,184088,183936,183785,183637,183488,183344,183195,183047,182900,182753,182606,182466,182324,182186,182049,181917,181790,181664,181537,181414,181295,181178,181064,180951,180840,180731,180624,180516,180409,180304,180196,180091,179986,179880,179776,179671,179563,179457,179352,179244,179137,179032,178924,178818,178712,178605,178499,178393,178285,178179,178071,177963,177855,177749,177641,177534,177427,177318,177209,177099,176987,176875,176768,176658,176549,176442,176332,176221,176112,176001,175892,175783,175672,175563,175455,175345,175235,175127,175017,174907,174798,174688,174577,174469,174357,174247,174137,174025,173914,173804,173690,173578,173467,173354,173242,173131,173017,172905,172793,172679,172567,172453,172339,172226,172111,171997,171882,171767,171651,171533,171416,171298,171179,171060,170942,170820,170699,170578,170457,170335,170216,170095,169975,169855,169734,169615,169496,169376,169255,169137,169015,168894,168775,168652,168531,168410,168287,168166,168044,167920,167795,167672,167544,167418,167293,167162,167033,166907,166777,166650,166522,166394,166265,166136,166005,165874,165746,165615,165486,165356,165226,165096,164967,164836,164708,164580,164451,164322,164195,164064,163935,163806,163676,163546,163416,163285,163153,163023,162891,162758,162626,162493,162359,162227,162092,161957,161822,161686,161549,161415,161278,161142,161007,160869,160731,160595,160455,160316,160175,160033,159891,159751,159609,159469,159330,159189,159049,158910,158770,158629,158492,158351,158212,158072,157932,157792,157653,157511,157371,157231,157090,156948,156809,156667,156526,156386,156243,156102,155962,155818,155677,155535,155392,155249,155107,154963,154819,154676,154531,154386,154242,154095,153950,153802,153651,153505,153359,153212,153067,152922,152775,152630,152485,152338,152193,152047,151901,151754,151609,151461,151314,151168,151019,150871,150725,150575,150426,150279,150128,149979,149831,149679,149529,149380,149227,149075,148925,148770,148618,148465,148311,148156,148003,147848,147692,147539,147382,147226,147071,146913,146756,146600,146440,146281,146122,145961,145802,145643,145483,145322,145162,145000,144839,144678,144516,144354,144193,144030,143868,143704,143540,143375,143209,143040,142876,142712,142548,142382,142219,142051,141883,141718,141549,141383,141217,141050,140883,140719,140551,140385,140220,140051,139883,139717,139547,139379,139211,139041,138870,138702,138531,138359,138190,138018,137846,137675,137502,137329,137156,136982,136807,136633,136458,136285,136111,135934,135759,135583,135406,135230,135056,134877,134701,134525,134346,134169,133991,133811,133631,133453,133270,133088,132906,132723,132542,132362,132180,131999,131819,131636,131454,131272,131087,130903,130719,130534,130348,130161,129973,129787,129602,129414,129229,129039,128853,128665,128475,128286,128096,127907,127718,127525,127336,127145,126958,126769,126582,126393,126204,126014,125824,125635,125444,125253,125063,124871,124679,124489,124298,124106,123914,123720,123527,123333,123138,122942,122747,122549,122352,122156,121958,121761,121565,121368,121172,120976,120777,120580,120383,120184,119985,119788,119588,119387,119189,118986,118786,118585,118382,118179,117978,117773,117569,117365,117160,116953,116749,116541,116332,116125,115915,115706,115497,115285,115074,114861,114645,114430,114217,114004,113791,113576,113364,113148,112933,112717,112500,112283,112066,111846,111627,111407,111186,110963,110742,110516,110292,110067,109839,109613,109386,109156,108927,108698,108465,108234,108002,107770,107538,107306,107073,106839,106605,106369,106133,105899,105663,105429,105193,104957,104719,104483,104243,104005,103766,103525,103284,103044,102800,102558,102314,102070,101825,101580,101333,101086,100837,100587,100336,100085,99831,99575,99321,99061,98801,98542,98278,98015,97749,97479,97208,96936,96664,96392,96121,95846,95572,95297,95018,94739,94459,94177,93894,93606,93316,93029,92742,92452,92162,91871,91575,91279,90984,90686,90386,90086,89784,89479,89174,88867,88557,88249,87935,87622,87308,86988,86669,86349,86025,85699,85373,85042,84709,84376,84036,83697,83356,83012,82666,82319,81967,81614,81260,80901,80542,80179,79812,79441,79066,78684,78300,77915,77523,77130,76737,76337,75936,75533,75123,74711,74295,73872,73451,73028,72601,72174,71743,71307,70868,70427,69979,69526,69069,68604,68137,67665,67186,66703,66216,65720,65221,64714,64193,63669,63141,62603,62054,61500,60937,60371,59798,59217,58629,58034,57430,56818,56191,55546,54887,54215,53523,52815,52096,51363,50615,49859,49092,48312,47516,46707,45899,45083,44248,43406,42561,41708,40848,39976,39098,38219,37337,36443,35537,34614,33688,32760,31844,30922,29995,29064,28141,27231,26324,25415,24518,23640,22778,21934,21093,20252,19407,18562,17734,16931,16148,15377,14611,13863,13141,12449,11778,11132,10528,9948,9395,8868,8362,7877,7417,6980,6550,6148,5768,5402,5051,4722,4403,4089,3788,3514,3262,3025,2803,2603,2424,2256,2100,1955,1819,1692,1573,1467,1368,1279,1199,1131,1072,1014,961,914,869,830,793,759,730,703,677,656,637,617,599,582,567,550,537,520,506,492,476,464,451,439,428,419,409,401,394,386,378,372,364,358,353,348,344,342,339,336,334,331,329,326,323,320,320,317,316,315,314,313,314,311,312,312,311,311,312,310,311,311,311,310,311,311,310,311,310,309,311,310,309,311,309,309,310,309,309,311,309,309,310,309,309,309,309,309,310,309,309,310,309,309,310,308,309,310,309,309,310,309,309,310,309,309,310,309,309,310,309,310,310,309,310,310,310,309,311,309,310,311,309,310,310,311,310,310,312,310,310,312,310,311,312,310,311,312,312,311,312,311,312,313,311,312,313,312,312,313,313,312,314,312,313,314,312,313,314,314,313,314,313,314,314,314,314,315,314,314,315,314,314,315,314,315,315,315,314,316,315,315,316,315,315,316,315,315,316,316,315,317,315,316,317,316,316,317,316,316,317,317,316,318,317,317,318,317,317,318,318,317,319,318,318,319,318,319,320,319,319,320,320,319,321,321,320,322,321,321,322,322,322,323,322,323,324,323,323,325,324,324,326,324,326,326,326,325,328,326,327,328,328,327,329,329,328,330,330,329,331,330,331,332,331,332,333,332,332,334,334,334,335,334,335,336,335,336,338,336,337,338,338,338,340,339,339,341,340,340,342,341,342,343,342,343,344,344,343,346,344,345,346,346,346,347,347,347,348,348,349,348,349,351,349,350,351,350,352,352,352,352,353,353,353,354,353,355,355,355,355,355,356,357,356,357,357,357,358,359,358,359,359,359,359,361,360,361,361,361,362,361,362,362,363,363,364,363,363,364,364,365,365,365,366,365,366,366,367,366,367,367,367,367,369,367,368,369,368,369,369,369,370,369,370,369,371,370,371,370,371,372,371,371,372,371,372,373,372,372,372,373,372,374,373,373,373,373,374,374,374,373,374,374,374,375,373,373,371,369,364,360,355,351,347,345,341,340,337,334,332,329,329,326,325,323,321,320,319,317,315,314,312,310,309,306,305,301,298,294"}, "C3_B": {"el0": -192.1, "n": 1211, "d": "0,196,196,195,196,196,196,195,196,196,196,195,196,1,12,38,69,102,135,162,188,209,229,245,259,272,285,295,304,313,319,325,330,335,338,342,346,348,351,353,356,357,360,361,363,366,366,369,371,372,374,375,378,379,381,382,384,386,387,389,391,392,394,395,397,398,399,401,402,404,405,405,407,408,408,410,410,411,412,412,413,363,364,364,367,366,366,368,368,369,370,370,371,373,372,374,374,374,376,376,377,377,380,378,380,380,382,381,383,383,383,385,385,385,386,386,387,388,388,389,388,390,390,391,391,391,392,393,393,394,393,394,395,396,396,395,397,398,398,398,398,399,399,400,401,400,402,401,402,402,404,403,404,405,404,406,405,407,406,407,407,408,408,409,409,409,410,409,411,410,411,411,412,411,412,413,412,414,412,414,414,414,414,415,414,416,416,415,417,415,417,417,417,417,418,418,418,419,418,420,418,420,419,421,419,421,421,421,421,421,422,421,422,421,423,421,423,423,421,423,422,423,422,424,422,423,422,424,423,423,424,422,424,423,424,423,423,423,424,425,423,424,423,424,424,424,423,425,423,424,425,423,425,423,425,424,424,424,425,424,424,425,424,424,424,425,423,425,423,425,424,424,424,423,425,423,424,423,424,423,424,424,422,424,423,423,423,423,422,424,422,423,423,422,423,422,423,421,423,421,423,421,423,422,421,422,421,422,421,422,421,421,421,422,422,420,422,420,422,420,422,420,422,421,420,422,420,421,421,421,420,421,421,421,421,420,421,420,421,420,421,420,421,419,421,421,420,420,420,421,419,421,419,421,419,420,421,419,420,419,420,420,420,419,420,419,420,420,419,420,419,420,419,420,419,420,420,419,420,419,420,418,420,419,420,418,420,420,419,419,419,419,419,419,419,419,419,419,419,419,419,418,419,419,419,418,419,418,419,418,418,419,418,418,418,418,417,416,417,416,416,416,416,416,416,415,416,416,415,415,415,415,415,414,415,415,414,414,413,414,414,415,415,414,415,414,414,414,414,414,413,413,413,413,412,413,412,412,413,411,412,410,411,410,411,410,410,409,409,409,408,409,407,409,406,408,406,407,405,406,406,405,405,404,405,403,404,402,404,402,402,403,401,401,401,401,399,401,399,399,399,399,398,398,398,396,398,396,396,396,396,396,394,396,394,396,394,395,394,395,394,395,395,394,395,394,394,394,394,394,394,394,394,395,393,394,393,395,393,394,393,394,393,394,394,392,394,393,394,392,394,393,393,393,393,394,392,394,392,394,392,394,392,394,394,392,394,393,394,393,394,393,394,393,395,394,393,395,393,395,393,395,394,395,393,395,395,394,395,394,395,395,395,394,395,394,396,395,395,395,394,396,395,395,395,395,395,396,395,395,396,395,396,395,397,395,396,396,396,397,395,397,396,397,396,397,396,397,397,396,397,396,398,396,397,397,397,397,397,398,396,398,397,397,397,398,397,398,396,398,398,397,398,397,398,397,398,397,398,397,398,399,397,399,397,399,397,399,398,399,399,399,399,399,399,399,400,398,400,399,400,400,400,400,399,401,399,401,399,401,400,401,401,400,401,400,402,400,401,401,401,401,402,401,401,402,401,402,401,402,401,403,401,403,403,402,403,402,403,403,403,403,404,403,404,404,404,404,404,405,403,406,404,405,405,405,406,405,406,405,406,405,406,406,407,406,406,407,406,407,407,407,407,407,407,408,407,407,408,407,409,407,408,407,409,407,408,409,407,409,407,408,408,408,408,408,407,409,408,408,408,407,409,407,408,407,409,407,408,408,407,409,407,408,407,408,407,408,408,407,408,407,407,407,408,407,407,407,408,407,407,407,406,408,406,407,406,407,406,407,407,406,407,405,407,406,406,405,407,405,406,406,405,406,405,406,404,406,404,406,404,405,406,404,405,403,405,404,405,403,404,405,403,404,403,404,402,404,402,404,402,403,403,402,403,402,402,402,402,401,402,401,402,401,401,401,400,401,400,401,399,401,399,400,400,399,400,398,400,398,399,398,399,398,398,399,397,398,397,398,397,398,396,397,397,397,397,396,397,395,397,395,396,396,396,396,395,396,394,396,394,396,394,396,394,395,395,394,395,393,395,393,395,393,394,393,394,393,393,393,392,393,392,393,392,393,392,392,393,391,392,391,393,391,392,391,391,391,392,392,390,392,391,391,391,391,391,391,391,391,391,390,391,390,391,390,391,390,391,391,389,391,390,390,389,391,389,390,389,390,389,389,389,389,389,388,389,388,388,388,388,389,387,388,387,388,387,388,386,388,386,388,387,386,387,386,387,386,387,386,387,386,386,387,385,387,385,387,385,386,385,386,387,385,386,385,385,385,386,385,386,384,386,386,384,386,384,386,385,385,384,386,384,386,385,384,386,384,385,385,385,384,386,384,385,386,384,385,384,386,384,385,385,385,384,386,385,385,385,385,385,385,386,384,386,386,385,385,385,386,385,386,385,386,385,386,386,385,386,385,386,385,386,386,386,385,387,386,385,387,385,387,385,387,386,387,384,385,386,386,385,385,387,385,386,386,386,387,386,387,387,388,387,387,388,389,388,388,388,390,389,391,391,391,392,392,393,393,392,394,393,395,394,395,395,397,397,396,398,397,399,398,400,399,401,401,402,402,402,404,403,405,404,406,405,407,406,408,408,408,410,409,410,410,411,411,412,412,413,414,413,415,414,415,415,416,416,417,416,418,419,418,419,419,420,419,421,420,422,421,423"}, "C4_A": {"el0": -152.1, "n": 4761, "d": "0,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,245,244,245,244,245,244,245,244,245,244,245,244,245,13,26,41,64,79,93,108,126,148,174,197,221,244,264,284,301,316,329,341,352,363,373,384,392,394,397,399,400,402,404,404,406,407,408,405,407,408,407,409,410,410,411,411,412,413,413,414,414,415,415,416,416,416,417,417,418,418,417,419,418,420,419,419,420,419,420,420,421,421,420,422,421,421,422,421,423,422,422,423,422,424,423,423,424,423,424,424,424,425,424,425,425,425,425,420,421,421,421,420,421,422,421,422,421,422,422,421,422,422,422,422,422,422,422,422,422,423,422,423,422,422,423,422,423,423,422,423,423,423,423,423,423,423,423,423,423,423,424,423,423,423,423,424,423,424,423,423,424,423,424,424,423,423,424,424,423,424,424,423,424,424,424,423,424,424,423,424,424,425,423,424,424,424,424,424,424,424,424,424,424,424,424,424,424,424,424,423,425,424,424,423,424,425,423,424,424,425,423,424,424,424,424,424,424,423,424,425,423,424,424,424,424,424,425,423,425,424,423,425,424,424,424,425,424,424,424,424,425,424,425,424,424,425,424,425,424,425,424,425,424,424,425,425,424,425,425,425,424,425,425,424,426,425,425,425,425,425,425,426,425,426,425,426,425,426,427,425,426,426,426,427,426,427,426,427,426,427,427,427,427,427,427,427,427,428,428,428,427,428,428,427,428,428,429,427,429,428,428,429,428,429,429,428,429,429,429,429,429,429,427,428,428,428,428,428,428,427,429,428,428,428,428,429,428,429,428,428,429,428,429,428,428,429,429,430,430,430,431,430,430,430,430,431,430,431,430,430,430,430,431,430,431,430,431,430,430,431,430,431,430,430,431,430,430,430,430,431,429,431,430,430,429,430,430,429,430,430,430,429,429,430,429,430,429,429,429,428,429,429,429,428,429,429,428,428,428,429,428,427,428,428,428,427,428,428,427,427,427,428,427,427,426,427,427,426,427,426,426,427,425,426,426,426,425,426,425,425,425,425,425,425,424,425,424,425,424,424,424,424,424,423,423,424,423,423,423,423,423,423,422,422,423,422,422,421,422,422,421,422,421,421,421,422,420,420,421,420,421,419,420,420,419,420,420,419,419,418,419,419,419,418,419,417,418,418,417,418,417,418,417,416,417,417,417,416,417,415,416,417,415,416,415,416,415,415,415,415,415,414,414,415,414,414,414,414,414,413,414,413,413,413,413,413,413,412,412,413,412,412,412,411,412,412,412,411,411,411,411,411,410,411,410,410,411,410,410,410,410,409,409,410,409,410,408,410,409,408,409,409,409,408,408,409,408,408,408,408,408,408,408,408,408,407,408,407,407,408,407,408,407,408,407,407,407,407,407,407,408,406,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,408,407,407,407,408,407,407,408,408,407,407,408,408,408,408,408,407,409,408,408,408,409,408,409,409,408,409,409,409,408,409,410,409,410,409,409,410,409,410,410,411,409,411,410,410,411,410,412,411,410,412,411,412,411,412,412,412,412,412,413,412,413,413,413,413,413,414,413,414,414,414,414,414,415,414,415,415,414,416,415,416,415,416,416,416,417,417,417,416,417,418,418,418,417,418,418,419,419,418,419,419,419,420,419,420,420,421,420,420,421,421,421,422,421,422,422,422,422,423,422,423,423,424,424,423,424,424,425,425,424,426,425,426,426,425,427,426,427,427,428,427,427,429,428,428,429,429,429,429,430,430,431,430,431,431,431,432,432,432,432,433,433,433,434,433,435,434,434,435,435,436,436,436,436,436,437,437,437,438,438,438,438,439,439,439,440,440,440,440,440,441,441,441,441,442,442,442,442,443,442,443,443,444,443,444,444,444,444,445,444,445,445,446,445,445,446,446,447,446,446,447,447,447,446,448,447,447,448,447,448,448,448,448,448,449,448,449,448,450,449,449,449,449,450,450,449,450,450,451,450,451,450,451,451,450,451,451,452,451,451,452,452,452,451,452,452,452,453,452,453,452,453,452,453,454,452,454,455,454,454,454,455,454,455,455,455,455,455,455,455,455,455,456,455,455,456,456,456,456,456,457,456,456,456,457,457,457,457,457,457,457,458,457,458,457,458,458,458,458,458,458,458,458,459,459,459,458,459,459,459,460,459,460,459,460,459,460,460,460,460,460,460,460,461,459,460,461,460,461,460,461,461,461,460,461,461,461,461,461,461,461,461,461,461,461,462,461,461,461,461,462,461,461,461,462,461,462,461,462,461,462,462,462,461,462,461,462,461,462,462,462,461,462,462,462,461,462,462,461,462,462,462,462,462,463,460,461,461,461,462,461,461,461,462,461,462,462,461,462,462,462,462,462,462,463,462,462,463,462,463,464,464,464,465,464,465,464,465,465,465,465,465,465,465,466,465,466,466,466,466,466,466,466,466,467,467,467,467,467,468,468,468,468,468,469,468,469,468,469,470,469,470,469,470,470,470,470,470,470,471,471,471,472,471,471,472,472,472,472,472,472,473,472,473,474,473,473,474,474,474,474,474,475,475,475,476,475,476,477,477,477,478,478,478,479,480,479,480,481,481,481,482,482,483,483,484,484,485,485,485,486,487,488,488,488,489,490,490,491,492,492,493,494,494,495,495,496,497,498,499,499,500,501,502,502,503,504,505,506,507,509,510,512,512,514,514,515,516,517,519,520,520,521,523,524,525,525,527,528,530,530,531,532,534,535,535,537,538,539,540,542,542,544,544,546,546,548,549,550,552,552,553,555,556,556,558,559,561,561,562,563,565,566,566,568,569,570,571,572,573,575,576,576,577,579,580,581,581,583,584,584,586,587,588,588,590,591,591,592,594,593,596,596,596,597,599,599,600,601,601,602,603,604,604,606,606,607,607,608,609,610,610,611,612,612,614,613,615,614,616,616,617,618,618,618,619,621,620,621,621,623,622,624,623,625,624,626,626,627,627,627,629,628,630,630,630,631,631,632,632,633,633,635,634,635,636,636,636,638,637,639,638,639,639,641,640,641,642,641,643,643,644,644,645,644,646,645,647,647,648,647,649,649,650,650,651,651,652,652,653,654,654,656,655,657,657,658,659,659,661,661,663,663,664,665,666,667,669,668,671,671,672,673,674,676,676,678,678,679,681,682,682,684,685,686,687,688,689,690,692,692,693,695,696,697,699,699,700,702,703,704,705,707,707,710,709,712,712,714,715,717,717,719,720,722,722,724,726,726,729,729,731,732,734,734,737,737,739,740,742,743,743,746,746,748,749,750,752,753,753,756,756,757,759,759,761,762,763,763,765,766,767,767,769,770,772,771,773,773,774,776,776,777,778,779,779,781,781,782,783,783,784,785,785,786,787,788,788,788,790,790,790,791,792,792,793,793,794,794,794,796,795,797,796,798,797,799,798,799,799,801,800,801,801,801,803,802,803,803,804,804,805,805,805,805,806,806,807,807,807,808,807,809,808,808,809,809,809,810,810,810,810,811,810,811,811,811,812,811,811,811,812,812,812,812,812,812,813,812,812,813,812,813,813,813,813,813,813,814,814,813,814,814,814,814,815,814,815,815,815,815,816,815,816,816,816,816,816,817,817,818,817,818,817,819,818,819,819,819,820,820,820,820,821,820,821,822,822,822,823,822,824,823,824,824,824,825,825,825,826,826,827,827,827,828,827,829,828,829,829,830,830,830,831,831,831,832,832,833,833,833,834,834,835,834,836,835,835,837,837,837,838,838,838,839,839,839,840,841,840,841,842,841,843,842,843,844,844,843,845,845,845,846,846,846,847,847,847,848,848,848,849,849,849,850,849,851,850,852,851,852,851,852,853,853,853,854,854,853,855,855,856,855,856,856,856,857,857,857,857,858,858,859,859,859,859,860,860,861,860,861,862,862,862,862,861,860,861,861,861,862,863,864,863,864,865,865,866,866,867,867,868,869,869,869,870,871,871,872,872,876,877,877,878,879,879,880,880,881,882,882,883,883,885,885,886,886,887,888,888,890,889,891,891,892,893,893,894,894,896,896,897,898,899,899,900,901,902,902,904,904,905,905,907,908,908,909,911,911,912,914,913,916,916,917,918,920,920,921,923,923,925,925,928,927,930,930,931,933,934,936,937,937,939,941,942,944,945,946,948,950,950,953,954,956,957,959,960,962,965,965,968,969,971,973,975,976,979,980,982,984,987,988,990,992,994,997,997,1000,1002,1004,1006,1008,1010,1012,1013,1016,1018,1020,1022,1024,1026,1028,1031,1032,1035,1036,1039,1041,1044,1045,1047,1050,1052,1054,1056,1059,1061,1064,1065,1069,1070,1074,1075,1079,1081,1083,1087,1089,1093,1094,1099,1101,1104,1107,1110,1113,1117,1120,1123,1126,1130,1133,1136,1140,1143,1147,1150,1155,1157,1162,1166,1171,1174,1180,1185,1191,1196,1202,1207,1212,1218,1223,1229,1235,1242,1247,1256,1262,1269,1275,1281,1287,1294,1301,1309,1324,1347,1380,1414,1454,1495,1543,1592,1643,1693,1741,1793,1849,1913,1996,2096,2222,2396,2607,2861,3152,3461,3800,4182,4620,5123,5676,6275,6936,7629,8406,9490,11106,13836,18425,25534,34459,42414,48028,51846,54099,55108,55478,55628,55746,55853,55950,56046,56163,56313,56485,56666,56803,56897,56975,57044,57107,57165,57221,57274,57328,57378,57430,57480,57535,57598,57665,57736,57817,57903,57988,58062,58122,58180,58237,58294,58345,58395,58442,58489,58535,58580,58624,58666,58709,58750,58793,58835,58878,58919,58963,59003,59045,59086,59127,59167,59207,59247,59287,59326,59366,59404,59443,59483,59521,59561,59599,59638,59676,59715,59754,59793,59831,59870,59908,59946,59984,60020,60056,60091,60126,60162,60197,60233,60267,60301,60336,60370,60404,60438,60471,60506,60539,60573,60606,60639,60672,60704,60737,60769,60801,60834,60866,60897,60929,60962,60994,61026,61058,61090,61121,61152,61184,61214,61246,61275,61307,61337,61367,61399,61428,61460,61489,61519,61549,61580,61609,61639,61669,61698,61728,61757,61787,61817,61847,61876,61907,61936,61966,61996,62027,62058,62088,62118,62149,62180,62211,62241,62272,62303,62333,62364,62394,62425,62456,62486,62516,62547,62577,62608,62638,62669,62700,62730,62761,62791,62823,62852,62883,62914,62944,62973,63004,63035,63065,63096,63126,63157,63187,63219,63248,63280,63309,63339,63370,63400,63429,63459,63488,63518,63548,63577,63607,63635,63666,63695,63725,63756,63786,63815,63847,63876,63906,63935,63965,63994,64023,64054,64082,64113,64141,64171,64200,64230,64259,64289,64318,64348,64376,64406,64435,64464,64494,64521,64552,64580,64609,64638,64668,64696,64727,64755,64786,64814,64845,64875,64904,64934,64963,64995,65023,65054,65084,65113,65141,65171,65200,65229,65257,65285,65314,65341,65370,65396,65424,65451,65478,65504,65531,65557,65585,65611,65639,65665,65693,65719,65746,65774,65800,65827,65853,65881,65907,65934,65960,65988,66015,66042,66068,66096,66123,66151,66178,66206,66233,66259,66287,66314,66341,66368,66395,66422,66450,66477,66503,66530,66558,66586,66612,66640,66667,66694,66720,66747,66773,66799,66825,66851,66876,66904,66928,66954,66981,67005,67032,67056,67082,67107,67133,67157,67182,67207,67232,67256,67280,67307,67330,67355,67380,67405,67429,67454,67478,67503,67527,67553,67577,67602,67625,67651,67676,67700,67725,67750,67775,67800,67824,67849,67874,67898,67924,67949,67974,67998,68023,68048,68073,68099,68122,68148,68173,68198,68222,68246,68270,68294,68317,68341,68365,68388,68411,68434,68458,68481,68505,68527,68551,68574,68598,68619,68642,68666,68688,68711,68733,68757,68780,68803,68825,68850,68872,68896,68918,68941,68962,68986,69007,69030,69052,69074,69096,69118,69141,69163,69186,69208,69231,69253,69275,69297,69320,69341,69364,69385,69407,69429,69452,69474,69495,69519,69540,69563,69584,69606,69628,69650,69671,69693,69714,69735,69757,69778,69799,69821,69843,69864,69887,69908,69930,69948,69972,69993,70014,70037,70058,70079,70100,70122,70142,70164,70185,70207,70228,70249,70270,70291,70311,70331,70353,70373,70394,70414,70434,70456,70479,70498,70518,70539,70559,70578,70598,70617,70638,70659,70679,70700,70719,70740,70759,70780,70798,70819,70838,70858,70877,70899,70917,70937,70958,70977,70997,71016,71038,71056,71077,71097,71116,71135,71154,71173,71193,71211,71230,71250,71267,71287,71306,71324,71343,71363,71382,71401,71420,71440,71460,71480,71501,71521,71542,71561,71583,71603,71624,71644,71666,71686,71707,71728,71749,71770,71790,71810,71830,71849,71869,71888,71908,71929,71948,71968,71988,72007,72027,72048,72066,72086,72107,72127,72146,72165,72186,72205,72225,72242,72262,72279,72299,72317,72335,72353,72372,72390,72409,72427,72445,72464,72482,72500,72517,72534,72551,72569,72584,72602,72618,72635,72651,72668,72684,72700,72717,72733,72750,72766,72782,72798,72814,72829,72847,72862,72878,72895,72910,72927,72942,72958,72973,72990,73005,73021,73036,73053,73068,73084,73098,73115,73130,73145,73160,73176,73190,73205,73219,73234,73248,73263,73278,73293,73309,73323,73338,73353,73368,73382,73395,73411,73424,73438,73451,73465,73479,73494,73506,73520,73534,73548,73562,73576,73591,73604,73618,73632,73646,73659,73673,73687,73701,73714,73729,73742,73756,73770,73783,73797,73810,73824,73837,73850,73862,73875,73888,73901,73913,73926,73939,73952,73965,73978,73992,74004,74018,74031,74045,74059,74074,74087,74101,74116,74130,74145,74159,74173,74187,74202,74217,74233,74249,74266,74282,74298,74314,74331,74346,74363,74381,74397,74417,74436,74459,74484,74512,74540,74572,74615,74790,75248,75788,76116,76324,76632,77005,77275,77408,77480,77545,77637,77781,78001,78255,78494,78740,78977,79159,79249,79269,79278,79288,79296,79305,79309,79315,79319,79323,79326,79330,79330,79333,79333,79332,79332,79331,79331,79328,79328,79326,79325,79323,79322,79320,79317,79313,79309,79303,79296,79290,79282,79274,79264,79256,79246,79237,79226,79215,79203,79191,79178,79166,79153,79139,79125,79108,79092,79074,79057,79038,79019,78997,78976,78954,78932,78905,78879,78853,78826,78801,78775,78747,78717,78687,78654,78623,78590,78561,78529,78498,78466,78433,78399,78362,78327,78291,78260,78228,78201,78172,78146,78121,78099,78076,78052,78026,78001,77978,77955,77934,77912,77891,77871,77851,77830,77809,77787,77768,77749,77732,77713,77695,77679,77661,77644,77625,77610,77594,77581,77567,77556,77545,77532,77520,77509,77497,77488,77478,77468,77459,77450,77441,77433,77427,77419,77412,77405,77399,77392,77387,77381,77377,77372,77368,77363,77359,77355,77352,77348,77344,77344,77342,77340,77339,77339,77336,77334,77332,77328,77326,77323,77321,77318,77317,77313,77312,77308,77307,77305,77303,77302,77300,77300,77298,77297,77297,77295,77293,77291,77288,77287,77283,77280,77276,77274,77271,77268,77266,77264,77262,77260,77259,77259,77257,77255,77254,77252,77251,77249,77248,77248,77244,77243,77239,77237,77232,77230,77227,77225,77221,77219,77217,77214,77212,77209,77207,77203,77199,77194,77192,77189,77187,77184,77182,77179,77177,77175,77174,77173,77173,77175,77175,77175,77174,77175,77174,77174,77174,77174,77173,77172,77172,77171,77171,77169,77170,77169,77169,77168,77168,77166,77166,77165,77164,77162,77161,77159,77159,77156,77155,77154,77153,77153,77152,77150,77148,77147,77145,77144,77141,77139,77136,77135,77131,77127,77124,77119,77116,77112,77110,77105,77101,77096,77091,77085,77080,77075,77072,77067,77062,77058,77053,77049,77044,77040,77033,77028,77024,77019,77013,77007,77001,76996,76989,76984,76980,76974,76969,76965,76960,76956,76951,76945,76940,76935,76931,76925,76921,76916,76910,76906,76900,76895,76889,76883,76877,76871,76864,76859,76852,76846,76839,76832,76825,76817,76811,76803,76796,76788,76780,76772,76764,76755,76745,76733,76722,76710,76698,76686,76672,76661,76649,76639,76627,76617,76606,76597,76585,76574,76563,76552,76540,76529,76518,76507,76499,76487,76478,76466,76455,76445,76436,76424,76415,76405,76396,76386,76374,76365,76356,76347,76337,76330,76320,76313,76305,76296,76289,76281,76271,76264,76254,76244,76236,76225,76216,76206,76197,76187,76176,76165,76153,76142,76131,76121,76109,76097,76085,76074,76061,76049,76038,76027,76016,76007,75997,75988,75978,75968,75959,75949,75939,75930,75921,75908,75898,75890,75882,75873,75863,75855,75846,75835,75826,75817,75805,75795,75785,75775,75765,75755,75745,75733,75721,75709,75700,75688,75678,75666,75656,75646,75634,75623,75614,75604,75596,75585,75576,75566,75557,75548,75539,75528,75519,75508,75499,75490,75479,75469,75458,75448,75436,75426,75413,75399,75383,75369,75355,75343,75331,75318,75306,75293,75280,75265,75251,75235,75222,75209,75197,75185,75173,75160,75149,75137,75125,75115,75103,75092,75079,75067,75054,75043,75028,75016,75003,74989,74975,74961,74948,74932,74918,74902,74888,74873,74859,74844,74830,74815,74801,74787,74772,74756,74740,74726,74710,74694,74678,74662,74647,74631,74616,74600,74583,74566,74549,74533,74516,74500,74485,74469,74454,74440,74426,74412,74398,74382,74367,74349,74334,74317,74301,74284,74267,74252,74234,74217,74199,74183,74166,74149,74131,74116,74098,74082,74065,74049,74031,74014,73997,73979,73961,73941,73923,73903,73884,73862,73843,73821,73800,73778,73757,73736,73714,73693,73670,73649,73625,73604,73580,73558,73536,73513,73491,73470,73447,73425,73401,73378,73354,73330,73306,73280,73257,73232,73210,73185,73161,73135,73111,73086,73060,73032,73006,72980,72952,72926,72898,72872,72844,72818,72789,72762,72734,72705,72677,72650,72621,72594,72565,72538,72511,72482,72454,72424,72395,72365,72333,72302,72272,72241,72209,72178,72145,72113,72080,72049,72019,71990,71959,71927,71894,71864,71833,71801,71770,71741,71713,71682,71653,71623,71594,71562,71534,71503,71475,71446,71418,71389,71360,71330,71302,71274,71245,71216,71189,71165,71140,71118,71094,71075,71063,71076,71112,71145,71161,71185,71237,71348,71522,71705,71869,72023,72196,72421,72759,73117,73338,73551,73895,74255,74586,74869,75052,75105,75066,75021,74971,74923,74873,74822,74772,74721,74671,74619,74567,74514,74462,74409,74358,74306,74255,74203,74153,74102,74050,73999,73949,73897,73845,73792,73740,73688,73634,73581,73525,73469,73412,73356,73299,73241,73183,73125,73068,73010,72951,72889,72828,72764,72701,72635,72571,72509,72446,72381,72317,72251,72185,72117,72048,71980,71913,71849,71783,71718,71650,71580,71510,71440,71367,71292,71214,71139,71061,70985,70911,70836,70764,70694,70625,70556,70487,70418,70350,70284,70217,70151,70087,70024,69964,69906,69851,69798,69743,69691,69638,69586,69535,69486,69435,69386,69334,69285,69233,69182,69132,69084,69036,68988,68942,68896,68851,68804,68759,68713,68669,68623,68578,68531,68486,68441,68396,68351,68305,68262,68219,68177,68133,68091,68048,68006,67962,67921,67877,67834,67792,67751,67710,67670,67630,67590,67550,67510,67469,67429,67388,67347,67307,67267,67226,67185,67141,67097,67055,67015,66972,66932,66889,66847,66805,66763,66722,66682,66643,66603,66563,66522,66484,66443,66403,66364,66325,66285,66245,66206,66167,66127,66089,66050,66012,65974,65934,65895,65856,65817,65776,65737,65698,65659,65619,65580,65540,65501,65460,65421,65381,65341,65301,65261,65221,65180,65140,65099,65060,65018,64979,64937,64896,64856,64815,64773,64732,64690,64647,64607,64563,64522,64479,64437,64393,64350,64307,64263,64219,64174,64130,64083,64038,63991,63946,63899,63853,63805,63757,63709,63662,63615,63567,63520,63473,63429,63383,63338,63293,63248,63202,63158,63111,63067,63021,62975,62928,62882,62837,62790,62743,62696,62649,62601,62555,62506,62460,62411,62363,62313,62264,62215,62165,62115,62063,62009,61955,61899,61843,61790,61737,61685,61632,61582,61529,61477,61426,61374,61325,61273,61222,61171,61120,61066,61015,60963,60913,60863,60813,60763,60713,60664,60615,60566,60515,60466,60416,60366,60316,60265,60215,60165,60113,60062,60011,59960,59908,59856,59804,59752,59701,59646,59593,59539,59485,59428,59375,59320,59269,59216,59164,59112,59059,59006,58951,58897,58843,58790,58735,58681,58626,58571,58515,58459,58402,58345,58289,58232,58177,58122,58067,58012,57957,57901,57846,57790,57734,57679,57623,57568,57511,57455,57398,57341,57284,57229,57171,57114,57057,57000,56943,56887,56831,56776,56721,56665,56609,56553,56498,56441,56385,56328,56273,56213,56156,56099,56043,55987,55932,55878,55823,55769,55713,55658,55602,55547,55491,55435,55379,55324,55267,55211,55154,55098,55041,54984,54927,54869,54812,54754,54695,54636,54577,54516,54457,54395,54335,54273,54212,54150,54087,54024,53959,53897,53834,53772,53709,53648,53585,53520,53458,53396,53332,53270,53206,53143,53078,53014,52951,52886,52820,52754,52689,52621,52554,52484,52415,52346,52278,52209,52141,52072,52003,51932,51865,51797,51729,51662,51594,51529,51461,51394,51326,51260,51193,51126,51060,50992,50926,50857,50789,50719,50651,50580,50511,50440,50369,50299,50229,50160,50090,50021,49949,49880,49809,49741,49670,49601,49532,49461,49392,49323,49253,49183,49115,49045,48976,48906,48835,48764,48691,48618,48543,48468,48394,48319,48247,48175,48104,48033,47961,47888,47814,47743,47669,47597,47525,47452,47379,47305,47230,47156,47080,47003,46928,46851,46775,46697,46620,46543,46464,46384,46306,46226,46147,46065,45983,45901,45818,45735,45650,45566,45483,45400,45318,45237,45156,45075,44993,44913,44832,44750,44670,44589,44508,44426,44345,44263,44181,44099,44017,43932,43848,43762,43678,43591,43505,43420,43333,43246,43158,43069,42978,42888,42800,42715,42628,42544,42458,42373,42289,42204,42121,42037,41953,41868,41783,41699,41614,41527,41442,41355,41268,41181,41094,41007,40921,40837,40751,40664,40579,40494,40408,40322,40236,40150,40063,39977,39888,39800,39712,39623,39536,39445,39356,39266,39175,39084,38993,38898,38805,38710,38618,38524,38432,38339,38245,38151,38058,37965,37870,37776,37681,37585,37490,37394,37296,37200,37102,37003,36902,36802,36702,36601,36499,36397,36295,36191,36087,35982,35877,35774,35670,35565,35460,35353,35247,35139,35030,34920,34809,34701,34589,34478,34365,34251,34137,34022,33908,33792,33679,33563,33449,33332,33217,33101,32986,32869,32754,32636,32520,32400,32283,32163,32043,31925,31805,31685,31560,31436,31310,31184,31055,30925,30794,30662,30530,30399,30265,30132,29997,29862,29725,29587,29448,29308,29167,29025,28882,28737,28591,28443,28294,28145,27993,27841,27687,27533,27377,27222,27064,26906,26745,26584,26420,26256,26092,25926,25758,25591,25420,25248,25074,24897,24719,24539,24358,24172,23984,23793,23601,23401,23197,22984,22768,22553,22335,22117,21894,21667,21434,21199,20962,20722,20477,20234,19994,19754,19510,19264,19015,18758,18494,18222,17945,17661,17372,17079,16782,16476,16164,15843,15520,15187,14850,14511,14163,13801,13425,13043,12662,12278,11890,11495,11087,10673,10253,9835,9416,8993,8572,8155,7743,7336,6940,6558,6193,5838,5499,5166,4843,4538,4252,3979,3716,3466,3226,2994,2775,2573,2384,2210,2048,1905,1775,1657,1550,1454,1368,1289,1218,1152,1093,1039,992,947,908,870,835,802,770,740,712,689,665,645,623,605,587,571,558,549,539,532,525,522,518,515,513,510,509,506,505,503,503,500,500,497,497,496,495,493,493,491,490,490,488,488,486,485,485,484,482,482,481,481,479,478,478,477,477,476,475,473,473,472,472,471,471,470,470,469,469,470,468,469,468,468,467,468,467,467,467,467,466,466,465,466,465,464,465,464,465,463,464,462,463,462,462,462,461,461,461,460,460,460,459,459,458,459,457,458,457,457,456,456,456,455,455,454,454,454,453,453,452,452,451,451,450,450,450,449,448,448,448,447,447,446,446,445,445,445,444,444,444,443,443,442,443,441,442,442,441,440,441,440,440,439,440,439,438,439,438,438,437,437,437,437,436,437,436,436,436,436,435,435,435,435,435,434,434,434,434,433,434,433,433,432,433,432,432,432,432,432,431,431,431,431,430,431,431,430,430,430,430,429,430,430,429,429,430,429,429,428,429,429,429,428,428,428,428,428,428,428,428,428,427,428,428,428,428,428,427,429,427,428,428,427,428,428,428,428,427,428,428,427,428,427,427,428,427,428,427,427,428,427,428,427,427,428,427,428,428,427,428,428,427,428,428,428,428,428,429,428,428,428,428,429,428,429,429,428,429,429,428,430,428,429,429,429,430,430,429,430,430,430,431,430,431,431,432,431,431,433,432,432,432,433,433,433,434,434,433,435,435,434,436,435,435,436,436,436,436,437,437,437,438,437,438,439,438,438,440,439,439,440,440,441,440,441,441,442,442,441,442,443,443,444,443,443,444,444,444,445,444,445,445,446,446,446,446,446,447,446,447,447,447,447,447,448,447,448,447,447,448,447,447,445,445,443,441,437,433,428,422,414,408,400,394,388,385,382,380,380,379,378,379,378,378,378,378,377,377,378,377,378,377,377,377,377,377,378,377,377,377,377,378,377,377,377,377,377,378,377,377,377,377,378,377,377,377,377,377,378,377,377,378,377,377,378,377,377,378,377,378,377,378,378,378,377,378,378,378,379,378,378,378,379,378,378,379,378,377,369,355,342,336,331,329,328,326,325,323,323,322,321,321,320,319,319,318,317,317,317,315,314,313,310,303,296,290,287,284,283,280,279,276,275,274,271,270,267,265,262,260,256,251,246,237,225,203,160,96,37"}, "C4_B": {"el0": -152.1, "n": 1211, "d": "0,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,244,245,245,244,245,244,245,244,245,244,245,244,245,244,245,13,26,41,64,79,93,108,126,148,174,197,221,244,264,284,301,316,329,341,352,363,373,384,392,394,397,399,400,402,404,404,406,407,408,367,368,368,369,370,371,372,372,372,373,374,375,375,376,375,377,376,378,378,378,378,379,379,379,379,380,380,381,380,381,381,381,381,382,382,382,383,382,382,383,383,384,383,384,383,384,385,384,385,385,384,385,385,386,386,386,385,386,386,387,386,386,387,386,386,387,387,387,387,388,387,387,388,387,387,388,388,388,387,388,388,387,388,388,388,389,388,388,388,388,389,388,388,389,389,388,389,388,389,389,388,389,389,389,389,388,389,389,389,389,389,389,389,389,390,389,389,389,389,389,390,389,389,390,389,389,390,389,389,390,389,390,389,390,390,389,389,390,389,390,390,389,390,390,389,390,390,389,390,389,390,390,389,390,390,389,389,390,390,389,390,390,389,390,389,389,390,390,390,389,389,390,390,389,390,390,389,390,390,389,390,390,389,390,390,390,389,390,390,390,390,390,389,390,390,391,389,390,391,390,390,390,390,390,391,390,389,391,390,390,391,390,391,390,390,391,390,391,391,390,391,391,391,390,391,392,391,391,391,391,392,392,391,391,392,392,392,392,392,392,392,393,392,392,393,393,392,393,393,393,393,394,393,393,393,394,394,393,394,394,393,394,394,394,394,394,395,394,394,395,394,394,395,395,394,393,394,393,394,394,393,394,393,394,394,394,393,394,394,394,394,395,394,394,394,394,394,394,394,395,395,396,396,396,396,395,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,396,395,396,396,395,396,395,396,395,395,396,395,395,396,394,395,396,395,394,395,395,394,394,395,394,394,395,394,394,394,394,393,394,394,393,393,394,393,393,394,393,392,393,393,393,392,393,392,392,393,392,392,392,392,391,391,392,391,391,392,391,390,391,391,390,390,391,390,390,390,390,389,390,390,389,389,389,389,389,389,389,388,388,389,388,388,388,388,387,387,388,387,387,388,387,386,387,387,386,386,386,386,386,385,386,385,385,386,385,385,384,385,384,384,385,384,384,383,384,383,383,384,383,382,383,383,382,382,383,382,382,381,382,382,381,382,380,381,381,381,381,380,381,380,380,380,379,380,380,380,379,379,379,379,379,378,379,379,378,378,378,378,378,377,378,377,377,378,377,377,377,377,376,376,377,376,376,376,376,376,375,376,375,375,375,375,376,374,375,375,374,375,374,374,375,374,374,374,374,374,373,374,374,374,373,373,374,373,373,373,373,373,373,373,373,373,373,373,372,373,373,373,373,372,372,373,373,372,373,373,373,372,373,373,372,373,373,372,373,373,373,372,373,374,372,373,374,373,373,373,373,373,374,374,373,374,374,374,373,374,374,374,375,374,374,375,374,375,374,375,375,374,376,375,374,376,375,376,375,376,376,375,377,376,376,376,377,377,376,377,377,377,377,377,378,378,378,378,377,379,378,378,379,379,379,379,379,380,379,380,379,380,380,381,380,380,381,381,381,381,381,382,381,382,383,382,382,383,382,384,383,384,383,383,384,384,385,384,385,384,385,385,385,386,386,385,386,387,386,386,387,388,386,388,388,387,388,388,389,388,389,389,389,390,389,390,390,391,390,391,391,392,391,391,392,393,392,393,393,392,394,394,394,393,395,395,394,395,396,395,397,396,396,397,397,397,397,398,398,398,399,399,399,399,400,400,400,401,401,401,401,402,402,402,402,403,402,404,404,404,403,405,404,405,405,406,405,406,406,407,406,407,407,407,408,408,408,407,409,408,409,409,409,409,410,410,410,410,410,411,410,412,411,410,412,412,412,411,413,412,412,413,412,413,413,413,413,413,414,413,414,414,414,414,413,415,414,415,415,415,414,415,416,415,415,416,416,415,416,417,416,416,417,416,416,417,417,417,417,418,417,417,418,417,418,418,418,418,418,418,418,418,419,419,418,419,420,419,418,420,419,419,420,420,419,420,420,420,420,420,420,420,421,420,421,421,421,421,420,422,421,420,422,422,422,421,422,422,421,423,422,422,423,422,423,422,423,423,423,423,423,423,424,424,424,423,424,424,423,425,424,425,424,424,425,424,425,425,424,425,425,426,425,425,425,425,425,426,425,426,426,425,425,426,426,425,426,426,426,426,426,426,426,426,426,426,426,426,427,426,426,426,426,426,427,426,426,427,426,426,427,427,426,427,426,427,426,427,427,426,426,427,427,426,427,427,426,427,427,426,427,427,427,427,426,425,426,427,426,426,426,426,426,427,426,427,426,427,426,427,428,427,427,427,427,427,427,428,427,429,429,429,430,429,429,430,429,430,430,430,430,429,431,430,430,431,431,430,431,431,431,431,432,432,431,432,432,432,432,433,433,433,433,434,433,433,434,434,434,434,435,434,434,435,435,435,435,436,435,436,436,436,436,436,437,437,437,437,436,438,437,437,438,439,438,437,439,439,439,439,439,440,440,440,441,440,441,442,441,442,443,443,443,444,444,444,445,446,445,447,446,447,448,448,449,448,450,451,450,451,452,452,453,453,454,454,456,456,456,457,458,459,458,460,461,460,462,463,464,463,465,466,467,467,468,469,470,471,472"}};
+const EOS = {"T0":-20,"dT":1,"off":[0,2,5,10,20,40],"C3":[[2.44518,0.554451,0.554753,0.555204,0.555947,0.557406,0.560218],[2.53441,0.553208,0.553514,0.553971,0.554724,0.556201,0.559048],[2.62609,0.55196,0.552271,0.552734,0.553497,0.554993,0.557874],[2.72026,0.550707,0.551022,0.551491,0.552265,0.55378,0.556698],[2.81696,0.54945,0.549769,0.550245,0.551028,0.552564,0.555517],[2.91624,0.548188,0.548511,0.548993,0.549787,0.551343,0.554334],[3.01813,0.54692,0.547248,0.547737,0.548542,0.550118,0.553147],[3.1227,0.545648,0.54598,0.546476,0.547292,0.548889,0.551956],[3.22996,0.54437,0.544707,0.54521,0.546037,0.547656,0.550762],[3.33998,0.543087,0.543429,0.543939,0.544777,0.546418,0.549564],[3.4528,0.541798,0.542145,0.542662,0.543513,0.545176,0.548362],[3.56845,0.540504,0.540857,0.541381,0.542243,0.543929,0.547157],[3.68699,0.539205,0.539562,0.540094,0.540969,0.542678,0.545948],[3.80846,0.537899,0.538262,0.538801,0.539689,0.541422,0.544735],[3.93291,0.536588,0.536956,0.537504,0.538404,0.540161,0.543518],[4.06037,0.535271,0.535645,0.5362,0.537114,0.538896,0.542298],[4.1909,0.533948,0.534327,0.534891,0.535818,0.537625,0.541073],[4.32454,0.532619,0.533004,0.533576,0.534517,0.53635,0.539844],[4.46133,0.531284,0.531675,0.532255,0.53321,0.53507,0.538612],[4.60133,0.529942,0.530339,0.530929,0.531897,0.533784,0.537375],[4.74458,0.528594,0.528997,0.529596,0.530579,0.532494,0.536134],[4.89112,0.527239,0.527648,0.528257,0.529255,0.531198,0.534888],[5.041,0.525877,0.526293,0.526911,0.527925,0.529897,0.533639],[5.19427,0.524509,0.524932,0.525559,0.526589,0.52859,0.532385],[5.35098,0.523134,0.523563,0.524201,0.525247,0.527278,0.531126],[5.51117,0.521751,0.522188,0.522836,0.523898,0.525961,0.529864],[5.67489,0.520362,0.520805,0.521464,0.522543,0.524637,0.528596],[5.84218,0.518965,0.519416,0.520085,0.521181,0.523308,0.527324],[6.0131,0.51756,0.518019,0.518699,0.519813,0.521973,0.526048],[6.1877,0.516148,0.516614,0.517306,0.518438,0.520632,0.524767],[6.36602,0.514727,0.515202,0.515905,0.517057,0.519285,0.523481],[6.5481,0.513299,0.513782,0.514497,0.515668,0.517932,0.52219],[6.73401,0.511863,0.512354,0.513082,0.514272,0.516573,0.520895],[6.92378,0.510418,0.510918,0.511658,0.512869,0.515207,0.519594],[7.11747,0.508965,0.509474,0.510227,0.511458,0.513835,0.518289],[7.31512,0.507503,0.508021,0.508788,0.51004,0.512457,0.516978],[7.51679,0.506033,0.50656,0.50734,0.508615,0.511072,0.515663],[7.72252,0.504553,0.50509,0.505884,0.507181,0.50968,0.514342],[7.93237,0.503064,0.503611,0.50442,0.50574,0.508281,0.513016],[8.14638,0.501565,0.502122,0.502947,0.504291,0.506875,0.511685],[8.36461,0.500057,0.500625,0.501465,0.502833,0.505462,0.510349],[8.5871,0.498539,0.499118,0.499973,0.501367,0.504042,0.509007],[8.81391,0.497011,0.497601,0.498473,0.499892,0.502615,0.50766],[9.04509,0.495472,0.496074,0.496963,0.498409,0.50118,0.506307],[9.28068,0.493923,0.494537,0.495443,0.496917,0.499738,0.504949],[9.52075,0.492363,0.492989,0.493913,0.495415,0.498288,0.503585],[9.76533,0.490792,0.491431,0.492374,0.493905,0.49683,0.502215],[10.01449,0.489209,0.489862,0.490824,0.492385,0.495364,0.500839],[10.26828,0.487615,0.488281,0.489263,0.490855,0.49389,0.499458],[10.52675,0.486009,0.486689,0.487691,0.489316,0.492408,0.498071],[10.78995,0.484391,0.485086,0.486109,0.487766,0.490918,0.496678],[11.05794,0.48276,0.48347,0.484515,0.486206,0.489419,0.495279],[11.33077,0.481116,0.481842,0.48291,0.484636,0.487912,0.493874],[11.60849,0.47946,0.480202,0.481292,0.483055,0.486396,0.492462],[11.89116,0.477789,0.478548,0.479663,0.481464,0.48487,0.491045],[12.17883,0.476105,0.476881,0.478021,0.479861,0.483336,0.489621],[12.47157,0.474406,0.475201,0.476367,0.478247,0.481793,0.488191],[12.76941,0.472693,0.473506,0.4747,0.476621,0.48024,0.486755],[13.07243,0.470965,0.471798,0.473019,0.474983,0.478678,0.485312],[13.38068,0.469221,0.470074,0.471324,0.473333,0.477106,0.483862],[13.6942,0.467461,0.468336,0.469616,0.471671,0.475524,0.482407],[14.01307,0.465685,0.466581,0.467893,0.469996,0.473932,0.480944],[14.33734,0.463891,0.464811,0.466155,0.468308,0.47233,0.479475],[14.66707,0.462081,0.463024,0.464402,0.466607,0.470717,0.477999],[15.00232,0.460252,0.461221,0.462634,0.464892,0.469095,0.476517],[15.34314,0.458405,0.4594,0.46085,0.463164,0.467461,0.475028],[15.6896,0.456538,0.457561,0.459049,0.461421,0.465816,0.473532],[16.04176,0.454652,0.455703,0.457232,0.459664,0.464161,0.472029],[16.39968,0.452746,0.453826,0.455397,0.457892,0.462494,0.470519],[16.76342,0.450818,0.45193,0.453544,0.456104,0.460816,0.469002],[17.13304,0.448868,0.450013,0.451673,0.454301,0.459126,0.467478],[17.50862,0.446896,0.448075,0.449783,0.452483,0.457424,0.465948],[17.89021,0.4449,0.446116,0.447873,0.450647,0.45571,0.46441],[18.27788,0.44288,0.444134,0.445944,0.448795,0.453985,0.462865],[18.67169,0.440835,0.442129,0.443994,0.446926,0.452246,0.461314],[19.07172,0.438763,0.440099,0.442023,0.445039,0.450496,0.459755],[19.47804,0.436665,0.438045,0.440029,0.443134,0.448732,0.458189],[19.8907,0.434537,0.435965,0.438013,0.441211,0.446956,0.456616],[20.30979,0.432381,0.433858,0.435974,0.439268,0.445166,0.455036],[20.73537,0.430193,0.431723,0.43391,0.437307,0.443364,0.45345],[21.16753,0.427973,0.429559,0.431822,0.435325,0.441548,0.451856]],"NC4":[[0.45213,0.62173,0.621945,0.622266,0.622797,0.623847,0.625898],[0.47285,0.620702,0.620919,0.621243,0.62178,0.622839,0.62491],[0.49433,0.619672,0.619891,0.620219,0.62076,0.62183,0.623919],[0.51658,0.61864,0.618862,0.619192,0.619739,0.620819,0.622927],[0.53962,0.617606,0.61783,0.618163,0.618715,0.619805,0.621933],[0.56346,0.61657,0.616795,0.617132,0.61769,0.61879,0.620938],[0.58814,0.615531,0.615759,0.616099,0.616662,0.617773,0.61994],[0.61366,0.61449,0.61472,0.615064,0.615632,0.616754,0.618941],[0.64005,0.613447,0.613679,0.614026,0.6146,0.615733,0.617941],[0.66733,0.612401,0.612636,0.612986,0.613566,0.614709,0.616938],[0.69553,0.611353,0.61159,0.611944,0.612529,0.613684,0.615934],[0.72465,0.610303,0.610542,0.610899,0.61149,0.612657,0.614928],[0.75473,0.60925,0.609491,0.609852,0.610449,0.611627,0.61392],[0.78578,0.608194,0.608438,0.608803,0.609406,0.610595,0.61291],[0.81782,0.607136,0.607383,0.607751,0.60836,0.609561,0.611898],[0.85089,0.606075,0.606324,0.606696,0.607312,0.608525,0.610884],[0.88499,0.605012,0.605264,0.60564,0.606261,0.607486,0.609868],[0.92016,0.603946,0.6042,0.60458,0.605208,0.606445,0.608851],[0.95641,0.602877,0.603134,0.603518,0.604152,0.605402,0.607831],[0.99377,0.601806,0.602065,0.602453,0.603094,0.604357,0.606809],[1.03226,0.600731,0.600994,0.601386,0.602033,0.603309,0.605785],[1.0719,0.599654,0.599919,0.600315,0.60097,0.602258,0.60476],[1.11272,0.598574,0.598842,0.599242,0.599904,0.601205,0.603731],[1.15474,0.597491,0.597762,0.598167,0.598835,0.60015,0.602701],[1.19799,0.596405,0.596679,0.597088,0.597763,0.599092,0.601669],[1.24248,0.595316,0.595593,0.596007,0.596689,0.598032,0.600634],[1.28825,0.594225,0.594504,0.594922,0.595612,0.596969,0.599598],[1.33531,0.59313,0.593413,0.593835,0.594532,0.595903,0.598559],[1.38369,0.592031,0.592318,0.592744,0.593449,0.594835,0.597517],[1.43342,0.59093,0.591219,0.591651,0.592363,0.593764,0.596474],[1.48452,0.589825,0.590118,0.590554,0.591274,0.59269,0.595428],[1.53702,0.588718,0.589013,0.589454,0.590183,0.591613,0.594379],[1.59093,0.587606,0.587906,0.588352,0.589088,0.590534,0.593329],[1.6463,0.586492,0.586794,0.587245,0.58799,0.589452,0.592276],[1.70313,0.585374,0.58568,0.586136,0.586889,0.588366,0.59122],[1.76146,0.584252,0.584562,0.585023,0.585784,0.587278,0.590162],[1.82132,0.583127,0.583441,0.583907,0.584677,0.586187,0.589101],[1.88272,0.581999,0.582316,0.582787,0.583566,0.585093,0.588038],[1.9457,0.580867,0.581187,0.581664,0.582452,0.583996,0.586972],[2.01029,0.579731,0.580055,0.580538,0.581334,0.582896,0.585904],[2.0765,0.578591,0.578919,0.579408,0.580213,0.581792,0.584833],[2.14436,0.577448,0.57778,0.578274,0.579089,0.580686,0.58376],[2.21391,0.5763,0.576636,0.577136,0.577961,0.579576,0.582683],[2.28517,0.575149,0.575489,0.575995,0.576829,0.578463,0.581604],[2.35816,0.573994,0.574338,0.57485,0.575694,0.577347,0.580523],[2.43292,0.572835,0.573183,0.573701,0.574555,0.576227,0.579438],[2.50947,0.571671,0.572024,0.572549,0.573413,0.575104,0.578351],[2.58783,0.570504,0.570861,0.571392,0.572266,0.573978,0.57726],[2.66805,0.569332,0.569693,0.570231,0.571116,0.572848,0.576167],[2.75013,0.568156,0.568522,0.569066,0.569962,0.571714,0.575071],[2.83412,0.566976,0.567346,0.567897,0.568804,0.570577,0.573972],[2.92004,0.565791,0.566166,0.566724,0.567642,0.569437,0.57287],[3.00791,0.564602,0.564982,0.565547,0.566476,0.568292,0.571765],[3.09777,0.563408,0.563793,0.564365,0.565306,0.567144,0.570657],[3.18965,0.56221,0.562599,0.563179,0.564132,0.565992,0.569546],[3.28357,0.561006,0.561401,0.561988,0.562953,0.564837,0.568432],[3.37957,0.559798,0.560198,0.560793,0.56177,0.563677,0.567314],[3.47766,0.558586,0.558991,0.559593,0.560583,0.562514,0.566194],[3.57789,0.557368,0.557778,0.558389,0.559392,0.561346,0.56507],[3.68028,0.556145,0.556561,0.557179,0.558195,0.560175,0.563943],[3.78485,0.554917,0.555339,0.555965,0.556995,0.558999,0.562812],[3.89165,0.553684,0.554111,0.554747,0.555789,0.55782,0.561678],[4.00069,0.552446,0.552879,0.553523,0.554579,0.556636,0.560541],[4.11201,0.551202,0.551641,0.552294,0.553365,0.555448,0.559401],[4.22563,0.549953,0.550398,0.55106,0.552145,0.554255,0.558257],[4.3416,0.548698,0.54915,0.549821,0.550921,0.553058,0.557109],[4.45993,0.547438,0.547896,0.548576,0.549691,0.551857,0.555958],[4.58066,0.546172,0.546637,0.547326,0.548457,0.550651,0.554803],[4.70382,0.5449,0.545371,0.546071,0.547217,0.549441,0.553645],[4.82944,0.543623,0.544101,0.54481,0.545972,0.548226,0.552483],[4.95755,0.542339,0.542824,0.543543,0.544722,0.547007,0.551318],[5.08817,0.541049,0.541541,0.542271,0.543467,0.545783,0.550149],[5.22135,0.539753,0.540252,0.540993,0.542206,0.544554,0.548976],[5.35711,0.53845,0.538957,0.539709,0.540939,0.54332,0.547799],[5.49549,0.537142,0.537656,0.538419,0.539667,0.542081,0.546618],[5.6365,0.535826,0.536349,0.537123,0.538389,0.540837,0.545434],[5.7802,0.534504,0.535035,0.535821,0.537106,0.539588,0.544245],[5.9266,0.533175,0.533714,0.534512,0.535816,0.538334,0.543053],[6.07574,0.531839,0.532387,0.533197,0.534521,0.537075,0.541857],[6.22765,0.530497,0.531052,0.531875,0.533219,0.535811,0.540656],[6.38236,0.529147,0.529711,0.530547,0.531912,0.534541,0.539452]],"IC4":[[0.72477,0.602875,0.603124,0.603494,0.604107,0.605316,0.607667],[0.75581,0.601788,0.602039,0.602413,0.603033,0.604254,0.606628],[0.78788,0.600698,0.600951,0.60133,0.601956,0.603189,0.605587],[0.82101,0.599605,0.599861,0.600244,0.600877,0.602123,0.604545],[0.85522,0.59851,0.598769,0.599155,0.599795,0.601054,0.603501],[0.89053,0.597411,0.597673,0.598064,0.59871,0.599983,0.602454],[0.92697,0.59631,0.596575,0.59697,0.597623,0.598909,0.601406],[0.96456,0.595206,0.595474,0.595873,0.596534,0.597833,0.600355],[1.00333,0.594099,0.59437,0.594774,0.595441,0.596755,0.599303],[1.0433,0.59299,0.593263,0.593672,0.594346,0.595674,0.598248],[1.0845,0.591877,0.592154,0.592567,0.593249,0.59459,0.597191],[1.12695,0.590761,0.591041,0.591459,0.592148,0.593504,0.596132],[1.17067,0.589642,0.589926,0.590348,0.591045,0.592416,0.595071],[1.2157,0.588521,0.588807,0.589234,0.589939,0.591325,0.594007],[1.26206,0.587396,0.587685,0.588117,0.58883,0.590231,0.592942],[1.30977,0.586267,0.58656,0.586997,0.587717,0.589134,0.591874],[1.35886,0.585136,0.585432,0.585874,0.586602,0.588035,0.590804],[1.40936,0.584001,0.584301,0.584747,0.585484,0.586933,0.589731],[1.46129,0.582863,0.583166,0.583618,0.584363,0.585828,0.588656],[1.51468,0.581721,0.582028,0.582485,0.583239,0.58472,0.587579],[1.56956,0.580576,0.580886,0.581349,0.582112,0.58361,0.586499],[1.62595,0.579427,0.579741,0.580209,0.580981,0.582496,0.585417],[1.68388,0.578275,0.578593,0.579067,0.579848,0.581379,0.584332],[1.74339,0.57712,0.577441,0.57792,0.57871,0.58026,0.583245],[1.80448,0.57596,0.576286,0.576771,0.57757,0.579137,0.582156],[1.8672,0.574797,0.575126,0.575617,0.576426,0.578012,0.581064],[1.93158,0.57363,0.573964,0.57446,0.575279,0.576883,0.579969],[1.99763,0.572459,0.572797,0.5733,0.574128,0.575751,0.578871],[2.06539,0.571285,0.571626,0.572135,0.572974,0.574616,0.577771],[2.13488,0.570106,0.570452,0.570967,0.571816,0.573478,0.576669],[2.20614,0.568923,0.569274,0.569795,0.570654,0.572336,0.575563],[2.2792,0.567736,0.568091,0.568619,0.569489,0.571191,0.574455],[2.35408,0.566545,0.566905,0.56744,0.56832,0.570043,0.573344],[2.4308,0.56535,0.565714,0.566256,0.567147,0.568891,0.57223],[2.50941,0.564151,0.564519,0.565068,0.565971,0.567735,0.571114],[2.58993,0.562947,0.56332,0.563876,0.56479,0.566576,0.569994],[2.67239,0.561738,0.562117,0.56268,0.563606,0.565414,0.568872],[2.75681,0.560526,0.560909,0.561479,0.562417,0.564248,0.567746],[2.84324,0.559308,0.559697,0.560274,0.561224,0.563078,0.566618],[2.93169,0.558086,0.55848,0.559065,0.560027,0.561904,0.565487],[3.0222,0.556859,0.557258,0.557851,0.558826,0.560727,0.564352],[3.1148,0.555627,0.556032,0.556633,0.557621,0.559546,0.563215],[3.20952,0.554391,0.554801,0.55541,0.556411,0.558361,0.562074],[3.30639,0.553149,0.553565,0.554182,0.555196,0.557172,0.56093],[3.40544,0.551903,0.552324,0.55295,0.553978,0.555979,0.559783],[3.5067,0.550651,0.551078,0.551712,0.552754,0.554782,0.558633],[3.6102,0.549394,0.549827,0.55047,0.551526,0.55358,0.557479],[3.71597,0.548131,0.54857,0.549223,0.550294,0.552375,0.556323],[3.82404,0.546863,0.547309,0.547971,0.549056,0.551165,0.555162],[3.93445,0.54559,0.546042,0.546713,0.547814,0.549951,0.553999],[4.04723,0.544311,0.544769,0.54545,0.546566,0.548733,0.552832],[4.1624,0.543026,0.543491,0.544182,0.545314,0.54751,0.551661],[4.28,0.541735,0.542208,0.542908,0.544056,0.546283,0.550487],[4.40006,0.540439,0.540918,0.541629,0.542794,0.545051,0.54931],[4.52261,0.539136,0.539623,0.540344,0.541526,0.543815,0.548129],[4.64769,0.537828,0.538321,0.539054,0.540252,0.542574,0.546944],[4.77533,0.536512,0.537014,0.537757,0.538974,0.541328,0.545755],[4.90555,0.535191,0.5357,0.536455,0.537689,0.540077,0.544563],[5.03839,0.533863,0.53438,0.535146,0.536399,0.538821,0.543367],[5.17389,0.532528,0.533054,0.533832,0.535104,0.537561,0.542168],[5.31208,0.531187,0.531721,0.532511,0.533802,0.536295,0.540964],[5.45298,0.529839,0.530381,0.531184,0.532495,0.535024,0.539757],[5.59664,0.528484,0.529034,0.52985,0.531181,0.533748,0.538545],[5.74308,0.527121,0.527681,0.52851,0.529862,0.532467,0.53733],[5.89234,0.525751,0.52632,0.527162,0.528536,0.531181,0.536111],[6.04446,0.524374,0.524953,0.525808,0.527204,0.529889,0.534888],[6.19946,0.522989,0.523578,0.524448,0.525865,0.528591,0.53366],[6.35737,0.521597,0.522195,0.523079,0.52452,0.527288,0.532428],[6.51824,0.520196,0.520805,0.521704,0.523169,0.525979,0.531193],[6.6821,0.518788,0.519407,0.520321,0.52181,0.524665,0.529953],[6.84898,0.517371,0.518001,0.518931,0.520444,0.523344,0.528708],[7.01892,0.515946,0.516587,0.517533,0.519072,0.522018,0.52746],[7.19194,0.514512,0.515164,0.516127,0.517692,0.520686,0.526207],[7.3681,0.51307,0.513734,0.514714,0.516305,0.519347,0.52495],[7.54741,0.511618,0.512294,0.513292,0.514911,0.518003,0.523688],[7.72991,0.510157,0.510846,0.511861,0.513509,0.516652,0.522422],[7.91565,0.508687,0.509389,0.510423,0.512099,0.515294,0.521151],[8.10465,0.507208,0.507922,0.508975,0.510682,0.513931,0.519875],[8.29695,0.505718,0.506447,0.507519,0.509257,0.51256,0.518595],[8.4926,0.504219,0.504961,0.506054,0.507823,0.511183,0.517311],[8.69161,0.502709,0.503466,0.50458,0.506381,0.509799,0.516021]]};
+
+/* ================= PLANT DATA (from Cavern Volume Gauge 4.1) ================= */
+const CFG={
+ C3:{name:"Propane",tk:"TK-3301",lt:["LT33001","LT33002","LT33003"],pt:"PT33210",bot:-192.1,top:-145,
+  zones:[[-192.1,-180],[-180,-172],[-172,-150],[-150,-145]],
+  pA:{LAHH:-151.64,LAH:-152.0,LAL:-172.0,LALL:-172.30},
+  wA:{"2":{LAHH:-182.50,LAH:-183.00,LAL:-188.00,LALL:-188.50},"3":{LAHH:-182.45,LAH:-182.95,LAL:-188.05,LALL:-188.50}},
+  te:[-146,-150,-155,-160,-165,-170,-172,-176,-180,-184],
+  snap:{date:"2026-10-02",p:-165.55,w2:-184.73,w3:-184.73,pg:"6.17",din:"0.507",ic4:"",te:[23.0,21.5,18.5,13.8,11.5,11.7,11.5,11.4,11.5,11.9]},
+  g:{crown:-150,floor:-172,resBot:-180,sumpBot:-192.1,potTop:-180,intake:-185.6,design:{MOP:11.13}},
+  file:"C3 Conversion Table & Curve Rev.1 (2021-05-26)"},
+ C4:{name:"Butane",tk:"TK-3401",lt:["LT34001","LT34002","LT34003"],pt:"PT34210",bot:-152.1,top:-104.5,
+  zones:[[-152.1,-140],[-140,-132],[-132,-110],[-110,-104.5]],
+  pA:{LAHH:-111.64,LAH:-112.0,LAL:-132.0,LALL:-132.3},
+  wA:{"2":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5},"3":{LAHH:-142.5,LAH:-143.0,LAL:-148.0,LALL:-148.5}},
+  te:[-106,-110,-115,-120,-125,-130,-132,-136,-140,-144],
+  snap:{date:"2026-10-02",p:-127.54,w2:-145.95,w3:-145.90,pg:"1.714",din:"0.578",ic4:"29",te:[26.5,26.0,25.8,24.2,23.7,23.6,23.7,23.8,23.5,23.7]},
+  g:{crown:-110,floor:-132,resBot:-140,sumpBot:-152.1,potTop:-140,intake:-145.6,design:{MOP:2.54}},
+  file:"C4 Conversion Table & Curve Rev.2 (2021-05-22)"}
+};
+
+/* ================= ENGINE (identical to Gauge 4.1) ================= */
+function decode(o){const a=new Float64Array(o.n);let s=0;const d=o.d.split(",");for(let i=0;i<o.n;i++){s+=+d[i];a[i]=s/1000}return {el0:o.el0,n:o.n,v:a,elTop:+(o.el0+(o.n-1)*0.01).toFixed(2)}}
+const T={};for(const c of ["C3","C4"])T[c]={A:decode(RAW[c+"_A"]),B:decode(RAW[c+"_B"])};
+function look(t,el){const x=(el-t.el0)*100;if(!(x>=-1e-6&&x<=t.n-1+1e-6))return NaN;const i=Math.min(t.n-2,Math.max(0,Math.floor(x+1e-9))),f=x-i;return t.v[i]+(t.v[i+1]-t.v[i])*f;}
+function inv(t,vol){if(!(vol>=t.v[0]&&vol<=t.v[t.n-1]))return NaN;let lo=0,hi=t.n-1;while(hi-lo>1){const m=(lo+hi)>>1;if(t.v[m]<=vol)lo=m;else hi=m;}const dv=t.v[hi]-t.v[lo];return t.el0+(lo+(dv>0?(vol-t.v[lo])/dv:0))*0.01;}
+const vTot=(c,el)=>look(T[c].A,el);
+function vWat(c,el){const B=T[c].B;if(el<=B.elTop+1e-9)return look(B,el);return look(B,B.elTop)+look(T[c].A,el)-look(T[c].A,B.elTop);}
+function invWat(c,vol){const B=T[c].B,vt=B.v[B.n-1];if(vol<=vt)return inv(B,vol);return inv(T[c].A,look(T[c].A,B.elTop)+vol-vt);}
+const invTot=(c,vol)=>inv(T[c].A,vol);
+const perCm=(c,el,fn)=>fn(c,el+0.005)-fn(c,el-0.005);
+function rhoRow(row,dP){const off=EOS.off,n=off.length;if(dP<=0)return row[1];for(let j=1;j<n;j++){if(dP<=off[j]){const f=(dP-off[j-1])/(off[j]-off[j-1]);return row[j]+(row[j+1]-row[j])*f;}}return row[n]+(row[n]-row[n-1])/(off[n-1]-off[n-2])*(dP-off[n-1]);}
+function psat(f,t){const R=EOS[f],x=(t-EOS.T0)/EOS.dT;if(!(x>=0&&x<=R.length-1))return NaN;const i=Math.min(R.length-2,Math.floor(x)),u=x-i;return R[i][0]+(R[i+1][0]-R[i][0])*u;}
+function rhoF(f,t,pa){const R=EOS[f],x=(t-EOS.T0)/EOS.dT;if(!(x>=0&&x<=R.length-1))return NaN;const i=Math.min(R.length-2,Math.floor(x)),u=x-i,dP=isFinite(pa)?pa-psat(f,t):0;const a=rhoRow(R[i],dP),b=rhoRow(R[i+1],dP);return a+(b-a)*u;}
+const wIso=ic4=>Math.min(1,Math.max(0,(isFinite(ic4)?ic4:0)/100));
+function rhoMix(c,t,pa,ic4){if(c==="C3")return rhoF("C3",t,pa);const w=wIso(ic4);return 1/(w/rhoF("IC4",t,pa)+(1-w)/rhoF("NC4",t,pa));}
+function bubble(c,t,ic4){if(c==="C3")return psat("C3",t);const w=wIso(ic4);return w*psat("IC4",t)+(1-w)*psat("NC4",t);}
+const g2a=pg=>pg*0.980665+1.01325,a2g=pa=>(pa-1.01325)/0.980665;
+const PCR={C3:{Tc:369.83,Pc:42.48,w:.152,M:44.097},NC4:{Tc:425.12,Pc:37.96,w:.200,M:58.123},IC4:{Tc:407.8,Pc:36.40,w:.184,M:58.123}};
+function rhoV(c,TC,pa,ic4){let f=PCR.C3;if(c==="C4"){const w=wIso(ic4),a=PCR.IC4,b=PCR.NC4;f={Tc:w*a.Tc+(1-w)*b.Tc,Pc:w*a.Pc+(1-w)*b.Pc,w:w*a.w+(1-w)*b.w,M:58.123}}
+ const Tk=TC+273.15,Tr=Tk/f.Tc,Pr=pa/f.Pc,B0=0.083-0.422/Math.pow(Tr,1.6),B1=0.139-0.172/Math.pow(Tr,4.2);return pa*f.M/((1+(B0+f.w*B1)*Pr/Tr)*0.0831446*Tk);}
+
+/* ================= I18N ================= */
+const L={
+en:{c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane",Butane:"Butane",
+ nStock:"Stock",nAB:"A → B",nPlan:"Pump plan",nLook:"Table",nDens:"Density",
+ massM:"Product mass · M",volG:"Product volume · G",fillLAH:"Fill to LAH",perCm:"1 cm product",room:"Room to LAH",pumpable:"Pumpable to LAL",
+ readings:"PMS readings",prodLevel:"product level",water:"water",wUse:"Water level used",avg:"Average",liqT:"liquid",d15:"density at 15 °C",more:"More",
+ negHint:"Levels in m MSL. Type 165.55 for −165.55 — the minus is added for you.",share:"Share result",copy:"Copy",copied:"Copied",details:"Details",
+ normal:"Normal",prodAl:"Product",watAl:"Water",
+ kTV:"Total liquid · TV",kWV:"Water · WV",kG:"Product volume · G",kN:"Volume at 15 °C · N",kM:"Product mass · M",kT:"Liquid temperature",teAvg:"TE average below level",entered:"entered",
+ kPs_C3:"Vapour pressure at T",kPs_C4:"Bubble pressure at T",kMargin:"PT − saturation",kFloor:"Level above gallery floor",kVap:"Vapour above liquid",kNpsh:"NPSHa estimate, no friction",
+ basisFoot:"M = G × VCF × (D15 − 0.0011), weight in air, as the PMS. Tables: {f}. Same engine as Cavern Volume Gauge 4.1.",
+ snapReset:"Load PMS snapshot {d}?",snapDone:"PMS snapshot {d} loaded",
+ teTitle:"TE temperature profile",teNote:"Points below the product level (coloured) are averaged as the liquid temperature; points above as the vapour temperature.",teLiq:"Liquid avg",teVap:"Vapour avg",done:"Done",clearT:"Use TE average",
+ product:"Product",waterC:"Water",from:"from",to:"to",useCur:"Current",quickB:"Quick: B = A",volA:"Volume at A",volB:"Volume at B",dLevel:"Level change",
+ volAB_p:"Product volume A → B",volAB_w:"Water volume A → B",falls:"Level falls · pumped out",rises:"Level rises · filled in",noChg:"No change",
+ assumeW:"Assumes the water level does not change between A and B.",waterTblEnd:"Water table B ends at {v} m; above it table A increments are used.",
+ newLevel:"New level",out:"Pump out",in:"Fill in",start:"Start",startLevel:"level",qty:"Quantity",rate:"Rate",optional:"optional",duration:"Time at rate",
+ sameM3:"Same in m³",sameT:"Same in tonnes",prodMoves:"Product level moves to",massAfter:"Product mass after",fromL:"from {v} m",
+ passes:"Passes",noPass:"No alarm passed",
+ l2v:"Level → volume",v2l:"Volume → level",level:"Level",tonnes:"Tonnes",waterB:"Water (B)",near:"Around this level",elev:"Elev. m",
+ lkTV:"Total liquid · TV (table A)",lkLevel:"Level",gAtW:"G at current water",mAtW:"M at current water",wB:"Water (table B)",cm:"m³ per cm",
+ lkFromTV:"from total liquid TV",lkFromG:"product G + current water {w} m³",lkFromM:"{t} t ÷ {r} t/m³ + current water",lkFromW:"from water table B",
+ rhoTP:"Density at cavern T, P",tpm:"Tonnes per m³ (G)",tUsed:"Temperature used",dmIn:"Enter density",dmCalc:"From T & P",density:"Density",basis:"This density is",
+ b15:"15 °C (COQ)",bObs:"Cavern T, P",blankTE:"blank = TE avg",ic4:"isobutane, % wt",massBasis:"Mass basis",air:"Weight in air (as PMS)",vac:"Mass in vacuum",
+ rCalc:"calculated at T & P (EOS)",rD15:"D15 × VCF",rAs:"as entered",
+ kR15:"Density 15 °C, saturated (EOS)",kREOS:"Density at T, P (EOS)",kVCF:"VCF = ρ(T,P) / ρ15",
+ dHelp:"Temperature: blank uses the TE average below the product level (Stock). Pressure is shared with Stock.",dHelpC4:" C4 is n-butane + isobutane; 29 % isobutane gives 0.578 kg/L at 15 °C, the PMS density.",
+ mEnterP:"Enter the product level.",mRange:"{l} {v} m is outside the table ({a} to {b} m).",mWaboveP:"Water level is above the product level — check which gauge is which.",
+ mWpot:"Water is above the pot tops ({v} m): product pumps can take water.",mPpot:"Product level is below the pot tops ({v} m): pots are no longer fed.",
+ mLTdiff:"LT-002 and LT-003 differ by {v} m.",mMOP:"Pressure is above MOP {v} kg/cm²g.",mNoT:"Enter the TE temperatures or a liquid temperature.",
+ mSat:"Pressure is below saturation at {t} °C ({p} kg/cm²g); saturated liquid density is used.",mQty:"Enter a quantity.",mNeedD:"Set a density to work in tonnes.",mOutT:"That quantity takes the level outside the table.",
+ mEnter:"Enter {l}.",lvlA:"Level A",lvlB:"Level B",lvlStart:"Starting level",lvlX:"Level",theme:"Theme",lang:"Language",chooseLang:"Language · Ngôn ngữ · 언어",
+ shareHead:"{tk} {n} · stock",shTime:"Time",hrs:"h",days:"days",min:"min"},
+vi:{c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propan",Butane:"Butan",
+ nStock:"Tồn kho",nAB:"Mức A → B",nPlan:"KH bơm",nLook:"Tra bảng",nDens:"KL riêng",
+ massM:"Khối lượng SP · M",volG:"Thể tích sản phẩm · G",fillLAH:"Đầy so với LAH",perCm:"1 cm sản phẩm",room:"Còn trống tới LAH",pumpable:"Bơm được tới LAL",
+ readings:"Số đọc PMS",prodLevel:"mức sản phẩm",water:"nước",wUse:"Mức nước dùng để tính",avg:"Trung bình",liqT:"lỏng",d15:"KLR ở 15 °C",more:"Thêm",
+ negHint:"Mức tính theo m MSL. Gõ 165.55 sẽ hiểu là −165.55 — dấu trừ tự thêm.",share:"Chia sẻ kết quả",copy:"Sao chép",copied:"Đã sao chép",details:"Chi tiết",
+ normal:"Bình thường",prodAl:"Sản phẩm",watAl:"Nước",
+ kTV:"Tổng chất lỏng · TV",kWV:"Nước · WV",kG:"Thể tích sản phẩm · G",kN:"Thể tích ở 15 °C · N",kM:"Khối lượng sản phẩm · M",kT:"Nhiệt độ lỏng",teAvg:"TB các TE dưới mức",entered:"nhập tay",
+ kPs_C3:"Áp suất hơi bão hòa ở T",kPs_C4:"Áp suất điểm sôi ở T",kMargin:"PT − áp bão hòa",kFloor:"Mức trên đáy gallery",kVap:"Hơi phía trên chất lỏng",kNpsh:"NPSHa ước tính, bỏ qua ma sát",
+ basisFoot:"M = G × VCF × (D15 − 0.0011), trọng lượng trong không khí, như PMS. Bảng: {f}. Cùng bộ tính với Cavern Volume Gauge 4.1.",
+ snapReset:"Nạp số liệu PMS {d}?",snapDone:"Đã nạp số liệu PMS {d}",
+ teTitle:"Biên dạng nhiệt độ TE",teNote:"Các điểm dưới mức sản phẩm (có màu) được lấy trung bình làm nhiệt độ lỏng; các điểm phía trên là nhiệt độ hơi.",teLiq:"TB lỏng",teVap:"TB hơi",done:"Xong",clearT:"Dùng TB TE",
+ product:"Sản phẩm",waterC:"Nước",from:"từ",to:"đến",useCur:"Hiện tại",quickB:"Nhanh: B = A",volA:"Thể tích tại A",volB:"Thể tích tại B",dLevel:"Thay đổi mức",
+ volAB_p:"Thể tích SP A → B",volAB_w:"Thể tích nước A → B",falls:"Mức giảm · đã bơm ra",rises:"Mức tăng · đã nạp vào",noChg:"Không đổi",
+ assumeW:"Giả định mức nước không đổi giữa A và B.",waterTblEnd:"Bảng nước B kết thúc ở {v} m; phía trên dùng gia số của bảng A.",
+ newLevel:"Mức mới",out:"Bơm ra",in:"Nạp vào",start:"Mức",startLevel:"ban đầu",qty:"Lượng",rate:"Lưu lượng",optional:"tùy chọn",duration:"Thời gian",
+ sameM3:"Tương đương m³",sameT:"Tương đương tấn",prodMoves:"Mức SP chuyển tới",massAfter:"Khối lượng SP sau đó",fromL:"từ {v} m",
+ passes:"Qua",noPass:"Không qua ngưỡng nào",
+ l2v:"Mức → thể tích",v2l:"Thể tích → mức",level:"Mức",tonnes:"Tấn",waterB:"Nước (B)",near:"Quanh mức này",elev:"Cao độ m",
+ lkTV:"Tổng chất lỏng · TV (bảng A)",lkLevel:"Mức",gAtW:"G với mức nước hiện tại",mAtW:"M với mức nước hiện tại",wB:"Nước (bảng B)",cm:"m³ mỗi cm",
+ lkFromTV:"từ tổng chất lỏng TV",lkFromG:"G sản phẩm + nước hiện tại {w} m³",lkFromM:"{t} t ÷ {r} t/m³ + nước hiện tại",lkFromW:"từ bảng nước B",
+ rhoTP:"KLR ở T, P của hang",tpm:"Tấn mỗi m³ (G)",tUsed:"Nhiệt độ dùng",dmIn:"Nhập KLR",dmCalc:"Tính từ T & P",density:"KLR",basis:"KLR này là",
+ b15:"15 °C (COQ)",bObs:"T, P trong hang",blankTE:"trống = TB TE",ic4:"isobutan, % kl",massBasis:"Cơ sở khối lượng",air:"Trong không khí (như PMS)",vac:"Trong chân không",
+ rCalc:"tính ở T & P (EOS)",rD15:"D15 × VCF",rAs:"như đã nhập",
+ kR15:"KLR 15 °C, bão hòa (EOS)",kREOS:"KLR ở T, P (EOS)",kVCF:"VCF = ρ(T,P) / ρ15",
+ dHelp:"Nhiệt độ: để trống sẽ dùng TB các TE dưới mức sản phẩm (Tồn kho). Áp suất dùng chung với Tồn kho.",dHelpC4:" C4 gồm n-butan + isobutan; 29 % isobutan cho 0.578 kg/L ở 15 °C, đúng KLR trên PMS.",
+ mEnterP:"Nhập mức sản phẩm.",mRange:"{l} {v} m nằm ngoài bảng ({a} đến {b} m).",mWaboveP:"Mức nước cao hơn mức sản phẩm — kiểm tra lại đồng hồ nào là đồng hồ nào.",
+ mWpot:"Nước cao hơn miệng pot ({v} m): bơm sản phẩm có thể hút nước.",mPpot:"Mức sản phẩm thấp hơn miệng pot ({v} m): pot không còn được cấp.",
+ mLTdiff:"LT-002 và LT-003 lệch nhau {v} m.",mMOP:"Áp suất vượt MOP {v} kg/cm²g.",mNoT:"Nhập nhiệt độ TE hoặc nhiệt độ lỏng.",
+ mSat:"Áp suất thấp hơn áp bão hòa ở {t} °C ({p} kg/cm²g); dùng KLR lỏng bão hòa.",mQty:"Nhập lượng.",mNeedD:"Cần KLR để tính theo tấn.",mOutT:"Lượng này đưa mức ra ngoài bảng.",
+ mEnter:"Nhập {l}.",lvlA:"Mức A",lvlB:"Mức B",lvlStart:"Mức ban đầu",lvlX:"Mức",theme:"Giao diện",lang:"Ngôn ngữ",chooseLang:"Language · Ngôn ngữ · 언어",
+ shareHead:"{tk} {n} · tồn kho",shTime:"Thời điểm",hrs:"giờ",days:"ngày",min:"phút"},
+ko:{c3:"C3 · 프로판",c4:"C4 · 부탄",sub:"HSVC LPG 캐번",Propane:"프로판",Butane:"부탄",
+ nStock:"재고",nAB:"레벨 A→B",nPlan:"펌핑 계획",nLook:"환산표",nDens:"밀도",
+ massM:"제품 질량 · M",volG:"제품 부피 · G",fillLAH:"LAH 대비 충전율",perCm:"제품 1 cm",room:"LAH까지 여유",pumpable:"LAL까지 출하 가능",
+ readings:"PMS 지시값",prodLevel:"제품 레벨",water:"물",wUse:"계산에 쓰는 물 레벨",avg:"평균",liqT:"액체",d15:"15 °C 밀도",more:"더보기",
+ negHint:"레벨은 m MSL. 165.55 입력 시 −165.55로 처리됩니다 (마이너스 자동).",share:"결과 공유",copy:"복사",copied:"복사됨",details:"상세",
+ normal:"정상",prodAl:"제품",watAl:"물",
+ kTV:"총 액체 · TV",kWV:"물 · WV",kG:"제품 부피 · G",kN:"15 °C 부피 · N",kM:"제품 질량 · M",kT:"액체 온도",teAvg:"레벨 아래 TE 평균",entered:"입력값",
+ kPs_C3:"T에서 증기압",kPs_C4:"T에서 기포점 압력",kMargin:"PT − 포화압",kFloor:"갤러리 바닥 위 레벨",kVap:"액면 위 증기",kNpsh:"NPSHa 추정 (마찰 제외)",
+ basisFoot:"M = G × VCF × (D15 − 0.0011), 공기 중 중량, PMS와 동일. 환산표: {f}. Cavern Volume Gauge 4.1과 같은 계산.",
+ snapReset:"PMS {d} 값을 불러올까요?",snapDone:"PMS {d} 값 불러옴",
+ teTitle:"TE 온도 분포",teNote:"제품 레벨 아래 지점(색 표시)의 평균을 액체 온도로, 위 지점은 증기 온도로 사용합니다.",teLiq:"액체 평균",teVap:"증기 평균",done:"완료",clearT:"TE 평균 사용",
+ product:"제품",waterC:"물",from:"시작",to:"끝",useCur:"현재값",quickB:"빠른 입력: B = A",volA:"A 부피",volB:"B 부피",dLevel:"레벨 변화",
+ volAB_p:"제품 부피 A → B",volAB_w:"물 부피 A → B",falls:"레벨 하강 · 출하",rises:"레벨 상승 · 입고",noChg:"변화 없음",
+ assumeW:"A와 B 사이에서 물 레벨은 변하지 않는다고 가정합니다.",waterTblEnd:"물 환산표 B는 {v} m까지; 그 위는 표 A 증분을 사용합니다.",
+ newLevel:"새 레벨",out:"출하",in:"입고",start:"시작",startLevel:"레벨",qty:"수량",rate:"유량",optional:"선택",duration:"소요 시간",
+ sameM3:"m³ 환산",sameT:"톤 환산",prodMoves:"제품 레벨 이동",massAfter:"이후 제품 질량",fromL:"{v} m에서",
+ passes:"통과",noPass:"통과하는 경보 없음",
+ l2v:"레벨 → 부피",v2l:"부피 → 레벨",level:"레벨",tonnes:"톤",waterB:"물 (B)",near:"이 레벨 주변",elev:"표고 m",
+ lkTV:"총 액체 · TV (표 A)",lkLevel:"레벨",gAtW:"현재 물 기준 G",mAtW:"현재 물 기준 M",wB:"물 (표 B)",cm:"cm당 m³",
+ lkFromTV:"총 액체 TV 기준",lkFromG:"제품 G + 현재 물 {w} m³",lkFromM:"{t} t ÷ {r} t/m³ + 현재 물",lkFromW:"물 환산표 B 기준",
+ rhoTP:"캐번 T·P 밀도",tpm:"m³당 톤 (G)",tUsed:"사용 온도",dmIn:"밀도 입력",dmCalc:"T·P로 계산",density:"밀도",basis:"이 밀도 기준",
+ b15:"15 °C (COQ)",bObs:"캐번 T·P",blankTE:"빈칸 = TE 평균",ic4:"이소부탄, wt %",massBasis:"질량 기준",air:"공기 중 중량 (PMS)",vac:"진공 질량",
+ rCalc:"T·P에서 계산 (EOS)",rD15:"D15 × VCF",rAs:"입력값",
+ kR15:"15 °C 포화 밀도 (EOS)",kREOS:"T·P 밀도 (EOS)",kVCF:"VCF = ρ(T,P) / ρ15",
+ dHelp:"온도: 빈칸이면 제품 레벨 아래 TE 평균(재고 화면)을 사용. 압력은 재고 화면과 공유.",dHelpC4:" C4는 노르말부탄 + 이소부탄; 이소부탄 29 %에서 15 °C 0.578 kg/L (PMS 밀도).",
+ mEnterP:"제품 레벨을 입력하세요.",mRange:"{l} {v} m가 환산표 범위({a} ~ {b} m)를 벗어났습니다.",mWaboveP:"물 레벨이 제품 레벨보다 높습니다 — 게이지를 확인하세요.",
+ mWpot:"물이 포트 상단({v} m)보다 높음: 출하펌프가 물을 흡입할 수 있습니다.",mPpot:"제품 레벨이 포트 상단({v} m)보다 낮음: 포트로 유입되지 않습니다.",
+ mLTdiff:"LT-002와 LT-003 차이 {v} m.",mMOP:"압력이 MOP {v} kg/cm²g를 초과했습니다.",mNoT:"TE 온도나 액체 온도를 입력하세요.",
+ mSat:"압력이 {t} °C 포화압({p} kg/cm²g)보다 낮아 포화 액체 밀도를 사용합니다.",mQty:"수량을 입력하세요.",mNeedD:"톤 계산에는 밀도가 필요합니다.",mOutT:"이 수량이면 레벨이 환산표 범위를 벗어납니다.",
+ mEnter:"{l}을(를) 입력하세요.",lvlA:"레벨 A",lvlB:"레벨 B",lvlStart:"시작 레벨",lvlX:"레벨",theme:"테마",lang:"언어",chooseLang:"Language · Ngôn ngữ · 언어",
+ shareHead:"{tk} {n} · 재고",shTime:"시각",hrs:"시간",days:"일",min:"분"}};
+let LANG="en";
+const t=(k,v)=>{let s=(L[LANG]&&L[LANG][k])??L.en[k]??k;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s;};
+
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+const nf=(x,d=1)=>isFinite(x)?x.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"–";
+const el2=x=>isFinite(x)?(x<0?"−":"")+Math.abs(x).toFixed(2):"–";
+const sg=(x,d=1)=>isFinite(x)?(x>0?"+":x<0?"−":"±")+nf(Math.abs(x),d):"–";
+function num(s){if(s==null)return NaN;s=String(s).trim().replace(/\s/g,"").replace(/−/g,"-").replace(/,/g,".");if((s.match(/\./g)||[]).length>1)return NaN;return s===""?NaN:+s;}
+function qnum(s){if(s==null)return NaN;s=String(s).trim().replace(/\s/g,"");if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s))s=s.replace(/,/g,"");return num(s);}
+function lvl(s){let v=num(s);if(isFinite(v)&&v>0)v=-v;return v;}
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
+const U=(u)=>`<small>${u}</small>`;
+const ICON_W='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.8 15 14H1Z"/><path d="M8 6.3v3.6M8 11.6v.4"/></svg>';
+
+/* ================= STATE ================= */
+const KEY="cvgm.v1";
+let cav="C3",scr="stock",theme=null;
+const S={C3:{},C4:{}};
+function defaults(c){const k=CFG[c],s=k.snap;return {p:s.p.toFixed(2),w2:s.w2.toFixed(2),w3:s.w3.toFixed(2),wsrc:"2",pg:s.pg,tl:"",te:s.te.map(String),
+ din:s.din,dbasis:"15",dm:"in",ic4:s.ic4,air:"1",
+ abL:"product",abA:s.p.toFixed(2),abB:(s.p-1).toFixed(2),
+ qL:"product",qD:"out",ql:s.p.toFixed(2),qq:"5000",qu:"m3",qr:"",
+ lkM:"l2v",lkEl:s.p.toFixed(2),lkW:"G",lkV:"",lkStep:"0.1"};}
+try{const j=JSON.parse(localStorage.getItem(KEY)||"null");if(j){if(j.S){S.C3=j.S.C3||{};S.C4=j.S.C4||{};}cav=j.cav||cav;scr=j.scr||scr;LANG=j.lang||null;theme=j.theme||null;}}catch(e){}
+if(!LANG||!L[LANG]){const n=(navigator.language||"en").toLowerCase();LANG=n.startsWith("ko")?"ko":n.startsWith("vi")?"vi":"en";}
+function st(c=cav){const s=S[c],d=defaults(c);for(const k in d)if(s[k]===undefined)s[k]=d[k];return s;}
+let saveT=null;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({S,cav,scr,lang:LANG,theme}))}catch(e){}},150);}
+
+/* ================= CALCULATIONS ================= */
+function teAvg(c,P){const g=CFG[c],s=st(c),b=[],a=[];g.te.forEach((e,i)=>{const v=num(s.te[i]);if(!isFinite(v))return;(isFinite(P)&&e<P?b:a).push(v);});return {tl:mean(b),tv:a.length?mean(a):mean(b)};}
+function current(c=cav){const s=st(c),P=lvl(s.p),W2=lvl(s.w2),W3=lvl(s.w3),src=s.wsrc;
+ let W=src==="3"?W3:src==="avg"?((isFinite(W2)&&isFinite(W3))?(W2+W3)/2:(isFinite(W2)?W2:W3)):W2;if(!isFinite(W)&&src!=="3")W=W3;
+ const TV=vTot(c,P),WV=vWat(c,W);return {P,W,W2,W3,src,TV,WV,G:TV-WV};}
+function density(c=cav){const s=st(c),P=lvl(s.p),te=teAvg(c,P);
+ const tIn=num(s.tl),tt=isFinite(tIn)?tIn:te.tl,pg=num(s.pg),ic4=num(s.ic4),air=s.air==="1";
+ const pa=isFinite(pg)?g2a(pg):NaN,pb=bubble(c,tt,ic4);
+ const rEOS=rhoMix(c,tt,isFinite(pa)?pa:pb,ic4),r15=rhoMix(c,15,NaN,ic4),vcf=rEOS/r15;
+ const din=num(s.din),b15=s.dbasis==="15";let rho,tpm,d15=NaN;
+ if(s.dm==="in"){if(b15){d15=din;rho=isFinite(din)?din*vcf:NaN;tpm=air?(din-0.0011)*vcf:rho;}else{rho=din;tpm=air?din-0.0011:din;}}
+ else{rho=rEOS;d15=r15;tpm=air?rho-0.0011:rho;}
+ const notes=[];
+ if(!isFinite(tt))notes.push(["crit",t("mNoT")]);
+ if(isFinite(pa)&&isFinite(pb)&&pa<pb-0.02)notes.push(["warn",t("mSat",{t:nf(tt,1),p:nf(a2g(pb),2)})]);
+ return {rho,tpm,air,t:tt,tAuto:!isFinite(tIn),te,pb,pa,pg,rEOS,r15,vcf,d15,b15,ic4,notes,dm:s.dm};}
+const rangeMsg=(el,l)=>{const k=CFG[cav];return t("mRange",{l,v:el2(el),a:el2(k.bot),b:el2(k.top)});};
+function msgs(id,list){$(id).innerHTML=list.map(([c,x])=>`<div class="msg ${c==="crit"?"crit":""}">${ICON_W}<div>${x}</div></div>`).join("");}
+function fmtDur(h){if(!isFinite(h)||h<0)return "–";const m=h*60;if(m<90)return nf(m,0)+" "+t("min");if(h<48){const hh=Math.floor(h),mm=Math.round((h-hh)*60);return `${hh} ${t("hrs")} ${String(mm).padStart(2,"0")}`;}return nf(h/24,1)+" "+t("days");}
+
+/* level status for hero chip */
+function band(v,A){if(!isFinite(v))return null;if(v>=A.LAHH)return ["tr","LAHH"];if(v>=A.LAH)return ["al","LAH"];if(v<=A.LALL)return ["tr","LALL"];if(v<=A.LAL)return ["al","LAL"];return ["ok",t("normal")];}
+const chip=(k,txt)=>`<span class="hchip ${k==="ok"?"":k}"><i></i>${txt}</span>`;
+
+/* ================= GAUGE (schematic, true elevation scale) ================= */
+function gauge(id,o){
+ const svg=$(id),k=CFG[cav],z=k.zones,H=240,top=6,bot=234,E0=k.top,E1=k.bot;
+ const Y=e=>top+(E0-e)/(E0-E1)*(bot-top);
+ const yS=Y(z[3][1]),yC=Y(z[2][1]),yF=Y(z[2][0]),yR=Y(z[1][0]),yB=Y(z[0][0]);
+ const path=`M43 ${yS} V${yC} H28 Q6 ${yC} 6 ${yC+16} V${yF} H24 V${yR} H39 V${yB-2} Q39 ${yB} 41 ${yB} H59 Q61 ${yB} 61 ${yB-2} V${yR} H76 V${yF} H94 V${yC+16} Q94 ${yC} 72 ${yC} H57 V${yS} Z`;
+ const acc=cav==="C3"?"var(--C3)":"var(--C4)";
+ const P=o.P,W=o.W;const yP=isFinite(P)?Math.max(top,Math.min(bot,Y(P))):bot,yW=isFinite(W)?Math.max(top,Math.min(bot,Y(W))):bot;
+ let s=`<defs><clipPath id="${id}c"><path d="${path}"/></clipPath>
+  <linearGradient id="${id}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${acc}" stop-opacity=".95"/><stop offset="1" stop-color="${acc}" stop-opacity=".55"/></linearGradient>
+  <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--waterL)"/><stop offset="1" stop-color="var(--water)"/></linearGradient>
+  <pattern id="${id}h" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#2A323C" stroke-width="1.2"/></pattern></defs>`;
+ s+=`<path d="${path}" fill="#141A20"/><g clip-path="url(#${id}c)">`;
+ s+=`<rect x="0" y="0" width="100" height="${H}" fill="url(#${id}h)" opacity=".7"/>`;
+ s+=`<g class="lvl" style="transform:translateY(${yP}px)"><rect x="0" y="0" width="100" height="${H}" fill="url(#${id}p)"/><rect x="0" y="0" width="100" height="1.6" fill="#fff" opacity=".85"/></g>`;
+ s+=`<g class="lvl" style="transform:translateY(${yW}px)"><rect x="0" y="0" width="100" height="${H}" fill="url(#${id}w)"/><rect x="0" y="0" width="100" height="1.2" fill="#CFE4FF" opacity=".9"/></g>`;
+ if(o.band&&o.band.every(isFinite)){const a=Y(Math.max(...o.band)),b=Y(Math.min(...o.band));s+=`<rect x="0" y="${a}" width="100" height="${Math.max(1,b-a)}" fill="#fff" opacity=".22"/>`;}
+ s+=`</g><path d="${path}" fill="none" stroke="#8B96A3" stroke-width="1.2" stroke-linejoin="round"/>`;
+ // alarm ticks (product, right side; water, left side)
+ const tick=(e,side,col,lab)=>{const y=Y(e);const x0=side>0?94:6;return `<line x1="${x0}" y1="${y}" x2="${x0+side*5}" y2="${y}" stroke="${col}" stroke-width="1.3"/><text x="${x0+side*6}" y="${y+2.6}" font-size="7.5" fill="${col}" text-anchor="${side>0?"start":"end"}" font-weight="600">${lab}</text>`;};
+ if(o.alarms!==false){const A=k.pA;s+=tick(A.LAH,1,"#F2C27A","H")+tick(A.LAL,1,"#F2C27A","L");}
+ for(const m of (o.marks||[])){if(!isFinite(m.e))continue;const y=Y(m.e);s+=`<line x1="2" y1="${y}" x2="98" y2="${y}" stroke="#fff" stroke-width="1.1" stroke-dasharray="3 2"/><rect x="${m.side==="l"?1:82}" y="${y-6}" width="17" height="11" rx="2.5" fill="#0B0E11" stroke="#fff" stroke-width=".8"/><text x="${m.side==="l"?9.5:90.5}" y="${y+2.6}" font-size="7.5" fill="#fff" text-anchor="middle" font-weight="600">${m.t}</text>`;}
+ svg.setAttribute("viewBox",`-6 0 112 ${H}`);
+ svg.style.setProperty("--acc",acc);
+ svg.innerHTML=s;
+}
+
+/* ================= RENDER ================= */
+function rStock(){
+ const s=current(),d=density(),k=CFG[cav],g=k.g,ss=st();
+ const M=s.G*d.tpm;
+ $("o-m").innerHTML=isFinite(M)?nf(M,0)+U("t"):"–";
+ $("o-g").innerHTML=isFinite(s.G)?nf(s.G,0)+U("m³"):"–";
+ const VLAH=vTot(cav,k.pA.LAH),VLAL=vTot(cav,k.pA.LAL),cm=perCm(cav,s.P,vTot);
+ $("o-fill").innerHTML=isFinite(s.TV)?nf(s.TV/VLAH*100,1)+U("%"):"–";
+ $("o-cm").innerHTML=isFinite(cm)?nf(cm,1)+U("m³")+(isFinite(d.tpm)?`<i>≈ ${nf(cm*d.tpm,1)} t</i>`:""):"–";
+ $("o-room").innerHTML=isFinite(s.TV)&&isFinite(d.tpm)?nf((VLAH-s.TV)*d.tpm,0)+U("t"):"–";
+ $("o-lal").innerHTML=isFinite(s.TV)&&isFinite(d.tpm)?nf((s.TV-VLAL)*d.tpm,0)+U("t"):"–";
+ const bp=band(s.P,k.pA),bw=band(s.W,k.wA[s.src==="3"?"3":"2"]);
+ $("o-chips").innerHTML=(bp?chip(bp[0],`${t("prodAl")} ${bp[1]}`):"")+(bw?chip(bw[0],`${t("watAl")} ${bw[1]}`):"");
+ gauge("g-stock",{P:s.P,W:s.W});
+ // TE hint in temperature field
+ $("tl").placeholder=isFinite(d.te.tl)?d.te.tl.toFixed(2):"";
+ // details
+ const top=T[cav].A.elTop,Vv=vTot(cav,top)-s.TV,rv=rhoV(cav,d.te.tv,d.pa,d.ic4),Mv=Vv*rv/1000;
+ const npsh=(s.P-g.intake)+(d.pa-d.pb)*1e5/(d.rEOS*1000*9.81);
+ const rows=[
+  [t("kTV"),isFinite(s.TV)?nf(s.TV,0)+" m³":"–",`${k.lt[0]} ${el2(s.P)} m`],
+  [t("kWV"),isFinite(s.WV)?nf(s.WV,0)+" m³":"–",`${s.src==="avg"?"LT-002/003 "+t("avg").toLowerCase():s.src==="3"?k.lt[2]:k.lt[1]} ${el2(s.W)} m`],
+  [t("kG"),isFinite(s.G)?nf(s.G,0)+" m³":"–","TV − WV"],
+  [t("kN"),isFinite(s.G*d.vcf)?nf(s.G*d.vcf,0)+" m³":"–","VCF "+(isFinite(d.vcf)?d.vcf.toFixed(5):"–")],
+  [t("kM"),isFinite(M)?nf(M,0)+" t":"–",d.dm==="in"&&d.b15&&d.air?`N × (${isFinite(d.d15)?d.d15.toFixed(4):"–"} − 0.0011)`:`G × ${isFinite(d.tpm)?d.tpm.toFixed(4):"–"}`],
+  [t("kT"),isFinite(d.t)?d.t.toFixed(2)+" °C":"–",d.tAuto?t("teAvg"):t("entered")],
+  [t("kPs_"+cav),isFinite(d.pb)?nf(a2g(d.pb),2)+" kg/cm²g":"–"],
+  [`${k.pt} − sat.`,isFinite(d.pa)&&isFinite(d.pb)?sg(a2g(d.pa)-a2g(d.pb),2)+" kg/cm²":"–"],
+  [t("kFloor"),isFinite(s.P)?(s.P-g.floor).toFixed(2)+" m":"–"],
+  [t("kVap"),isFinite(Mv)?nf(Mv,0)+" t":"–",isFinite(Vv)?`${nf(Vv,0)} m³ × ${nf(rv,2)} kg/m³`:""],
+  [t("kNpsh"),isFinite(npsh)?nf(npsh,1)+" m":"–","NPSHr 10 m"]];
+ $("o-kv").innerHTML=rows.map(([a,b,c])=>`<div><dt>${a}</dt><dd>${b}${c?`<small>${c}</small>`:""}</dd></div>`).join("");
+ const m=[...d.notes];
+ if(!isFinite(s.TV))m.unshift(["crit",isFinite(s.P)?rangeMsg(s.P,k.lt[0]):t("mEnterP")]);
+ if(isFinite(s.W)&&!isFinite(s.WV))m.push(["crit",rangeMsg(s.W,t("waterC"))]);
+ if(isFinite(s.P)&&isFinite(s.W)&&s.W>s.P)m.push(["crit",t("mWaboveP")]);
+ if(isFinite(s.W)&&s.W>g.potTop)m.push(["crit",t("mWpot",{v:el2(g.potTop)})]);
+ if(isFinite(s.P)&&s.P<g.potTop)m.push(["crit",t("mPpot",{v:el2(g.potTop)})]);
+ if(isFinite(s.W2)&&isFinite(s.W3)&&Math.abs(s.W2-s.W3)>=0.2)m.push(["warn",t("mLTdiff",{v:nf(Math.abs(s.W2-s.W3),2)})]);
+ if(isFinite(d.pg)&&d.pg>g.design.MOP)m.push(["crit",t("mMOP",{v:g.design.MOP})]);
+ msgs("o-msg",m);
+ $("foot").innerHTML=t("basisFoot",{f:`<b>${k.file}</b>`});
+ $("snap").textContent="PMS "+k.snap.date;
+}
+function rAB(){
+ const s=st(),isP=s.abL==="product",fn=isP?vTot:vWat,a=lvl(s.abA),b=lvl(s.abB),d=density();
+ const va=fn(cav,a),vb=fn(cav,b),dv=vb-va;
+ $("ab-k1").textContent=t(isP?"volAB_p":"volAB_w");
+ $("ab-v").innerHTML=isFinite(dv)?nf(Math.abs(dv),1)+U("m³"):"–";
+ $("ab-t").innerHTML=isP&&isFinite(dv*d.tpm)?nf(Math.abs(dv*d.tpm),1)+U("t"):"";
+ $("ab-s").textContent=!isFinite(dv)?"–":dv<0?t("falls"):dv>0?t("rises"):t("noChg");
+ $("ab-va").innerHTML=isFinite(va)?nf(va,0)+U("m³"):"–";$("ab-vb").innerHTML=isFinite(vb)?nf(vb,0)+U("m³"):"–";
+ $("ab-dl").innerHTML=isFinite(b-a)?sg(b-a,2)+U("m"):"–";$("ab-tpm").textContent=isP&&isFinite(d.tpm)?d.tpm.toFixed(4):"–";
+ ["ab-ia","ab-ib"].forEach(i=>$(i).className="inp "+(isP?"prod":"wat"));
+ $("ab-note").textContent=isP?t("assumeW"):t("waterTblEnd",{v:el2(T[cav].B.elTop)});
+ const m=[];
+ if(!isFinite(va))m.push(["crit",isFinite(a)?rangeMsg(a,t("lvlA")):t("mEnter",{l:t("lvlA")})]);
+ if(!isFinite(vb))m.push(["crit",isFinite(b)?rangeMsg(b,t("lvlB")):t("mEnter",{l:t("lvlB")})]);
+ msgs("ab-msg",m);
+ const cur=current();
+ gauge("g-ab",isP?{P:cur.P,W:cur.W,marks:[{e:a,t:"A"},{e:b,t:"B",side:"l"}],band:[a,b],alarms:true}:{P:cur.P,W:cur.W,marks:[{e:a,t:"A"},{e:b,t:"B",side:"l"}],band:[a,b]});
+}
+function rPlan(){
+ const s=st(),isP=s.qL==="product",out=s.qD==="out",d=density(),cur=current(),k=CFG[cav];
+ if(!isP&&s.qu==="t")s.qu="m3";
+ const L0=lvl(s.ql),q=qnum(s.qq),qm3=s.qu==="t"?q/d.tpm:q,sgn=out?-1:1;
+ const v0=isP?vTot(cav,L0):vWat(cav,L0),L2=isP?invTot(cav,v0+sgn*qm3):invWat(cav,v0+sgn*qm3);
+ $("q-v").innerHTML=isFinite(L2)?el2(L2)+U("m"):"–";
+ $("q-s").innerHTML=isFinite(L2)?`<b>${sg(L2-L0,2)} m</b> · ${t("fromL",{v:el2(L0)})}`:"–";
+ $("q-il").className="inp "+(isP?"prod":"wat");
+ let P2=NaN;
+ if(isP){$("q-k2").textContent=s.qu==="t"?t("sameM3"):t("sameT");
+  $("q-e").innerHTML=s.qu==="t"?(isFinite(qm3)?nf(qm3,0)+U("m³"):"–"):(isFinite(q*d.tpm)?nf(q*d.tpm,0)+U("t"):"–");
+  $("q-k3").textContent=t("massAfter");
+  const Ma=(vTot(cav,L2)-cur.WV)*d.tpm;$("q-after").innerHTML=isFinite(Ma)?nf(Ma,0)+U("t")+` <small>(${t("kWV").split(" ·")[0]} ${el2(cur.W)} m)</small>`:"–";}
+ else{P2=invTot(cav,cur.TV+sgn*qm3);$("q-k2").textContent=t("prodMoves");$("q-e").innerHTML=isFinite(P2)?el2(P2)+U("m"):"–";
+  $("q-k3").textContent=t("kTV");$("q-after").innerHTML=isFinite(cur.TV+sgn*qm3)?nf(cur.TV+sgn*qm3,0)+U("m³"):"–";}
+ const r=qnum(s.qr);$("q-dur").textContent=isFinite(r)&&r>0&&isFinite(qm3)?fmtDur(qm3/r):"–";
+ const al=isP?k.pA:k.wA[cur.src==="3"?"3":"2"],cross=[];
+ if(isFinite(L2))for(const [n,v] of Object.entries(al))if((L0>v&&L2<=v)||(L0<v&&L2>=v))cross.push([n.endsWith("HH")||n.endsWith("LL")?"tr":"al",`${t("passes")} ${n} ${el2(v)}`]);
+ $("q-chips").innerHTML=cross.length?cross.map(([c,x])=>chip(c,x)).join(""):(isFinite(L2)?chip("ok",t("noPass")):"");
+ $("q-u").querySelector('[data-v="t"]').disabled=!isP;$("q-u").querySelector('[data-v="t"]').style.opacity=isP?1:.35;
+ const m=[];
+ if(!isFinite(v0))m.push(["crit",isFinite(L0)?rangeMsg(L0,t("lvlStart")):t("mEnter",{l:t("lvlStart")})]);
+ else if(!isFinite(q)||q<=0)m.push(["warn",t("mQty")]);
+ else if(s.qu==="t"&&!isFinite(d.tpm))m.push(["crit",t("mNeedD")]);
+ else if(!isFinite(L2))m.push(["crit",t("mOutT")]);
+ msgs("q-msg",m);
+ const marks=[{e:L0,t:"S"},{e:L2,t:"N",side:"l"}];
+ gauge("g-plan",isP?{P:cur.P,W:cur.W,marks,band:[L0,L2]}:{P:isFinite(P2)?P2:cur.P,W:cur.W,marks,band:[L0,L2]});
+}
+function rLook(){
+ const s=st(),d=density(),cur=current(),k=CFG[cav],l2v=s.lkM==="l2v";
+ $("lk-l").hidden=!l2v;$("lk-v").hidden=l2v;
+ let el=NaN;const m=[];let tiles=[];
+ if(l2v){el=lvl(s.lkEl);const TV=vTot(cav,el),B=el<=T[cav].B.elTop+1e-9?look(T[cav].B,el):NaN,cm=perCm(cav,el,vTot),G=TV-cur.WV;
+  $("lk-k").textContent=t("lkTV");$("lk-o").innerHTML=isFinite(TV)?nf(TV,1)+U("m³"):"–";$("lk-s").innerHTML=isFinite(el)?`<b>${el2(el)} m</b> MSL`:"–";
+  tiles=[[t("cm"),isFinite(cm)?nf(cm,2)+U("m³"):"–"],[t("wB"),isFinite(B)?nf(B,1)+U("m³"):"–"],[t("gAtW"),isFinite(G)?nf(G,0)+U("m³"):"–"],[t("mAtW"),isFinite(G*d.tpm)?nf(G*d.tpm,0)+U("t"):"–"]];
+  if(!isFinite(TV))m.push(["crit",isFinite(el)?rangeMsg(el,t("lvlX")):t("mEnter",{l:t("lvlX")})]);}
+ else{const v=qnum(s.lkV),w=s.lkW;let vol=NaN,fn=invTot,src="";
+  $("lk-vl").textContent=w==="M"?t("tonnes"):w==="W"?t("wB"):w==="G"?t("kG"):t("kTV");$("lk-vu").textContent=w==="M"?"t":"m³";
+  if(w==="TV"){vol=v;src=t("lkFromTV");}else if(w==="G"){vol=v+cur.WV;src=t("lkFromG",{w:nf(cur.WV,0)});}
+  else if(w==="M"){vol=v/d.tpm+cur.WV;src=t("lkFromM",{t:nf(v,0),r:isFinite(d.tpm)?d.tpm.toFixed(4):"–"});}
+  else{fn=(c,x)=>invWat(c,x);vol=v;src=t("lkFromW");}
+  el=fn(cav,vol);
+  $("lk-k").textContent=t("lkLevel");$("lk-o").innerHTML=isFinite(el)?el2(el)+U("m"):"–";$("lk-s").textContent=src;
+  const cm=perCm(cav,el,vTot);tiles=[[t("cm"),isFinite(cm)?nf(cm,2)+U("m³"):"–"],["TV",isFinite(el)?nf(vTot(cav,el),0)+U("m³"):"–"],[t("kFloor"),isFinite(el)?sg(el-k.g.floor,2)+U("m"):"–"],[t("fillLAH"),isFinite(el)?nf(vTot(cav,el)/vTot(cav,k.pA.LAH)*100,1)+U("%"):"–"]];
+  if(!isFinite(v))m.push(["warn",t("mQty")]);else if(!isFinite(el))m.push(["crit",t("mOutT")]);}
+ $("lk-tiles").innerHTML=tiles.map(([a,b])=>`<div class="ht"><div class="hk">${a}</div><b>${b}</b></div>`).join("");
+ msgs("lk-msg",m);
+ // nearby table
+ const stp=+s.lkStep,c0=isFinite(el)?Math.round(el/stp)*stp:NaN,rows=[];
+ if(isFinite(c0))for(let i=6;i>=-6;i--){const e=+(c0+i*stp).toFixed(2);if(e<k.bot-1e-9||e>k.top+1e-9)continue;
+  const A=vTot(cav,e),B=e<=T[cav].B.elTop+1e-9?look(T[cav].B,e):NaN,cm=perCm(cav,Math.max(k.bot+0.005,Math.min(e,k.top-0.005)),vTot);
+  rows.push(`<tr data-e="${e.toFixed(2)}" class="${i===0?"cur":""}"><td>${el2(e)}</td><td>${nf(A,1)}</td><td class="${isFinite(B)?"":"na"}">${isFinite(B)?nf(B,1):"—"}</td><td>${nf(cm,2)}</td></tr>`);}
+ $("lk-tb").innerHTML=rows.join("");
+}
+function rDens(){
+ const s=st(),d=density(),k=CFG[cav];
+ $("d-inrow").hidden=s.dm!=="in";$("d-ic4row").hidden=cav!=="C4";$("d-row3").style.gridTemplateColumns=cav==="C4"?"":"1fr";
+ $("tl2").placeholder=isFinite(d.te.tl)?d.te.tl.toFixed(2):"";$("d-pt").textContent=k.pt;
+ $("d-rho").innerHTML=isFinite(d.rho)?d.rho.toFixed(4)+U("kg/L"):"–";
+ $("d-rhos").textContent=s.dm==="calc"?t("rCalc"):d.b15?t("rD15"):t("rAs");
+ $("d-tpm").textContent=isFinite(d.tpm)?d.tpm.toFixed(4):"–";$("d-vcf").textContent=isFinite(d.vcf)?d.vcf.toFixed(5):"–";
+ $("d-t").innerHTML=isFinite(d.t)?d.t.toFixed(2)+U("°C"):"–";$("d-pbk").textContent=t("kPs_"+cav);$("d-pb").innerHTML=isFinite(d.pb)?nf(a2g(d.pb),2)+U("kg/cm²g"):"–";
+ $("d-kv").innerHTML=[[t("kR15"),isFinite(d.r15)?d.r15.toFixed(4)+" kg/L":"–"],[t("kREOS"),isFinite(d.rEOS)?d.rEOS.toFixed(4)+" kg/L":"–"],[t("kVCF"),isFinite(d.vcf)?d.vcf.toFixed(5):"–"],
+  [t("tpm"),isFinite(d.tpm)?d.tpm.toFixed(4)+" t/m³":"–",d.air?(s.dm==="in"&&d.b15?"VCF × (D15 − 0.0011)":"ρ − 0.0011"):""]].map(([a,b,c])=>`<div><dt>${a}</dt><dd>${b}${c?`<small>${c}</small>`:""}</dd></div>`).join("");
+ msgs("d-msg",d.notes);
+ $("d-help").textContent=t("dHelp")+(cav==="C4"?t("dHelpC4"):"");
+}
+const R={stock:rStock,ab:rAB,plan:rPlan,look:rLook,dens:rDens};
+function render(){R[scr]();}
+
+/* ================= BINDINGS ================= */
+// text inputs → state key
+const BIND={p:"p",w2:"w2",w3:"w3",pg:"pg",tl:"tl",din:"din","ab-a":"abA","ab-b":"abB","q-l":"ql","q-q":"qq","q-r":"qr","lk-el":"lkEl","lk-vol":"lkV",din2:"din",tl2:"tl",pg2:"pg",ic4:"ic4"};
+const SELS={dbasis:"dbasis",air:"air"};
+const SEGS={wsrc:"wsrc","ab-liq":"abL","q-liq":"qL","q-dir":"qD","q-u":"qu","lk-mode":"lkM","lk-what":"lkW","lk-step":"lkStep","d-mode":"dm"};
+function loadFields(){const s=st();
+ for(const id in BIND){const el=$(id);if(document.activeElement!==el)el.value=s[BIND[id]]??"";}
+ for(const id in SELS)$(id).value=s[SELS[id]];
+ for(const id in SEGS)$(id).querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===s[SEGS[id]]));
+ const k=CFG[cav];$("t-lt1").textContent=k.lt[0];$("t-lt2").textContent=k.lt[1];$("t-lt3").textContent=k.lt[2];$("t-pt").textContent=k.pt;
+}
+for(const id in BIND)$(id).addEventListener("input",e=>{st()[BIND[id]]=e.target.value;save();render();});
+for(const id in SELS)$(id).addEventListener("change",e=>{st()[SELS[id]]=e.target.value;save();render();});
+for(const id in SEGS)$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const s=st(),ch=s[SEGS[id]]!==b.dataset.v;s[SEGS[id]]=b.dataset.v;if(ch&&SEGHOOK[id])SEGHOOK[id](s);save();loadFields();render();});
+// enter key → next field / blur
+document.addEventListener("keydown",e=>{if(e.key!=="Enter"||e.target.tagName!=="INPUT")return;e.preventDefault();const ins=[...document.querySelectorAll(`[data-s="${scr}"] input`)].filter(x=>x.offsetParent);const i=ins.indexOf(e.target);if(i>=0&&i<ins.length-1&&e.target.enterKeyHint==="next")ins[i+1].focus();else e.target.blur();});
+// nudge buttons with hold-to-repeat
+let rep=null;
+function nudge(b){const id=b.dataset.nudge,el=$(id),key=BIND[id],v=lvl(el.value),d=+b.dataset.d;if(!isFinite(v))return;const nv=(v+d).toFixed(2);el.value=nv;st()[key]=nv;save();render();}
+document.addEventListener("pointerdown",e=>{const b=e.target.closest("[data-nudge]");if(!b)return;e.preventDefault();nudge(b);let n=0;rep=setTimeout(function go(){nudge(b);n++;rep=setTimeout(go,n>12?35:90);},420);});
+["pointerup","pointercancel","pointerleave"].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(rep);rep=null;}));
+// quick B
+$("ab-q").addEventListener("click",e=>{const b=e.target.closest("[data-dd]");if(!b)return;const s=st(),a=lvl(s.abA);if(!isFinite(a))return;s.abB=(a+ +b.dataset.dd).toFixed(2);save();loadFields();render();});
+$("ab-cur").addEventListener("click",()=>{const s=st(),c=current();const v=s.abL==="product"?c.P:c.W;if(isFinite(v)){s.abA=v.toFixed(2);save();loadFields();render();}});
+$("q-cur").addEventListener("click",()=>{const s=st(),c=current();const v=s.qL==="product"?c.P:c.W;if(isFinite(v)){s.ql=v.toFixed(2);save();loadFields();render();}});
+$("lk-cur").addEventListener("click",()=>{const s=st(),c=current();if(isFinite(c.P)){s.lkEl=c.P.toFixed(2);save();loadFields();render();}});
+$("q-qq").addEventListener("click",e=>{const b=e.target.closest("[data-q]");if(!b)return;st().qq=b.dataset.q;save();loadFields();render();});
+$("lk-tb").addEventListener("click",e=>{const r=e.target.closest("tr[data-e]");if(!r)return;const s=st();s.lkM="l2v";s.lkEl=r.dataset.e;save();loadFields();render();});
+// liquid switch in A→B / plan resets the levels to the current reading of that liquid
+const SEGHOOK={"ab-liq":s=>{const c=current(),v=s.abL==="product"?c.P:c.W;if(isFinite(v)){s.abA=v.toFixed(2);s.abB=(v-(s.abL==="product"?1:0.5)).toFixed(2);}},
+ "q-liq":s=>{const c=current(),v=s.qL==="product"?c.P:c.W;if(isFinite(v))s.ql=v.toFixed(2);if(s.qL==="water"){s.qu="m3";s.qq="200";}else if(qnum(s.qq)<1000)s.qq="5000";}};
+// snapshot
+$("snap").addEventListener("click",()=>{const k=CFG[cav];if(!confirmSheet(t("snapReset",{d:k.snap.date}),()=>{const d=defaults(cav),s=st();["p","w2","w3","pg","tl","te","din","ic4","wsrc"].forEach(x=>s[x]=Array.isArray(d[x])?[...d[x]]:d[x]);save();loadFields();render();toast(t("snapDone",{d:k.snap.date}));}))return;});
+// navigation
+function go(n){scr=n;document.querySelectorAll(".scr").forEach(x=>x.hidden=x.dataset.s!==n);document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.go===n));save();loadFields();render();window.scrollTo({top:0});}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b){e.preventDefault();go(b.dataset.go);}});
+// cavern
+function setCav(c){cav=c;document.querySelectorAll("#cavsw button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===c));document.documentElement.style.setProperty("--acc",c==="C3"?"var(--C3)":"var(--C4)");$("hsub").textContent=`HSVC · ${CFG[c].tk} · ${t(CFG[c].name)}`;save();loadFields();render();}
+$("cavsw").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setCav(b.dataset.c);});
+// swipe between caverns on hero
+(function(){let x0=null,y0=null;document.addEventListener("touchstart",e=>{if(!e.target.closest(".hero"))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+ document.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)setCav(dx<0?"C4":"C3");},{passive:true});})();
+
+/* ================= SHEETS ================= */
+function sheet(html,onMount){const h=$("sheetHost");h.innerHTML=`<div class="scrim"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;const sc=h.firstChild;sc.addEventListener("click",e=>{if(e.target===sc||e.target.closest("[data-close]"))close();});function close(){h.innerHTML="";render();}onMount&&onMount(sc,close);return close;}
+function confirmSheet(msg,ok){sheet(`<div class="sh-h"><h3>${msg}</h3></div><div class="acts" style="margin-top:14px"><button class="btn" data-close>✕</button><button class="btn pri" id="sOK">OK</button></div>`,(sc,close)=>{sc.querySelector("#sOK").onclick=()=>{close();ok();};});return true;}
+$("bTE").addEventListener("click",()=>{const k=CFG[cav];
+ sheet(`<div class="sh-h"><h3>${t("teTitle")} · ${k.tk}</h3><button class="chip t" data-close>${t("done")}</button></div><p class="hint">${t("teNote")}</p>
+  <div class="tegrid" id="teg">${k.te.map((e,i)=>`<label data-i="${i}"><span><i></i> ${el2(e)}</span><div class="inp"><input data-te="${i}" inputmode="decimal" value="${st().te[i]??""}"><span class="u">°C</span></div></label>`).join("")}</div>
+  <div class="kv" id="teo"></div><div class="acts" style="margin-top:12px"><button class="btn" id="teAuto">${t("clearT")}</button><button class="btn pri" data-close>${t("done")}</button></div>`,(sc)=>{
+  const upd=()=>{const P=lvl(st().p),a=teAvg(cav,P);sc.querySelectorAll("#teg label").forEach(l=>l.classList.toggle("liq",k.te[+l.dataset.i]<P));
+   sc.querySelector("#teo").innerHTML=`<div><dt>${t("teLiq")}</dt><dd>${isFinite(a.tl)?a.tl.toFixed(2)+" °C":"–"}</dd></div><div><dt>${t("teVap")}</dt><dd>${isFinite(a.tv)?a.tv.toFixed(2)+" °C":"–"}</dd></div>`;};
+  sc.querySelectorAll("[data-te]").forEach(i=>i.addEventListener("input",()=>{st().te[+i.dataset.te]=i.value;save();upd();}));
+  sc.querySelector("#teAuto").onclick=()=>{st().tl="";save();loadFields();render();toast(t("clearT"));};upd();});});
+$("bLang").addEventListener("click",()=>{sheet(`<div class="sh-h"><h3>${t("chooseLang")}</h3></div><div class="langs">${[["en","English","EN"],["vi","Tiếng Việt","VI"],["ko","한국어","한"]].map(([c,n,s])=>`<button data-l="${c}" aria-pressed="${c===LANG}">${n}<small>${s}</small></button>`).join("")}</div>`,(sc,close)=>{sc.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{LANG=b.dataset.l;applyLang();save();close();});});});
+function toast(m){const d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),1800);}
+
+/* ================= SHARE ================= */
+function summary(){const k=CFG[cav],s=current(),d=density(),M=s.G*d.tpm,now=new Date(),p2=n=>String(n).padStart(2,"0");
+ const ts=`${now.getFullYear()}-${p2(now.getMonth()+1)}-${p2(now.getDate())} ${p2(now.getHours())}:${p2(now.getMinutes())}`;
+ return [`${t("shareHead",{tk:k.tk,n:t(k.name)})} · ${ts}`,
+  `${k.lt[0]} ${el2(s.P)} m · ${s.src==="3"?k.lt[2]:s.src==="avg"?"LT-002/003":k.lt[1]} ${el2(s.W)} m`,
+  `TV ${nf(s.TV,0)} m³ · WV ${nf(s.WV,0)} m³`,
+  `G ${nf(s.G,0)} m³ · M ${nf(M,0)} t`,
+  `D15 ${st().din} · T ${isFinite(d.t)?d.t.toFixed(2):"–"} °C · ${k.pt} ${st().pg} kg/cm²g · VCF ${isFinite(d.vcf)?d.vcf.toFixed(5):"–"}`,
+  `${t("fillLAH")} ${nf(s.TV/vTot(cav,k.pA.LAH)*100,1)} % · ${t("pumpable")} ${nf((s.TV-vTot(cav,k.pA.LAL))*d.tpm,0)} t`].join("\n");}
+async function copyText(x){try{await navigator.clipboard.writeText(x);return true;}catch(e){const ta=document.createElement("textarea");ta.value=x;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy");}catch(_){}ta.remove();return ok;}}
+$("copy").addEventListener("click",async()=>{if(await copyText(summary()))toast(t("copied"));});
+$("share").addEventListener("click",async()=>{const x=summary();if(navigator.share){try{await navigator.share({text:x});return;}catch(e){if(e&&e.name==="AbortError")return;}}if(await copyText(x))toast(t("copied"));});
+
+/* ================= THEME / LANG ================= */
+function applyTheme(){const th=theme||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=th;$("metaTheme").content=th==="light"?"#F7F7F5":"#15191E";
+ $("bTheme").innerHTML=th==="light"?'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.5 12.3A7 7 0 0 1 7.7 3.5a7 7 0 1 0 8.8 8.8Z"/></svg>':'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="3.6"/><path d="M10 1.8v2M10 16.2v2M1.8 10h2M16.2 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>';}
+$("bTheme").addEventListener("click",()=>{theme=document.documentElement.dataset.theme==="light"?"dark":"light";applyTheme();save();});
+function applyLang(){document.documentElement.lang=LANG;document.querySelectorAll("[data-i]").forEach(e=>{e.textContent=t(e.dataset.i);});$("bLang").textContent={en:"EN",vi:"VI",ko:"한"}[LANG];$("hsub").textContent=`HSVC · ${CFG[cav].tk} · ${t(CFG[cav].name)}`;render();}
+
+/* ================= START ================= */
+applyTheme();
+document.querySelectorAll(".scr").forEach(x=>x.hidden=x.dataset.s!==scr);
+document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.go===scr));
+setCav(cav);applyLang();
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{});}
+</script>
+</body>
+</html>
