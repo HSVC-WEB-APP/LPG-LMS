@@ -171,8 +171,8 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto;min
 .grab{width:38px;height:4px;border-radius:2px;background:var(--bd2);margin:2px auto 12px}
 .sh-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
 .sh-h h3{margin:0;font:600 16px var(--sans);color:var(--t0)}
-.tegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:12px 0}
-.tegrid label{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--t3)}
+.tegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:12px 0}
+.tegrid label{display:grid;grid-template-columns:auto minmax(0,1fr);min-width:0;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--t3)}
 .tegrid label i{font-style:normal;display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--t4)}
 .tegrid label.liq i{background:var(--acc)}
 .tegrid .inp{height:42px}.tegrid .inp input{font-size:16px;padding:0 10px}
@@ -244,7 +244,6 @@ main{padding:14px 16px calc(var(--sab) + 92px);max-width:640px;margin:0 auto;min
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 /* ===== v4: single-screen layout ===== */
 main{padding:10px 10px calc(var(--sab) + 14px);min-height:0}
-body.kpo main{padding-bottom:calc(var(--kph,360px) + 8px)}
 .fnbtn{height:34px;border-radius:var(--r-ctl);border:1px solid var(--bd2);background:var(--card);color:var(--t0);display:inline-flex;align-items:center;gap:6px;padding:0 8px 0 9px;font:600 13px var(--sans);max-width:44%;box-shadow:var(--sh)}
 .fnbtn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fnbtn svg{width:16px;height:16px;flex:none}
@@ -283,17 +282,8 @@ body.kpo main{padding-bottom:calc(var(--kph,360px) + 8px)}
 .h2r>.seg{flex:none}
 .taphint{text-align:center;font:400 11.5px var(--sans);color:var(--t4);margin:10px 0 0}
 .taphint b{font-weight:500;color:var(--t3)}
-/* compact while the keypad is open */
-body.kpo .opt{display:none!important}
-body.kpo .h2r{gap:4px}
-body.kpo .h2r .pc{padding:3px 7px}
-body.kpo .pv{font-size:14px;margin-top:1px}
-body.kpo .pc.m .pv{font-size:22px}
-body.kpo .pl{font-size:8.5px}
-body.kpo .chp{padding:2px 5px 3px}body.kpo .chp b{font-size:12.5px}body.kpo .chp small{font-size:8px}
-body.kpo .msgs{display:none}
 /* keypad */
-.kp{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#FFFFFF;border-top:1px solid #D7D9D3;border-radius:18px 18px 0 0;box-shadow:0 -12px 40px -12px rgba(17,19,21,.28);padding:8px 10px calc(var(--sab) + 8px);max-width:640px;margin:0 auto;animation:up .2s cubic-bezier(.2,.8,.2,1)}
+.kp{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-top:1px solid #D7D9D3;border-radius:20px 20px 0 0;box-shadow:0 -16px 44px -10px rgba(17,19,21,.35);padding:8px 10px calc(var(--sab) + 8px);max-width:640px;margin:0 auto;animation:up .2s cubic-bezier(.2,.8,.2,1)}
 .kp-h{display:flex;align-items:center;gap:6px}
 .kp-t{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;line-height:1.2}
 .kp-t b{font:600 13px var(--mono);color:#111315}
@@ -302,7 +292,7 @@ body.kpo .msgs{display:none}
 .kpb svg{width:18px;height:18px}
 .kp-done{height:36px;border-radius:9px;border:0;background:#111315;color:#fff;font:600 13px var(--sans);padding:0 14px}
 .kp-x{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin:8px 0 0;scrollbar-width:none;align-items:center}
-.kp-x:empty{display:none}
+.kp-x{min-height:34px}
 .kp-x::-webkit-scrollbar{display:none}
 .kp-x .seg{flex:none}.kp-x .seg button{padding:6px 10px}
 .kp-x .chip{flex:none;padding:6px 10px}
@@ -370,7 +360,7 @@ body.kpo .msgs{display:none}
     </div>
   </div>
   <div class="msgs" id="o-msg"></div>
-  <p class="taphint opt"><span data-i="tapHint">Tap a value on the drawing to enter it</span> · <b>v2026-10-15e</b></p>
+  <p class="taphint opt"><span data-i="tapHint">Tap a value on the drawing to enter it</span> · <b>v2026-10-15g</b></p>
 </section>
 
 <!-- ================= A → B ================= -->
@@ -613,7 +603,7 @@ function rhoV(c,TC,pa,ic4){let f=PCR.C3;if(c==="C4"){const w=wIso(ic4),a=PCR.IC4
 
 /* ================= I18N ================= */
 const L={
-en:{pressure:"Cavern pressure",liqTemp:"Liquid temperature",next:"Next",okK:"OK",teProfile:"TE profile",autoTE:"Auto: TE avg",teAvgS:"TE avg",calcNote:"Mass now from T & P — D15 not used",fn:"Function",menuSnap:"Load PMS {d}",fdStock:"Levels → volume and mass",fdAB:"Volume between two levels",fdPlan:"Quantity → new level, time",fdLook:"Conversion table lookup",fdDens:"Density settings",tapHint:"Tap a value on the drawing or a dashed box to enter it",mass:"Mass",massFrom:"Mass from",dmD15:"Density D15",enter:"Enter",result:"Result",inputs:"Input",c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane",Butane:"Butane",
+en:{backup:"backup",sameAs2:"same as LT-002 (not entered)",pressure:"Cavern pressure",liqTemp:"Liquid temperature",next:"Next",okK:"OK",teProfile:"TE profile",autoTE:"Auto: TE avg",teAvgS:"TE avg",calcNote:"Mass now from T & P — D15 not used",fn:"Function",menuSnap:"Load PMS {d}",fdStock:"Levels → volume and mass",fdAB:"Volume between two levels",fdPlan:"Quantity → new level, time",fdLook:"Conversion table lookup",fdDens:"Density settings",tapHint:"Tap a value on the drawing or a dashed box to enter it",mass:"Mass",massFrom:"Mass from",dmD15:"Density D15",enter:"Enter",result:"Result",inputs:"Input",c3:"C3 · PROPANE",c4:"C4 · BUTANE",sub:"HSVC LPG caverns",Propane:"Propane",Butane:"Butane",
  nStock:"Stock",nAB:"A → B",nPlan:"Pump plan",nLook:"Table",nDens:"Density",
  massM:"Product mass · M",volG:"Product volume · G",fillLAH:"Fill to LAH",perCm:"1 cm product",room:"Room to LAH",pumpable:"Pumpable to LAL",
  readings:"PMS readings",prodLevel:"product level",water:"water",wUse:"Water level used",avg:"Average",liqT:"liquid",d15:"density at 15 °C",more:"More",
@@ -644,7 +634,7 @@ en:{pressure:"Cavern pressure",liqTemp:"Liquid temperature",next:"Next",okK:"OK"
  mSat:"Pressure is below saturation at {t} °C ({p} kg/cm²g); saturated liquid density is used.",mQty:"Enter a quantity.",mNeedD:"Set a density to work in tonnes.",mOutT:"That quantity takes the level outside the table.",
  mEnter:"Enter {l}.",lvlA:"Level A",lvlB:"Level B",lvlStart:"Starting level",lvlX:"Level",theme:"Theme",lang:"Language",chooseLang:"Language · Ngôn ngữ · 언어",
  shareHead:"{tk} {n} · stock",shTime:"Time",hrs:"h",days:"days",min:"min"},
-vi:{pressure:"Áp suất hang",liqTemp:"Nhiệt độ lỏng",next:"Tiếp",okK:"Xong",teProfile:"Biên dạng TE",autoTE:"Tự động: TB TE",teAvgS:"TB TE",calcNote:"Đang tính từ T & P — D15 không dùng",fn:"Chức năng",menuSnap:"Nạp số PMS {d}",fdStock:"Mức → thể tích và khối lượng",fdAB:"Thể tích giữa hai mức",fdPlan:"Lượng bơm → mức mới, thời gian",fdLook:"Tra bảng quy đổi",fdDens:"Cài đặt khối lượng riêng",tapHint:"Chạm vào số trên hình hoặc ô nét đứt để nhập",mass:"Khối lượng",massFrom:"Tính khối lượng theo",dmD15:"Tỷ trọng D15",enter:"Nhập số",result:"Kết quả",inputs:"Nhập liệu",c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propan",Butane:"Butan",
+vi:{backup:"dự phòng",sameAs2:"bằng LT-002 (chưa nhập riêng)",pressure:"Áp suất hang",liqTemp:"Nhiệt độ lỏng",next:"Tiếp",okK:"Xong",teProfile:"Biên dạng TE",autoTE:"Tự động: TB TE",teAvgS:"TB TE",calcNote:"Đang tính từ T & P — D15 không dùng",fn:"Chức năng",menuSnap:"Nạp số PMS {d}",fdStock:"Mức → thể tích và khối lượng",fdAB:"Thể tích giữa hai mức",fdPlan:"Lượng bơm → mức mới, thời gian",fdLook:"Tra bảng quy đổi",fdDens:"Cài đặt khối lượng riêng",tapHint:"Chạm vào số trên hình hoặc ô nét đứt để nhập",mass:"Khối lượng",massFrom:"Tính khối lượng theo",dmD15:"Tỷ trọng D15",enter:"Nhập số",result:"Kết quả",inputs:"Nhập liệu",c3:"C3 · PROPAN",c4:"C4 · BUTAN",sub:"Hang chứa LPG HSVC",Propane:"Propan",Butane:"Butan",
  nStock:"Tồn kho",nAB:"Mức A → B",nPlan:"KH bơm",nLook:"Tra bảng",nDens:"KL riêng",
  massM:"Khối lượng SP · M",volG:"Thể tích sản phẩm · G",fillLAH:"Đầy so với LAH",perCm:"1 cm sản phẩm",room:"Còn trống tới LAH",pumpable:"Bơm được tới LAL",
  readings:"Số đọc PMS",prodLevel:"mức sản phẩm",water:"nước",wUse:"Mức nước dùng để tính",avg:"Trung bình",liqT:"lỏng",d15:"KLR ở 15 °C",more:"Thêm",
@@ -675,7 +665,7 @@ vi:{pressure:"Áp suất hang",liqTemp:"Nhiệt độ lỏng",next:"Tiếp",okK:
  mSat:"Áp suất thấp hơn áp bão hòa ở {t} °C ({p} kg/cm²g); dùng KLR lỏng bão hòa.",mQty:"Nhập lượng.",mNeedD:"Cần KLR để tính theo tấn.",mOutT:"Lượng này đưa mức ra ngoài bảng.",
  mEnter:"Nhập {l}.",lvlA:"Mức A",lvlB:"Mức B",lvlStart:"Mức bắt đầu",lvlX:"Mức",theme:"Giao diện",lang:"Ngôn ngữ",chooseLang:"Language · Ngôn ngữ · 언어",
  shareHead:"{tk} {n} · tồn kho",shTime:"Thời điểm",hrs:"giờ",days:"ngày",min:"phút"},
-ko:{pressure:"캐번 압력",liqTemp:"액체 온도",next:"다음",okK:"완료",teProfile:"TE 분포",autoTE:"자동: TE 평균",teAvgS:"TE 평균",calcNote:"T·P 계산 중 — D15 미사용",fn:"기능",menuSnap:"PMS {d} 값 불러오기",fdStock:"레벨 → 부피·질량",fdAB:"두 레벨 사이 부피",fdPlan:"수량 → 새 레벨, 시간",fdLook:"환산표 조회",fdDens:"밀도 설정",tapHint:"그림의 값이나 점선 칸을 눌러 입력",mass:"질량",massFrom:"질량 계산 기준",dmD15:"밀도 D15",enter:"값 입력",result:"결과",inputs:"입력",c3:"C3 · 프로판",c4:"C4 · 부탄",sub:"HSVC LPG 캐번",Propane:"프로판",Butane:"부탄",
+ko:{backup:"백업",sameAs2:"LT-002와 동일 (미입력)",pressure:"캐번 압력",liqTemp:"액체 온도",next:"다음",okK:"완료",teProfile:"TE 분포",autoTE:"자동: TE 평균",teAvgS:"TE 평균",calcNote:"T·P 계산 중 — D15 미사용",fn:"기능",menuSnap:"PMS {d} 값 불러오기",fdStock:"레벨 → 부피·질량",fdAB:"두 레벨 사이 부피",fdPlan:"수량 → 새 레벨, 시간",fdLook:"환산표 조회",fdDens:"밀도 설정",tapHint:"그림의 값이나 점선 칸을 눌러 입력",mass:"질량",massFrom:"질량 계산 기준",dmD15:"밀도 D15",enter:"값 입력",result:"결과",inputs:"입력",c3:"C3 · 프로판",c4:"C4 · 부탄",sub:"HSVC LPG 캐번",Propane:"프로판",Butane:"부탄",
  nStock:"재고",nAB:"레벨 A→B",nPlan:"펌핑 계획",nLook:"환산표",nDens:"밀도",
  massM:"제품 질량 · M",volG:"제품 부피 · G",fillLAH:"LAH 대비 충전율",perCm:"제품 1 cm",room:"LAH까지 여유",pumpable:"LAL까지 출하 가능",
  readings:"PMS 지시값",prodLevel:"제품 레벨",water:"물",wUse:"계산에 쓰는 물 레벨",avg:"평균",liqT:"액체",d15:"15 °C 밀도",more:"더보기",
@@ -729,21 +719,21 @@ const ICON_W='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-
 const KEY="cvgm.v1";
 let cav="C3",scr="stock",theme=null;
 const S={C3:{},C4:{}};
-function defaults(c){const k=CFG[c],s=k.snap;return {p:s.p.toFixed(2),w2:s.w2.toFixed(2),w3:s.w3.toFixed(2),wsrc:"2",pg:s.pg,tl:"",te:s.te.map(String),
+function defaults(c){const k=CFG[c],s=k.snap;return {p:s.p.toFixed(2),w2:s.w2.toFixed(2),w3:"",wsrc:"2",pg:s.pg,tl:"",te:s.te.map(String),
  din:s.din,dbasis:"15",dm:"in",ic4:s.ic4,air:"1",
  abL:"product",abA:s.p.toFixed(2),abB:(s.p-1).toFixed(2),
  qL:"product",qD:"out",ql:s.p.toFixed(2),qq:"5000",qu:"m3",qr:"",
  lkM:"l2v",lkEl:s.p.toFixed(2),lkW:"G",lkV:"",lkStep:"0.1"};}
 try{const j=JSON.parse(localStorage.getItem(KEY)||"null");if(j){if(j.S){S.C3=j.S.C3||{};S.C4=j.S.C4||{};}cav=j.cav||cav;scr=j.scr||scr;LANG=j.lang||null;theme=j.theme||null;}}catch(e){}
 if(!LANG||!L[LANG]){const n=(navigator.language||"en").toLowerCase();LANG=n.startsWith("ko")?"ko":n.startsWith("vi")?"vi":"en";}
-function st(c=cav){const s=S[c],d=defaults(c);for(const k in d)if(s[k]===undefined)s[k]=d[k];return s;}
+function st(c=cav){const s=S[c],d=defaults(c);if(!s.w3v){s.w3="";s.w3v=1;}for(const k in d)if(s[k]===undefined)s[k]=d[k];return s;}
 let saveT=null;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({S,cav,scr,lang:LANG,theme}))}catch(e){}},150);}
 
 /* ================= CALCULATIONS ================= */
 function teAvg(c,P){const g=CFG[c],s=st(c),b=[],a=[];g.te.forEach((e,i)=>{const v=smartT(s.te[i]);if(!isFinite(v))return;(isFinite(P)&&e<P?b:a).push(v);});return {tl:mean(b),tv:a.length?mean(a):mean(b)};}
-function current(c=cav){const s=st(c),P=lvl(s.p),W2=lvl(s.w2),W3=lvl(s.w3),src=s.wsrc;
+function current(c=cav){const s=st(c),P=lvl(s.p),W2=lvl(s.w2),W3in=lvl(s.w3),W3=isFinite(W3in)?W3in:W2,src=s.wsrc;
  let W=src==="3"?W3:src==="avg"?((isFinite(W2)&&isFinite(W3))?(W2+W3)/2:(isFinite(W2)?W2:W3)):W2;if(!isFinite(W)&&src!=="3")W=W3;
- const TV=vTot(c,P),WV=vWat(c,W);return {P,W,W2,W3,src,TV,WV,G:TV-WV};}
+ const TV=vTot(c,P),WV=vWat(c,W);return {P,W,W2,W3,W3in,src,TV,WV,G:TV-WV};}
 function density(c=cav){const s=st(c),P=lvl(s.p),te=teAvg(c,P);
  const tIn=smartT(s.tl),tt=isFinite(tIn)?tIn:te.tl,pg=smartP(s.pg,c),ic4=num(s.ic4),air=s.air==="1";
  const pa=isFinite(pg)?g2a(pg):NaN,pb=bubble(c,tt,ic4);
@@ -840,8 +830,8 @@ function layout(){const sec=document.querySelector(`[data-s="${scr}"] .h2body`);
  const ar=vb.width/vb.height,kph=KP.open?$("kp").getBoundingClientRect().height:0;
  document.documentElement.style.setProperty("--kph",kph+"px");
  const topY=sec.getBoundingClientRect().top+scrollY;
- let h=innerHeight-kph-topY-(KP.open?8:22);h=Math.max(KP.open?200:300,h);
- const Wd=sec.clientWidth;let w=Math.min(h*ar,Wd*(KP.open?0.5:0.6));h=w/ar;
+ let h=innerHeight-topY-22;h=Math.max(300,h);
+ const Wd=sec.clientWidth;let w=Math.min(h*ar,Wd*0.6);h=w/ar;
  wrap.style.width=w+"px";wrap.style.height=h+"px";sec.style.height=h+"px";placeChips(wrap);fitText(sec);}
 function fitText(root){root.querySelectorAll(".h2r .pv").forEach(el=>{el.style.fontSize="";if(!el.offsetParent)return;let f=parseFloat(getComputedStyle(el).fontSize);while(el.scrollWidth>el.clientWidth+1&&f>11){f-=1;el.style.fontSize=f+"px";}});}
 
@@ -899,7 +889,7 @@ function rStock(){
  if(isFinite(s.P)&&isFinite(s.W)&&s.W>s.P)m.push(["crit",t("mWaboveP")]);
  if(isFinite(s.W)&&s.W>g.potTop)m.push(["crit",t("mWpot",{v:el2(g.potTop)})]);
  if(isFinite(s.P)&&s.P<g.potTop)m.push(["crit",t("mPpot",{v:el2(g.potTop)})]);
- if(isFinite(s.W2)&&isFinite(s.W3)&&Math.abs(s.W2-s.W3)>=0.2)m.push(["warn",t("mLTdiff",{v:nf(Math.abs(s.W2-s.W3),2)})]);
+ if(isFinite(s.W2)&&isFinite(s.W3in)&&Math.abs(s.W2-s.W3in)>=0.2)m.push(["warn",t("mLTdiff",{v:nf(Math.abs(s.W2-s.W3),2)})]);
  if(isFinite(d.pg)&&d.pg>g.design.MOP)m.push(["crit",t("mMOP",{v:g.design.MOP})]);
  msgs("o-msg",m);
 }
@@ -1027,7 +1017,7 @@ const KP={open:false,list:[],i:0,fresh:true};
 function FIELDS(){const k=CFG[cav],s=st();return {
  p:{tag:k.lt[0],name:t("prodLevel"),kind:"L",step:.01,unit:"m"},
  w2:{tag:k.lt[1],name:t("water"),kind:"L",step:.01,unit:"m",x:"wsrc"},
- w3:{tag:k.lt[2],name:t("water"),kind:"L",step:.01,unit:"m",x:"wsrc"},
+ w3:{tag:k.lt[2],name:t("water")+" · "+t("backup"),kind:"L",step:.01,unit:"m",x:"wsrc"},
  pg:{tag:k.pt,name:t("pressure"),kind:"P",step:.01,unit:"kg/cm²g"},
  tl:{tag:"T",name:t("liqTemp"),kind:"T",step:.1,unit:"°C",x:"temp"},
  din:{tag:"D15",name:t("d15"),kind:"D",step:.001,unit:"kg/L",x:"dmode"},
@@ -1037,12 +1027,12 @@ function FIELDS(){const k=CFG[cav],s=st();return {
  ql:{tag:t("start"),name:t("lvlStart"),kind:"L",step:.01,unit:"m",x:"curL"},
  qq:{tag:t("qty"),name:t("qty"),kind:"Q",step:s.qu==="t"?100:100,unit:s.qu==="t"?"t":"m³",x:"qty"},
  qr:{tag:t("rate"),name:t("rate")+" · "+t("optional"),kind:"Q",step:10,unit:"m³/h",x:"rate"}};}
-const SEQ={stock:()=>["p","w2","w3","pg","tl","din"].concat(cav==="C4"?["ic4"]:[]),ab:()=>["abA","abB"],plan:()=>["ql","qq","qr"]};
+const SEQ={stock:()=>["p","w2","pg","tl","din"].concat(cav==="C4"?["ic4"]:[]),ab:()=>["abA","abB"],plan:()=>["ql","qq","qr"]};
 const kParse=(kind,r)=>kind==="L"?lvl(r):kind==="P"?smartP(r):kind==="T"?smartT(r):kind==="D"?dNum(r):kind==="Q"?qnum(r):num(r);
 const kFmt=(kind,v)=>kind==="L"?v.toFixed(2):kind==="Q"?String(Math.round(v*100)/100):String(+v.toFixed(4));
 const curKey=()=>KP.list[KP.i];
 function kpCommit(){const key=curKey();if(!key)return;const f=FIELDS()[key],s=st(),r=String(s[key]??"").trim();if(r==="")return;const v=kParse(f.kind,r);if(isFinite(v))s[key]=kFmt(f.kind,v);}
-function kpOpen(key){const list=SEQ[scr]?SEQ[scr]():[];if(!list.includes(key))return;KP.list=list;KP.i=list.indexOf(key);KP.fresh=true;
+function kpOpen(key){if(KP.open)kpCommit();const list=SEQ[scr]?SEQ[scr]():[];if(key==="w3"&&!list.includes("w3"))list.splice(list.indexOf("w2")+1,0,"w3");if(!list.includes(key))return;KP.list=list;KP.i=list.indexOf(key);KP.fresh=true;
  if(!KP.open){KP.open=true;$("kp").hidden=false;document.body.classList.add("kpo");}
  kpRender();render();requestAnimationFrame(()=>{layout();});}
 function kpClose(){kpCommit();KP.open=false;$("kp").hidden=true;document.body.classList.remove("kpo");save();render();requestAnimationFrame(layout);}
@@ -1062,13 +1052,13 @@ function kpPress(k){const key=curKey(),s=st();let v=String(s[key]??"");
 function kpRender(){if(!KP.open)return;const key=curKey(),F=FIELDS(),f=F[key],s=st(),r=String(s[key]??"").trim(),d=density();
  $("kpTag").textContent=f.tag;$("kpName").textContent=`${f.name} · ${KP.i+1}/${KP.list.length}`;
  const vEl=$("kpVal"),hEl=$("kpHint");
- if(r===""){vEl.textContent=key==="tl"&&isFinite(d.te.tl)?d.te.tl.toFixed(2):"—";vEl.className="ph";hEl.className="u";hEl.textContent=key==="tl"?t("autoTE"):f.unit;}
+ if(r===""){vEl.textContent=key==="tl"&&isFinite(d.te.tl)?d.te.tl.toFixed(2):key==="w3"?el2(lvl(s.w2)):"—";vEl.className="ph";hEl.className="u";hEl.textContent=key==="tl"?t("autoTE"):key==="w3"?t("sameAs2"):f.unit;}
  else{vEl.textContent=r;vEl.className=KP.fresh?"fresh":"";const v=kParse(f.kind,r);
   if(isFinite(v)&&String(v)!==r&&v!==+r){hEl.className="";hEl.textContent="= "+(f.kind==="L"?el2(v):kFmt(f.kind,v))+" "+f.unit;}else{hEl.className="u";hEl.textContent=f.unit;}}
  const nx=document.querySelector('#kp .nx span');if(nx)nx.textContent=KP.i===KP.list.length-1?t("okK"):t("next");
  // extra row
  let x="";const seg=(sk,opts)=>`<div class="seg sm" data-segkey="${sk}">${opts.map(([v,l])=>`<button data-v="${v}" aria-pressed="${s[sk]===v}">${l}</button>`).join("")}</div>`;
- if(f.x==="wsrc")x=`<span class="lbl">${t("wUse")}</span>`+seg("wsrc",[["2","LT-002"],["3","LT-003"],["avg",t("avg")]]);
+ if(f.x==="wsrc")x=(key==="w2"?`<button class="chip t" data-kx="toW3">LT-003 · ${t("backup")}${String(s.w3??"").trim()?" "+el2(lvl(s.w3)):""}</button>`:`<button class="chip t" data-kx="w3link">= LT-002</button>`)+`<span class="lbl">${t("wUse")}</span>`+seg("wsrc",[["2","LT-002"],["3","LT-003"],["avg",t("avg")]]);
  else if(f.x==="temp")x=`<button class="chip t" data-kx="te">${t("teProfile")}</button><button class="chip" data-kx="auto">${t("autoTE")}${isFinite(d.te.tl)?" "+d.te.tl.toFixed(2):""}</button>`;
  else if(f.x==="dmode")x=`<span class="lbl">${t("massFrom")}</span>`+seg("dm",[["in",t("dmD15")],["calc",t("dmCalc")]])+(s.dm==="calc"?`<span class="lbl">ρ ${isFinite(d.rho)?d.rho.toFixed(4):"–"}</span>`:"");
  else if(f.x==="curA"||f.x==="curL")x=`<button class="chip t" data-kx="${f.x}">${t("useCur")}</button>`;
@@ -1086,6 +1076,8 @@ $("kp").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-k]");
 $("kp").addEventListener("click",e=>{const sb=e.target.closest("[data-segkey] button");if(sb){const s=st(),key=sb.parentElement.dataset.segkey;s[key]=sb.dataset.v;save();kpRender();render();return;}
  const b=e.target.closest("[data-kx]");if(!b)return;const s=st(),c=current(),a=b.dataset.kx;
  if(a==="te"){openTE();return;}
+ if(a==="toW3"){kpOpen("w3");return;}
+ if(a==="w3link"){s.w3="";}
  if(a==="auto")s.tl="";
  if(a==="curA"){const v=s.abL==="product"?c.P:c.W;if(isFinite(v))s.abA=v.toFixed(2);}
  if(a==="curL"){const v=s.qL==="product"?c.P:c.W;if(isFinite(v))s.ql=v.toFixed(2);}
@@ -1112,7 +1104,7 @@ function fnLabel(){const f=FN.find(x=>x[0]===scr)||FN[0];$("fnName").textContent
 $("bFn").addEventListener("click",()=>{if(KP.open)kpClose();const k=CFG[cav];
  sheet(`<div class="sh-h"><h3>${t("fn")}</h3><button class="chip t" data-close>${t("done")}</button></div>
   <div class="fnl">${FN.map(([id,n,d,ic])=>`<button data-fn="${id}" aria-pressed="${id===scr}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${ic}</svg><span><b>${t(n)}</b><small>${t(d)}</small></span></button>`).join("")}</div>
-  <div class="fnfoot"><button class="chip t" id="mSnap">${t("menuSnap",{d:k.snap.date})} · ${k.tk}</button><span>v2026-10-15e</span></div>`,(sc,close)=>{
+  <div class="fnfoot"><button class="chip t" id="mSnap">${t("menuSnap",{d:k.snap.date})} · ${k.tk}</button><span>v2026-10-15g</span></div>`,(sc,close)=>{
   sc.querySelectorAll("[data-fn]").forEach(b=>b.onclick=()=>{close();go(b.dataset.fn);});
   sc.querySelector("#mSnap").onclick=()=>{const d=defaults(cav),s=st();["p","w2","w3","pg","tl","te","din","ic4","wsrc","dm"].forEach(x=>s[x]=Array.isArray(d[x])?[...d[x]]:d[x]);save();close();toast(t("snapDone",{d:k.snap.date}));};});});
 
